@@ -14,16 +14,22 @@ namespace PhysicsSimulations
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            //new ThurstJob
+            //{
+            //    DeltaTime = SystemAPI.Time.DeltaTime,
+            //}.Schedule();
+
             new ThurstJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
-            }.Schedule();
+            }.ScheduleParallel();
         }
 
         [BurstCompile]
         public partial struct ThurstJob : IJobEntity
         {
             public float DeltaTime;
+
 
             public void Execute(in AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
             {
