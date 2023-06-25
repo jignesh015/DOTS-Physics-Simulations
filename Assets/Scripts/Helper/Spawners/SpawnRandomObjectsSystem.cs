@@ -63,11 +63,13 @@ namespace PhysicsSimulations
                             transform.Rotation = rotations[i];
                         EntityManager.SetComponentData(instance, transform);
 
-
                         ConfigureInstance(instance, ref spawnSettings);
                     }
 
-                    EntityManager.RemoveComponent<T>(entity);
+                    if(spawnSettings.SpawnOnce)
+                    {
+                        EntityManager.RemoveComponent<T>(entity);
+                    }
                 }
             }
         }

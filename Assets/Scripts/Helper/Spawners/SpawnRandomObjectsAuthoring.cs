@@ -25,6 +25,7 @@ namespace PhysicsSimulations
         // authors a way to tweak one of the spawners' seeds without changing its behavior-defining parameters.
         public int randomSeedOffset;
         public bool randomizeRotation;
+        public bool spawnOnce;
 
         internal virtual void Configure(ref T spawnSettings) {}
         internal virtual void Configure(List<GameObject> referencedPrefabs) { referencedPrefabs.Add(prefab); }
@@ -45,6 +46,7 @@ namespace PhysicsSimulations
                 Count = authoring.count,
                 RandomSeedOffset = authoring.randomSeedOffset,
                 RandomizeRotation = authoring.randomizeRotation,
+                SpawnOnce = authoring.spawnOnce,
             };
             Configure(authoring, ref spawnSettings, GetEntity(TransformUsageFlags.Dynamic), this);
             Configure(authoring, ref spawnSettings);
@@ -67,6 +69,7 @@ namespace PhysicsSimulations
         int Count { get; set; }
         int RandomSeedOffset { get; set; }
         bool RandomizeRotation { get; set; }
+        bool SpawnOnce { get; set; }
     }
 
     struct SpawnSettings : IComponentData, ISpawnSettings
@@ -78,5 +81,6 @@ namespace PhysicsSimulations
         public int Count { get; set; }
         public int RandomSeedOffset { get; set; }
         public bool RandomizeRotation { get; set; }
+        public bool SpawnOnce { get; set; }
     }
 }

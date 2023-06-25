@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
@@ -10,11 +11,13 @@ namespace PhysicsSimulations
     [UpdateAfter(typeof(StatefulTriggerEventSystem))]
     public partial struct TriggerVolumeDestroyParticleSystem : ISystem
     {
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<TriggerVolumeDestroyParticle>();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
@@ -41,7 +44,6 @@ namespace PhysicsSimulations
 
                     if (triggerEvent.State == StatefulEventState.Enter)
                     {
-                        Debug.Log($"Destroying entity : {otherEntity.ToString()} | {otherEntity.Index}");
                         ecb.DestroyEntity(otherEntity);
                     }
                 }

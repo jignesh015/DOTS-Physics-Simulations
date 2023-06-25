@@ -13,6 +13,7 @@ namespace PhysicsSimulations
         [Min(0)] public float Magnitude = 1.0f;
         public Vector3 LocalDirection = -Vector3.forward;
         public Vector3 LocalOffset = Vector3.zero;
+        [Min(0)] public float Lifespan = 10.0f;
 
         // Start is called before the first frame update
         void Start()
@@ -36,6 +37,7 @@ namespace PhysicsSimulations
                     Magnitude = authoring.Magnitude,
                     Direction = authoring.LocalDirection.normalized,
                     Offset = authoring.LocalOffset,
+                    Lifespan = authoring.Lifespan,
                 });
             }
         }
@@ -46,5 +48,6 @@ namespace PhysicsSimulations
         public float Magnitude;
         public float3 Direction;
         public float3 Offset;
+        public float Lifespan;
     }
 }

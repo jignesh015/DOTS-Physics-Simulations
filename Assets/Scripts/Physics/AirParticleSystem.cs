@@ -11,6 +11,15 @@ namespace PhysicsSimulations
     [UpdateBefore(typeof(PhysicsSystemGroup))]
     public partial struct AirParticleSystem : ISystem
     {
+        private double startTime;
+        public EntityCommandBuffer ecb;
+
+        [BurstCompile]
+        void OnCreate(ref SystemState state) 
+        {
+            startTime = SystemAPI.Time.ElapsedTime;
+        }
+
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
@@ -19,24 +28,36 @@ namespace PhysicsSimulations
             //    DeltaTime = SystemAPI.Time.DeltaTime,
             //}.Schedule();
 
+            ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
+               .CreateCommandBuffer(state.WorldUnmanaged);
+
             new ThurstJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
-            }.ScheduleParallel();
+                TimeSinceAlive = SystemAPI.Time.ElapsedTime - startTime,
+                Ecb = ecb,
+            }.Schedule();
         }
 
         [BurstCompile]
         public partial struct ThurstJob : IJobEntity
         {
             public float DeltaTime;
+            public double TimeSinceAlive;
+            public EntityCommandBuffer Ecb;
 
-
-            public void Execute(in AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
+            public void Execute(ref AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
             {
                 float3 impulse = -airParticle.Direction * airParticle.Magnitude;
                 impulse *= DeltaTime;
 
                 rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
+
+                airParticle.Lifespan -= DeltaTime;
+                if (airParticle.Lifespan <= 0)
+                {
+                    Ecb.DestroyEntity(rigidBodyAspect.Entity);
+                }
             }
         }
     }

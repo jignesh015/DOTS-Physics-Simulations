@@ -295,3 +295,4 @@ MonoBehaviour:
   Magnitude: 15
   LocalDirection: {x: -0, y: 0, z: -1}
   LocalOffset: {x: 0, y: 0, z: 0}
+  Lifespan: 2
