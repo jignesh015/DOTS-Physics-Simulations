@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af72760ba711bf94089950fff7ba8767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Magnitude: 500
+  Magnitude: 300
   LocalDirection: {x: -0, y: 0, z: -1}
   LocalOffset: {x: 0, y: 0, z: 0}
   Lifespan: 0.5
