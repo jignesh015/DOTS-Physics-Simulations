@@ -1,8 +1,10 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics.Aspects;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 
 namespace PhysicsSimulations
 {
@@ -23,20 +25,17 @@ namespace PhysicsSimulations
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            //new ThurstJob
-            //{
-            //    DeltaTime = SystemAPI.Time.DeltaTime,
-            //}.Schedule();
-
             ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
                .CreateCommandBuffer(state.WorldUnmanaged);
 
-            new ThurstJob
+            JobHandle thurstJob = new ThurstJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 TimeSinceAlive = SystemAPI.Time.ElapsedTime - startTime,
                 Ecb = ecb,
-            }.Schedule();
+            }.Schedule<ThurstJob>(state.Dependency);
+
+            thurstJob.Complete();
         }
 
         [BurstCompile]

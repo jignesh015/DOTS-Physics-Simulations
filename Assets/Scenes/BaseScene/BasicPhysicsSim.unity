@@ -1326,7 +1326,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994972020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: -1.5}
+  m_LocalPosition: {x: 0, y: 2, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1345,12 +1345,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537ea15a5406d2c4aadffad496991862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4128185496858806000, guid: 8705baf90993f7843b7865376f6d0193, type: 3}
+  prefab: {fileID: 4128185496858806000, guid: 6f43e846b98d2a0409bca8e1db61f217, type: 3}
   range:
     x: 0
-    y: 3
+    y: 2
     z: 0
-  count: 70
+  count: 20
   randomSeedOffset: 0
   randomizeRotation: 0
   spawnOnce: 0
