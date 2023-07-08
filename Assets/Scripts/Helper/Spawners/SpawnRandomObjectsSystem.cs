@@ -41,7 +41,7 @@ namespace PhysicsSimulations
                     // Limit the number of bodies on platforms with potentially low-end devices
                     var count = math.min(spawnSettings.Count, 500);
 #else
-                    var count = spawnSettings.Count;
+                    var count = SimConfigurationController.Instance.CurrentSimConfig.airParticleCount;
 #endif
 
                     OnBeforeInstantiatePrefab(ref spawnSettings);
@@ -57,6 +57,7 @@ namespace PhysicsSimulations
                     {
                         var instance = instances[i];
 
+                        //Set Transform and Rotation
                         var transform = EntityManager.GetComponentData<LocalTransform>(instance);
                         transform.Position = positions[i];
                         if(spawnSettings.RandomizeRotation)

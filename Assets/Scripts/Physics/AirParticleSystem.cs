@@ -4,7 +4,6 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics.Aspects;
 using Unity.Physics.Systems;
-using Unity.Transforms;
 
 namespace PhysicsSimulations
 {
@@ -47,7 +46,7 @@ namespace PhysicsSimulations
 
             public void Execute(ref AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
             {
-                float3 impulse = -airParticle.Direction * airParticle.Magnitude;
+                float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
                 impulse *= DeltaTime;
 
                 rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
