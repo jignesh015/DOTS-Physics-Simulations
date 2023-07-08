@@ -9,10 +9,19 @@ namespace PhysicsSimulations
 {
     public class SimConfigurationController : MonoBehaviour
     {
+        [Header("CONFIG SETTINGS")]
         [SerializeField] private SimConfiguration defaultConfig;
+        public SimConfigurationSanity configSanityCheck;
+
+        [Header("CAMERA SETTINGS")]
+        [SerializeField] private GameObject sideViewVC;
+        [SerializeField] private GameObject topViewVC;
+
+
 
         public SimConfiguration CurrentSimConfig { get; private set; }
 
+        [Header("READ ONLY")]
         public float WindMagnitude;
 
 
@@ -59,10 +68,49 @@ namespace PhysicsSimulations
 
         private void FixedUpdate()
         {
-            CurrentSimConfig = defaultConfig;
+            //CurrentSimConfig = defaultConfig;
 
-            WindMagnitude = CurrentSimConfig.windSpeed / Time.fixedDeltaTime;
+            WindMagnitude = CurrentSimConfig.airSpeed / Time.fixedDeltaTime;
             //Debug.Log($"Fixed time: {Time.fixedDeltaTime}");
+        }
+
+        public void SetCurrentConfig(SimConfiguration config)
+        {
+            CurrentSimConfig = PerformSanityCheck(config);
+        }
+
+        public SimConfiguration PerformSanityCheck(SimConfiguration config)
+        {
+            SimConfigurationSanity csc = configSanityCheck;
+            config.airSpeed = Mathf.Clamp(config.airSpeed, csc.airSpeedMin, csc.airSpeedMax);
+            config.windSpawnZoneDimension = new Vector3(
+                Mathf.Clamp(config.windSpawnZoneDimension.x, csc.windSpawnZoneDimensionMin.x, csc.windSpawnZoneDimensionMax.x),
+                Mathf.Clamp(config.windSpawnZoneDimension.y, csc.windSpawnZoneDimensionMin.y, csc.windSpawnZoneDimensionMax.y),
+                Mathf.Clamp(config.windSpawnZoneDimension.z, csc.windSpawnZoneDimensionMin.z, csc.windSpawnZoneDimensionMax.z)
+                );
+            config.airParticleCount = Mathf.Clamp( config.airParticleCount, csc.airParticleCountMin, csc.airParticleCountMax );
+            config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
+            return config;
+        }
+
+        public SimConfiguration GetDefaultConfig() { return  CurrentSimConfig.Clone(); }
+
+        public void ChangeView(ViewAngle _angle)
+        {
+            sideViewVC.SetActive(false);
+            topViewVC.SetActive(false);
+
+            Debug.Log($"Change View: {_angle}");
+
+            switch (_angle)
+            {
+                case ViewAngle.Side:
+                    sideViewVC.SetActive(true);
+                    break;
+                case ViewAngle.Top:
+                    topViewVC.SetActive(true);
+                    break;
+            }
         }
     }
 
@@ -70,11 +118,39 @@ namespace PhysicsSimulations
     public class SimConfiguration
     {
         [Range(1, 100)]
-        public float windSpeed;
+        public float airSpeed;
         public Vector3 windSpawnZoneDimension;
 
         [Range(1,50)]
         public int airParticleCount;
+
+        [Range(0,2)]
         public float airParticleGravityFactor;
+
+        public SimConfiguration Clone()
+        {
+            SimConfiguration config = new SimConfiguration();
+            config.airSpeed = this.airSpeed;
+            config.windSpawnZoneDimension = this.windSpawnZoneDimension;
+            config.airParticleCount = this.airParticleCount;
+            config.airParticleGravityFactor = this.airParticleGravityFactor;
+            return config;
+        }
+    }
+
+    [Serializable]
+    public class SimConfigurationSanity
+    {
+        public float airSpeedMin;
+        public float airSpeedMax;
+
+        public Vector3 windSpawnZoneDimensionMin;
+        public Vector3 windSpawnZoneDimensionMax;
+
+        public int airParticleCountMin;
+        public int airParticleCountMax;
+
+        public float airParticleGravityFactorMin;
+        public float airParticleGravityFactorMax;
     }
 }
