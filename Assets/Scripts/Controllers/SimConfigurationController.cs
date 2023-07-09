@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics.Authoring;
+using Unity.Transforms;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PhysicsSimulations
@@ -16,8 +19,6 @@ namespace PhysicsSimulations
         [Header("CAMERA SETTINGS")]
         [SerializeField] private GameObject sideViewVC;
         [SerializeField] private GameObject topViewVC;
-
-
 
         public SimConfiguration CurrentSimConfig { get; private set; }
 
@@ -63,7 +64,6 @@ namespace PhysicsSimulations
             //    }
             //}
 
-            
         }
 
         private void FixedUpdate()
@@ -110,6 +110,22 @@ namespace PhysicsSimulations
                 case ViewAngle.Top:
                     topViewVC.SetActive(true);
                     break;
+            }
+
+            ChangeCar((int)_angle);
+        }
+
+        public void ChangeCar(int _carIndex)
+        {
+            EntityManager em = World.DefaultGameObjectInjectionWorld.EntityManager;
+            EntityQuery carQuery = em.CreateEntityQuery(typeof(CarComponent));
+            NativeArray<Entity> carArray = carQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
+            Debug.Log($"carArray: {carArray.Length}");
+            for(int i = 0; i < carArray.Length; i++)
+            {
+                LocalTransform obj = em.GetComponentData<LocalTransform>(carArray[i]);
+                obj.Scale = (i == _carIndex) ? 1 : 0;
+                em.SetComponentData(carArray[i], obj);
             }
         }
     }

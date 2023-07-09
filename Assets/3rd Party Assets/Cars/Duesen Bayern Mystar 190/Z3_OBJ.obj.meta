@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 4e10900cc32c7584d8a41f5da2b55a09
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_body2Mat
+    second: {fileID: 2100000, guid: 96c245215af63af45ad490d57580ef30, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_body3Mat
+    second: {fileID: 2100000, guid: 5eca7ca5150aa40499d99cde9e71e739, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_body4Mat
+    second: {fileID: 2100000, guid: 9d1f14a02f4328743b22e317c3476b26, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_body5Mat
+    second: {fileID: 2100000, guid: 66ba8e4be0d032f4f9e23bf2c6ccb868, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_body6Mat
+    second: {fileID: 2100000, guid: 41c07d040e886db4eb2a53755bd57f7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_bodyMat
+    second: {fileID: 2100000, guid: 32241563db543fa40ac9c296a9de6fd1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_bottomMat
+    second: {fileID: 2100000, guid: 08142e17cda0d42448f9dca61f2c77b4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_dashboardMat
+    second: {fileID: 2100000, guid: 4fc93893e858ca34d94e80972f6b22f1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_exhaustMat
+    second: {fileID: 2100000, guid: f9576a805991bd24aa774785e2942bd3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_front_bumperMat
+    second: {fileID: 2100000, guid: 4e9414ba17addc846b37a691fc36c065, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_gearboxMat
+    second: {fileID: 2100000, guid: c670380cf6c4e1f43a4f9aa393d6e5e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_glass1Mat
+    second: {fileID: 2100000, guid: fb978454a26ff334fb08770a24306f92, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_glass2Mat
+    second: {fileID: 2100000, guid: dca15b24acae2804b8a55888cd066d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_glass4Mat
+    second: {fileID: 2100000, guid: 27e7d7eb4cb3a9842994b5211ff22d52, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_grill1Mat
+    second: {fileID: 2100000, guid: afbd224fb14b8f149a1a62de64c9ccd8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_grill2Mat
+    second: {fileID: 2100000, guid: fe5e70a4002593e4ea7f4d01c412d82d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_grill3Mat
+    second: {fileID: 2100000, guid: 9cee0c8ccd49e1246a07b0a14156d1d0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_grill4Mat
+    second: {fileID: 2100000, guid: e3b1e71dc6a275d4ba2ddac1d5bbf4ff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_grill5Mat
+    second: {fileID: 2100000, guid: 6cc5034f67c856c47a238b7abcb62c69, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_handlesMat
+    second: {fileID: 2100000, guid: 38da50a19e5a010479d8b770f6b66bf4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_hood1Mat
+    second: {fileID: 2100000, guid: 2f4099e73430b994fb06589a74b40a87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_hood2Mat
+    second: {fileID: 2100000, guid: e25029a53b920554fbdb15dde45ad192, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_interior1Mat
+    second: {fileID: 2100000, guid: b2ca9865d7a9786408ecff7e4540cea7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_interior2Mat
+    second: {fileID: 2100000, guid: ec5520d73e890154bb5c9315cfaeb84b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_interior3Mat
+    second: {fileID: 2100000, guid: b19e499d8255c6e40bbe6dd79c4bd34d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_interior4Mat
+    second: {fileID: 2100000, guid: 1bbee253f0745df4bbf44d6b6a8551a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_interior5Mat
+    second: {fileID: 2100000, guid: e97105645baa41348ae5e514912a19e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_ledlight1Mat
+    second: {fileID: 2100000, guid: 86ff260d945cd374b9ce8b04118356c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_ledlight2Mat
+    second: {fileID: 2100000, guid: d0f0b77bd915fab45a5f5fcf63d5d774, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_ledlight3Mat
+    second: {fileID: 2100000, guid: 85785aefe48f90440b6abcf133c982f1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_headlight1Mat
+    second: {fileID: 2100000, guid: 8f8944220c6b8db45b098ea50a73c663, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_headlight2Mat
+    second: {fileID: 2100000, guid: 5212de032fdc05143aae21612f38972d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_mirror03Mat
+    second: {fileID: 2100000, guid: a48c9e90c3ebcf443b1c0dfa7ca5b692, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_mirror04Mat
+    second: {fileID: 2100000, guid: a97309e0733d50d498ab035225df8dfb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_mirror1Mat
+    second: {fileID: 2100000, guid: 27b84f31bd2b56c4f9e3661453cb00ad, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_mirror2Mat
+    second: {fileID: 2100000, guid: e8b4e173d4afac744bcf161c091157d6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight1Mat
+    second: {fileID: 2100000, guid: b573aa952259e2a4baba52ae567e6231, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight2Mat
+    second: {fileID: 2100000, guid: 015c927b2cbf5ae44aff5afb404b3c2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight3Mat
+    second: {fileID: 2100000, guid: 52b645740531c4c46b68325bdc305224, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight4Mat
+    second: {fileID: 2100000, guid: 5b7cbeb6cd5db5d40936078446e77785, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight5Mat
+    second: {fileID: 2100000, guid: cf9f32cd64209a34b9a160f98e1a129c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_rearlight6Mat
+    second: {fileID: 2100000, guid: 5fa3e3f650b8eb248864123841515836, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_turnlight1Mat
+    second: {fileID: 2100000, guid: 54c65b2f3ad48864d867ed89385931bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_turnlight2Mat
+    second: {fileID: 2100000, guid: af81fb9b57f83a64f995777747a2e6a4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_turnlight3Mat
+    second: {fileID: 2100000, guid: 39110936e513ff047a9d5cfa84f03591, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_turnlight4Mat
+    second: {fileID: 2100000, guid: 547bb88fd4007b948ae4b98c2d98e7ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_left_turnlight5Mat
+    second: {fileID: 2100000, guid: d9178dd707cb45d48bbe2809efa070e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_lockMat
+    second: {fileID: 2100000, guid: 7df002c6aed9c9b41b91bd12015db972, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_mirror1Mat
+    second: {fileID: 2100000, guid: 813c210a1629bb441b55558f1eed92ea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_mirror2Mat
+    second: {fileID: 2100000, guid: d05099baa5ea16c49bf4020eb4cd0cbf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_moldingMat
+    second: {fileID: 2100000, guid: 427e26e01596e2b4789a193111bd9b89, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_numberMat
+    second: {fileID: 2100000, guid: 26573dc4f1741974385d30790bc6075a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_rear_bumperMat
+    second: {fileID: 2100000, guid: 148ec6f6073f5ac4a983f90e5f28f108, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_headlight1Mat
+    second: {fileID: 2100000, guid: f5e2d5cc418cce340ac6154a31245143, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_headlight2Mat
+    second: {fileID: 2100000, guid: 269509fe3a827ba4695ea4a2c078590f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight1Mat
+    second: {fileID: 2100000, guid: f9f381ad5a50a8a4b8809e6eb5f7e29e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight2Mat
+    second: {fileID: 2100000, guid: 1dcf4d0e1a03a254d87d28f7a2c2c0a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight3Mat
+    second: {fileID: 2100000, guid: d35889edb8b17d04fb7957efb259869f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight4Mat
+    second: {fileID: 2100000, guid: c9fe8efa33df1c24a97ed8ea89cba42c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight5Mat
+    second: {fileID: 2100000, guid: bf04dfa6ae556974b9e0b9f974ed5626, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_rearlight6Mat
+    second: {fileID: 2100000, guid: 5e40bf0ebae13c94e8b179462bbe717a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_turnlight1Mat
+    second: {fileID: 2100000, guid: 75815e4d7927b1b45b69adb1aaf5bbe6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_turnlight2Mat
+    second: {fileID: 2100000, guid: 0b033f49743554444a90176fa8009854, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_turnlight3Mat
+    second: {fileID: 2100000, guid: 43ff221d400553c43a27d8e9cd8e0240, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_turnlight4Mat
+    second: {fileID: 2100000, guid: df065f1769fcef847b4abfae2f96b4c9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_right_turnlight5Mat
+    second: {fileID: 2100000, guid: adc1ff02a900b1d4aacce3bbf51cd823, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_roof1Mat
+    second: {fileID: 2100000, guid: 6100c586541d97544b9ba7ef83b440dc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_roof2Mat
+    second: {fileID: 2100000, guid: 8164470f0da01fa4c9285b35b7952266, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_seatsMat
+    second: {fileID: 2100000, guid: b71d285c07901904ca80d3ba5ff9f835, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_steering_wheelMat
+    second: {fileID: 2100000, guid: fd73cbbece40fe3458f5dad71122cfc5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_tyre1Mat
+    second: {fileID: 2100000, guid: 2c071b3967127e448aedf84501c59783, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_tyre2Mat
+    second: {fileID: 2100000, guid: ad1f4a4a16faa1f418328be7308f489e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_tyre3Mat
+    second: {fileID: 2100000, guid: fdae10f5c129dd743bd6a9c3e5c1aeae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_tyre4Mat
+    second: {fileID: 2100000, guid: 445ee79ceda7298428ff2cf3ceac0872, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel1(1)Mat
+    second: {fileID: 2100000, guid: 225fee7706cfd3e4a9f635ecdf2fae65, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel1(2)Mat
+    second: {fileID: 2100000, guid: f7fcb28dc76775c41aac9741cd90809a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel1(3)Mat
+    second: {fileID: 2100000, guid: 16aa5d1670f2a0a428d0839f9c7f68f9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel1(4)Mat
+    second: {fileID: 2100000, guid: 435101ce365f45f46b1a911191bebb07, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel2(1)Mat
+    second: {fileID: 2100000, guid: dc9e0d295f4afe749b8ae9e46a69bf66, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel2(2)Mat
+    second: {fileID: 2100000, guid: bf3f483cd1cfffc429b71e709af3bbe0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel2(3)Mat
+    second: {fileID: 2100000, guid: 8963370131b49464aa2bc2411bde6cde, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel2(4)Mat
+    second: {fileID: 2100000, guid: b814ce2c714ad144fb7379b46e8c147b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel3(1)Mat
+    second: {fileID: 2100000, guid: 09dc76e0898961e41adfafc284ab2968, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel3(2)Mat
+    second: {fileID: 2100000, guid: d377e2b83b4c6cb41852caa4f85c8962, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel3(3)Mat
+    second: {fileID: 2100000, guid: 4c46ccb4df3809f4e823fb114b8e1772, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel3(4)Mat
+    second: {fileID: 2100000, guid: 2d3bdc7e687cd814db8a2cafbadc627d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel4(1)Mat
+    second: {fileID: 2100000, guid: c95c7262a5d39034f9145da1dc03c071, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel4(2)Mat
+    second: {fileID: 2100000, guid: e836b2f5723dea94cb271932da919b62, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel4(3)Mat
+    second: {fileID: 2100000, guid: 5f166b06834ef2c4c8b5681d17e93698, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Z3_wheel4(4)Mat
+    second: {fileID: 2100000, guid: fbc1ab70c47846c45a0bc3fe457abedf, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
