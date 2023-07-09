@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace PhysicsSimulations
 {
@@ -11,6 +12,9 @@ namespace PhysicsSimulations
         [Header("SETTINGS")]
         [SerializeField] private Slider airSpeedInput;
         [SerializeField] private Slider airParticleCountInput;
+
+        [Header("INDICATORS")]
+        [SerializeField] private TextMeshProUGUI airSpeedText; 
 
         private SimConfiguration config;
         private SimConfigurationSanity configSanity;
@@ -29,7 +33,10 @@ namespace PhysicsSimulations
         // Update is called once per frame
         void Update()
         {
-        
+            if (config != null)
+            {
+                airSpeedText.text = $"{config.airSpeed:0} mph";
+            }
         }
 
         public void SetInitialConfigValues()
