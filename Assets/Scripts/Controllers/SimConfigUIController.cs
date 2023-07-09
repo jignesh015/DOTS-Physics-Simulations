@@ -72,5 +72,12 @@ namespace PhysicsSimulations
 
             scc.ChangeView((ViewAngle)_value);
         }
+
+        public void OnCarDropdownChange(int _value)
+        {
+            if (scc == null) return;
+
+            scc.ChangeCar(_value);
+        }
     }
 }

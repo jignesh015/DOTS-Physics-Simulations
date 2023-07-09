@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Physics.Authoring;
 using Unity.Transforms;
 using Unity.VisualScripting;
@@ -111,8 +112,6 @@ namespace PhysicsSimulations
                     topViewVC.SetActive(true);
                     break;
             }
-
-            ChangeCar((int)_angle);
         }
 
         public void ChangeCar(int _carIndex)
@@ -120,12 +119,12 @@ namespace PhysicsSimulations
             EntityManager em = World.DefaultGameObjectInjectionWorld.EntityManager;
             EntityQuery carQuery = em.CreateEntityQuery(typeof(CarComponent));
             NativeArray<Entity> carArray = carQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-            Debug.Log($"carArray: {carArray.Length}");
-            for(int i = 0; i < carArray.Length; i++)
+            foreach(Entity entity in carArray)
             {
-                LocalTransform obj = em.GetComponentData<LocalTransform>(carArray[i]);
-                obj.Scale = (i == _carIndex) ? 1 : 0;
-                em.SetComponentData(carArray[i], obj);
+                int _entityIndex = em.GetComponentData<CarComponent>(entity).Index;
+                LocalTransform obj = em.GetComponentData<LocalTransform>(entity);
+                obj.Scale = (_entityIndex == _carIndex) ? 1 : 0;
+                em.SetComponentData(entity, obj);
             }
         }
     }
