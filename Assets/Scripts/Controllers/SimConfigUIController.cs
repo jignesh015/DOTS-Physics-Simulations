@@ -4,6 +4,7 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 namespace PhysicsSimulations
 {
@@ -27,7 +28,7 @@ namespace PhysicsSimulations
         {
             scc = SimConfigurationController.Instance;
 
-            SetInitialConfigValues();
+            SetConfigUI();
         }
 
         // Update is called once per frame
@@ -39,7 +40,7 @@ namespace PhysicsSimulations
             }
         }
 
-        public void SetInitialConfigValues()
+        public void SetConfigUI()
         {
             config = scc.GetDefaultConfig();
             configSanity = scc.configSanityCheck;
@@ -85,6 +86,17 @@ namespace PhysicsSimulations
             if (scc == null) return;
 
             scc.ChangeCar(_value);
+        }
+
+        public async void OnResetConfigButtonClicked()
+        {
+            initialValueCheck = false;
+            scc.ResetToDefault();
+
+            await Task.Delay(100);
+
+            SetConfigUI();
+            //initialValueCheck = true;
         }
     }
 }

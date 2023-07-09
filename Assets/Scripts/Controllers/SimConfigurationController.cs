@@ -42,7 +42,7 @@ namespace PhysicsSimulations
                 _instance = this;
             }
 
-            CurrentSimConfig = defaultConfig;
+            ResetToDefault();
         }
 
         // Start is called before the first frame update
@@ -131,6 +131,11 @@ namespace PhysicsSimulations
             //}
 
             ChangeCarIndex = _carIndex;
+        }
+
+        public void ResetToDefault()
+        {
+            CurrentSimConfig = defaultConfig;
         }
     }
 
