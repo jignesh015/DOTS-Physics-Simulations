@@ -29,6 +29,8 @@ namespace PhysicsSimulations
 
         protected override void OnUpdate()
         {
+            SimConfigurationController scc = SimConfigurationController.Instance;
+
             // Entities.ForEach in generic system types are not supported
             using (var entities = GetEntityQuery(new ComponentType[] { typeof(T) }).ToEntityArray(Allocator.TempJob))
             {
@@ -41,35 +43,39 @@ namespace PhysicsSimulations
                     // Limit the number of bodies on platforms with potentially low-end devices
                     var count = math.min(spawnSettings.Count, 500);
 #else
-                    var count = SimConfigurationController.Instance.CurrentSimConfig.airParticleCount;
+                    var count = scc.CurrentSimConfig.airParticleCount;
 #endif
-
-                    OnBeforeInstantiatePrefab(ref spawnSettings);
-
-                    var instances = new NativeArray<Entity>(count, Allocator.Temp);
-                    EntityManager.Instantiate(spawnSettings.Prefab, instances);
-
-                    var positions = new NativeArray<float3>(count, Allocator.Temp);
-                    var rotations = new NativeArray<quaternion>(count, Allocator.Temp);
-                    RandomPointsInRange(spawnSettings.Position, spawnSettings.Rotation, spawnSettings.Range, ref positions, ref rotations, GetRandomSeed(spawnSettings));
-
-                    for (int i = 0; i < count; i++)
+                    if (spawnSettings.SpawnViewAngle == (int)scc.CurrentViewAngle)
                     {
-                        var instance = instances[i];
+                        OnBeforeInstantiatePrefab(ref spawnSettings);
 
-                        //Set Transform and Rotation
-                        var transform = EntityManager.GetComponentData<LocalTransform>(instance);
-                        transform.Position = positions[i];
-                        if(spawnSettings.RandomizeRotation)
-                            transform.Rotation = rotations[i];
-                        EntityManager.SetComponentData(instance, transform);
 
-                        ConfigureInstance(instance, ref spawnSettings);
-                    }
 
-                    if(spawnSettings.SpawnOnce)
-                    {
-                        EntityManager.RemoveComponent<T>(entity);
+                        var instances = new NativeArray<Entity>(count, Allocator.Temp);
+                        EntityManager.Instantiate(spawnSettings.Prefab, instances);
+
+                        var positions = new NativeArray<float3>(count, Allocator.Temp);
+                        var rotations = new NativeArray<quaternion>(count, Allocator.Temp);
+                        RandomPointsInRange(spawnSettings.Position, spawnSettings.Rotation, spawnSettings.Range, ref positions, ref rotations, GetRandomSeed(spawnSettings));
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            var instance = instances[i];
+
+                            //Set Transform and Rotation
+                            var transform = EntityManager.GetComponentData<LocalTransform>(instance);
+                            transform.Position = positions[i];
+                            if (spawnSettings.RandomizeRotation)
+                                transform.Rotation = rotations[i];
+                            EntityManager.SetComponentData(instance, transform);
+
+                            ConfigureInstance(instance, ref spawnSettings);
+                        }
+
+                        if (spawnSettings.SpawnOnce)
+                        {
+                            EntityManager.RemoveComponent<T>(entity);
+                        }
                     }
                 }
             }

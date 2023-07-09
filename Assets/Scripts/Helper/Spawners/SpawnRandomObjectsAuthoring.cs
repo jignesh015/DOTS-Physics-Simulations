@@ -26,6 +26,7 @@ namespace PhysicsSimulations
         public int randomSeedOffset;
         public bool randomizeRotation;
         public bool spawnOnce;
+        public ViewAngle spawnViewAngle;
 
         internal virtual void Configure(ref T spawnSettings) {}
         internal virtual void Configure(List<GameObject> referencedPrefabs) { referencedPrefabs.Add(prefab); }
@@ -47,6 +48,7 @@ namespace PhysicsSimulations
                 RandomSeedOffset = authoring.randomSeedOffset,
                 RandomizeRotation = authoring.randomizeRotation,
                 SpawnOnce = authoring.spawnOnce,
+                SpawnViewAngle = (int)authoring.spawnViewAngle,
             };
             Configure(authoring, ref spawnSettings, GetEntity(TransformUsageFlags.Dynamic), this);
             Configure(authoring, ref spawnSettings);
@@ -70,6 +72,7 @@ namespace PhysicsSimulations
         int RandomSeedOffset { get; set; }
         bool RandomizeRotation { get; set; }
         bool SpawnOnce { get; set; }
+        int SpawnViewAngle { get; set; }
     }
 
     struct SpawnSettings : IComponentData, ISpawnSettings
@@ -82,5 +85,6 @@ namespace PhysicsSimulations
         public int RandomSeedOffset { get; set; }
         public bool RandomizeRotation { get; set; }
         public bool SpawnOnce { get; set; }
+        public int SpawnViewAngle { get; set; }
     }
 }

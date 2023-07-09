@@ -26,6 +26,7 @@ namespace PhysicsSimulations
         [Header("READ ONLY")]
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
+        public ViewAngle CurrentViewAngle;
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -102,6 +103,7 @@ namespace PhysicsSimulations
             topViewVC.SetActive(false);
 
             Debug.Log($"Change View: {_angle}");
+            CurrentViewAngle = _angle;
 
             switch (_angle)
             {
