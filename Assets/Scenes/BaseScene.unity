@@ -2452,6 +2452,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: 'Duesen Bayern '
       m_Image: {fileID: 0}
+    - m_Text: Corvette C8
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3679,6 +3681,7 @@ MonoBehaviour:
   sideViewVC: {fileID: 88391333}
   topViewVC: {fileID: 385878987}
   WindMagnitude: 0
+  ChangeCarIndex: -1
 --- !u!1 &1325584486
 GameObject:
   m_ObjectHideFlags: 0

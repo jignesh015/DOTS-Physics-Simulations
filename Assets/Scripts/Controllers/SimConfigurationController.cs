@@ -25,7 +25,7 @@ namespace PhysicsSimulations
 
         [Header("READ ONLY")]
         public float WindMagnitude;
-
+        public int ChangeCarIndex = -1;
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -116,16 +116,19 @@ namespace PhysicsSimulations
 
         public void ChangeCar(int _carIndex)
         {
-            EntityManager em = World.DefaultGameObjectInjectionWorld.EntityManager;
-            EntityQuery carQuery = em.CreateEntityQuery(typeof(CarComponent));
-            NativeArray<Entity> carArray = carQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-            foreach(Entity entity in carArray)
-            {
-                int _entityIndex = em.GetComponentData<CarComponent>(entity).Index;
-                LocalTransform obj = em.GetComponentData<LocalTransform>(entity);
-                obj.Scale = (_entityIndex == _carIndex) ? 1 : 0;
-                em.SetComponentData(entity, obj);
-            }
+            //return;
+            //EntityManager em = World.DefaultGameObjectInjectionWorld.EntityManager;
+            //EntityQuery carQuery = em.CreateEntityQuery(typeof(CarComponent));
+            //NativeArray<Entity> carArray = carQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
+            //foreach(Entity entity in carArray)
+            //{
+            //    int _entityIndex = em.GetComponentData<CarComponent>(entity).Index;
+            //    LocalTransform obj = em.GetComponentData<LocalTransform>(entity);
+            //    obj.Scale = (_entityIndex == _carIndex) ? 1 : 0;
+            //    em.SetComponentData(entity, obj);
+            //}
+
+            ChangeCarIndex = _carIndex;
         }
     }
 
