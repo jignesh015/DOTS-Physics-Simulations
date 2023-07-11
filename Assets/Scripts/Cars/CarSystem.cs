@@ -25,11 +25,14 @@ namespace PhysicsSimulations
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            SimConfigurationController scc = SimConfigurationController.Instance;
+            if (scc == null) return;
+
             if (isInitialized == 0)
             {
                 Debug.Log("Not init!");
                 isInitialized = 1;
-                SimConfigurationController.Instance.ChangeCar(0);
+                scc.ChangeCar(0);
                 return;
             }
             //SimConfigurationController.Instance.ChangeCar(0);
