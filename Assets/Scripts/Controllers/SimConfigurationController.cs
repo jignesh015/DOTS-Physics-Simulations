@@ -27,6 +27,7 @@ namespace PhysicsSimulations
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
         public ViewAngle CurrentViewAngle;
+        public bool SpawnAirParticles;
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }

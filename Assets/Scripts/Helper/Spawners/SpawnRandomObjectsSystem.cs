@@ -45,7 +45,7 @@ namespace PhysicsSimulations
 #else
                     var count = scc.CurrentSimConfig.airParticleCount;
 #endif
-                    if (spawnSettings.SpawnViewAngle == (int)scc.CurrentViewAngle)
+                    if (scc.SpawnAirParticles && spawnSettings.SpawnViewAngle == (int)scc.CurrentViewAngle)
                     {
                         OnBeforeInstantiatePrefab(ref spawnSettings);
 

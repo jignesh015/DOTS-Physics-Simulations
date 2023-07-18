@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace PhysicsSimulations
 {
@@ -66,21 +65,25 @@ namespace PhysicsSimulations
                 if (!voxelGrid.IsGridComplete && lengthBuffer < voxelGrid.Length)
                 {
                     var voxelGridTransform = em.GetComponentData<LocalTransform>(voxelGridEntity);
-                    float3 vgPos = voxelGridTransform.Position;
-                    SpawnSingleRow(em, voxelGrid, vgPos);
+                    SpawnSingleRow(em, voxelGridEntity, voxelGrid, voxelGridTransform);
                     lengthBuffer++;
                 }
                 else if (lengthBuffer >= voxelGrid.Length)
                 {
                     voxelGrid.IsGridComplete = true;
                     em.SetComponentData(voxelGridEntity, voxelGrid);
+
+                    //Add physics shape and physics body to the completed grid
+                    //em.AddComponent<PhysicsBodyAuthoringData>(voxelGridEntity);
+                    //em.AddComponent<PhysicsShapeAuthoring>(voxelGridEntity);
                 }
             }
             #endregion
         }
 
-        public void SpawnSingleRow(EntityManager em, VoxelGrid voxelGrid, float3 vgPos) 
+        public void SpawnSingleRow(EntityManager em, Entity voxelGridEntity, VoxelGrid voxelGrid, LocalTransform voxelGridTransform) 
         {
+            float3 vgPos = voxelGridTransform.Position;
             for (int i = 0; i < voxelGrid.Width; i++)
             {
                 //Set voxel position on the grid
@@ -88,15 +91,22 @@ namespace PhysicsSimulations
                 var voxelTransform = em.GetComponentData<LocalTransform>(voxelEntity);
                 voxelTransform.Position = new float3(vgPos.x + voxelGrid.GridOffset * i, vgPos.y, vgPos.z + voxelGrid.GridOffset * lengthBuffer);
 
+                //Set parent
+                em.AddComponent<Parent>(voxelEntity);
+                var voxelParent = em.GetComponentData<Parent>(voxelEntity);
+                voxelParent.Value = voxelGridEntity;
+
                 //Set voxel component data
                 Voxel voxel = em.GetComponentData<Voxel>(voxelEntity);
                 voxel.Row = lengthBuffer;
                 voxel.Column = i;
                 voxel.Height = lengthBuffer < (float)voxelGrid.Length / 3 || lengthBuffer > (float)voxelGrid.Length * 2 / 3 ? (float)voxel.MaxHeight / 2 : voxel.MaxHeight;
+                voxel.VoxelSize = voxelGrid.GridOffset;
 
                 voxel.IsVoxelReady = false;
 
                 em.SetComponentData(voxelEntity, voxelTransform);
+                em.SetComponentData(voxelEntity, voxelParent);
                 em.SetComponentData(voxelEntity, voxel);
             }
         }

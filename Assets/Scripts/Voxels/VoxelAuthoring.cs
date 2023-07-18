@@ -38,6 +38,7 @@ namespace PhysicsSimulations
         public float Height;
         public float MinHeight;
         public float MaxHeight;
+        public float VoxelSize;
         public bool IsVoxelReady;
     }
 }
