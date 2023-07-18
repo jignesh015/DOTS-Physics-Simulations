@@ -55,26 +55,13 @@ namespace PhysicsSimulations
         // Update is called once per frame
         void Update()
         {
-            //EntityQuery airParticleQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(AirParticle));
-            //NativeArray<Entity> airParticleArray = airParticleQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-            //foreach (Entity entity in airParticleArray)
-            //{
-            //    if(World.DefaultGameObjectInjectionWorld.EntityManager.Exists(entity))
-            //    {
-            //        var airP = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<AirParticle>(entity);
-            //        airP.Magnitude = defaultConfig.windSpeed;
-            //        World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(entity, airP);
-            //    }
-            //}
 
         }
 
         private void FixedUpdate()
         {
-            //CurrentSimConfig = defaultConfig;
-
-            WindMagnitude = CurrentSimConfig.airSpeed / Time.fixedDeltaTime;
-            //Debug.Log($"Fixed time: {Time.fixedDeltaTime}");
+            //WindMagnitude = CurrentSimConfig.airSpeed / Time.fixedDeltaTime;
+            WindMagnitude = CurrentSimConfig.airSpeed;
         }
 
         public void SetCurrentConfig(SimConfiguration config)
@@ -143,7 +130,7 @@ namespace PhysicsSimulations
     [Serializable]
     public class SimConfiguration
     {
-        [Range(1, 100)]
+        [Range(10, 100)]
         public float airSpeed;
         public Vector3 windSpawnZoneDimension;
 

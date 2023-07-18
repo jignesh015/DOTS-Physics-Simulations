@@ -46,10 +46,16 @@ namespace PhysicsSimulations
 
             public void Execute(ref AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
             {
-                float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
-                impulse *= DeltaTime;
+                //float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
+                //impulse *= DeltaTime;
+                //rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
 
-                rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
+                if (!airParticle.isForceApplied)
+                {
+                    float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
+                    airParticle.isForceApplied = true;
+                    rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
+                }
 
                 airParticle.Lifespan -= DeltaTime;
                 if (airParticle.Lifespan <= 0)

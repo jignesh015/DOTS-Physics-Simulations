@@ -4013,13 +4013,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultConfig:
-    airSpeed: 5
+    airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
     airParticleCount: 20
     airParticleGravityFactor: 0
   configSanityCheck:
-    airSpeedMin: 1
-    airSpeedMax: 80
+    airSpeedMin: 10
+    airSpeedMax: 120
     windSpawnZoneDimensionMin: {x: 0, y: 0, z: 0}
     windSpawnZoneDimensionMax: {x: 0, y: 0, z: 0}
     airParticleCountMin: 1
@@ -4031,6 +4031,7 @@ MonoBehaviour:
   WindMagnitude: 0
   ChangeCarIndex: -1
   CurrentViewAngle: 0
+  SpawnAirParticles: 0
 --- !u!1 &1325584486
 GameObject:
   m_ObjectHideFlags: 0
@@ -4838,10 +4839,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1268126459}
   m_HandleRect: {fileID: 1054695199}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 40
+  m_MinValue: 10
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 4
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

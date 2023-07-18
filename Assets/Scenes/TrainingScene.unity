@@ -3103,13 +3103,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultConfig:
-    airSpeed: 5
+    airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
     airParticleCount: 20
     airParticleGravityFactor: 0
   configSanityCheck:
-    airSpeedMin: 1
-    airSpeedMax: 80
+    airSpeedMin: 10
+    airSpeedMax: 120
     windSpawnZoneDimensionMin: {x: 0, y: 0, z: 0}
     windSpawnZoneDimensionMax: {x: 0, y: 0, z: 0}
     airParticleCountMin: 1
