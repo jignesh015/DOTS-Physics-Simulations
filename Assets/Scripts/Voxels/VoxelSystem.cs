@@ -36,12 +36,12 @@ namespace PhysicsSimulations
                 //Debug.Log($"{localToWorld.Value[0]} | {localToWorld.Value[1]} | {localToWorld.Value[2]} |{localToWorld.Value[3]}");
                 if (!voxel.IsVoxelReady)
                 {
-                    if(math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.05f)
+                    if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.05f)
                     {
                         //Lerp the Y-scale of the voxel
                         float yScale = math.lerp(localToWorld.Value[1][1], voxel.Height, DeltaTime);
                         localToWorld.Value[1][1] = yScale;
-                        
+
                         //Lerp the Y-position of the voxel to keep it grounded
                         localToWorld.Value[3][1] = yScale / 2f;
 
@@ -58,15 +58,22 @@ namespace PhysicsSimulations
                     {
                         //Set the final Y-scale and Y-position
                         localToWorld.Value[1][1] = voxel.Height;
-                        localToWorld.Value[3][1] = voxel.Height/2f;
+                        localToWorld.Value[3][1] = voxel.Height / 2f;
 
                         //Scale the collider
-                        collider.Value = Unity.Physics.BoxCollider.Create(new BoxGeometry
+                        collider.Value = BoxCollider.Create(new BoxGeometry
                         {
                             Center = float3.zero,
-                            BevelRadius = voxel.VoxelSize/2f,
+                            BevelRadius = voxel.VoxelSize / 2f,
                             Orientation = quaternion.identity,
                             Size = new float3(voxel.VoxelSize, voxel.Height, voxel.VoxelSize)
+                        },
+                        //Add collision filter
+                        collider.Value.Value.GetCollisionFilter(),
+                        //Add mat to raise events
+                        new Material
+                        {
+                            CollisionResponse = CollisionResponsePolicy.CollideRaiseCollisionEvents
                         });
 
                         voxel.IsVoxelReady = true;
@@ -75,7 +82,6 @@ namespace PhysicsSimulations
                         if (scc != null && !scc.SpawnAirParticles)
                             scc.SpawnAirParticles = true;
                     }
-                    
                 }
             }
         }
