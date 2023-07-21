@@ -28,7 +28,7 @@ namespace Events
             state.Dependency = new CollisionEventJob
             {
                 CollisionEventData = SystemAPI.GetComponentLookup<CollisionEvent>(),
-                PhysicsVelocityData = SystemAPI.GetComponentLookup<AirParticle>(),
+                AirParticle = SystemAPI.GetComponentLookup<AirParticle>(),
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
         }
 
@@ -36,15 +36,15 @@ namespace Events
         struct CollisionEventJob : ICollisionEventsJob
         {
             public ComponentLookup<CollisionEvent> CollisionEventData;
-            public ComponentLookup<AirParticle> PhysicsVelocityData;
+            public ComponentLookup<AirParticle> AirParticle;
 
             public void Execute(Unity.Physics.CollisionEvent collisionEvent)
             {
                 Entity entityA = collisionEvent.EntityA;
                 Entity entityB = collisionEvent.EntityB;
 
-                bool isBodyADynamic = PhysicsVelocityData.HasComponent(entityA);
-                bool isBodyBDynamic = PhysicsVelocityData.HasComponent(entityB);
+                bool isBodyADynamic = AirParticle.HasComponent(entityA);
+                bool isBodyBDynamic = AirParticle.HasComponent(entityB);
 
                 bool isBodyACollider = CollisionEventData.HasComponent(entityA);
                 bool isBodyBCollider = CollisionEventData.HasComponent(entityB);
@@ -53,16 +53,16 @@ namespace Events
                 {
                     var colliderComponent = CollisionEventData[entityA];
                     colliderComponent.CollisionCount++;
+                    colliderComponent.ImpactForce = AirParticle[entityB].ImpactForce;
                     CollisionEventData[entityA] = colliderComponent;
-                    //Debug.Log("<color=green>isBodyACollider</color>");
                 }
 
                 if (isBodyBCollider && isBodyADynamic)
                 {
                     var colliderComponent = CollisionEventData[entityB];
                     colliderComponent.CollisionCount++;
+                    colliderComponent.ImpactForce = AirParticle[entityA].ImpactForce;
                     CollisionEventData[entityB] = colliderComponent;
-                    //Debug.Log("<color=yellow>isBodyBCollider</color>");
                 }
             }
         }

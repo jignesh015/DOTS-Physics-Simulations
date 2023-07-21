@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Entities.UniversalDelegates;
@@ -27,7 +28,9 @@ namespace PhysicsSimulations
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
         public ViewAngle CurrentViewAngle;
-        public bool SpawnAirParticles;
+
+        public bool SpawnAirParticlesCommand { get; set; }
+        public bool SpawnAirParticles { get; private set; }
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -124,6 +127,14 @@ namespace PhysicsSimulations
         public void ResetToDefault()
         {
             CurrentSimConfig = defaultConfig;
+        }
+
+        public async void SpawnAirParticlesWithDelay(int _delayInMS)
+        {
+            SpawnAirParticlesCommand = true;
+            await Task.Delay( _delayInMS );
+            SpawnAirParticles = true;
+            SpawnAirParticlesCommand = false;
         }
     }
 

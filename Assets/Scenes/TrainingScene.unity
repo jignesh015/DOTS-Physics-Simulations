@@ -3105,7 +3105,7 @@ MonoBehaviour:
   defaultConfig:
     airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
-    airParticleCount: 15
+    airParticleCount: 1
     airParticleGravityFactor: 0
   configSanityCheck:
     airSpeedMin: 10
@@ -3121,9 +3121,6 @@ MonoBehaviour:
   WindMagnitude: 0
   ChangeCarIndex: -1
   CurrentViewAngle: 0
-  SpawnAirParticles: 0
-  AirVelocity: 0
-  AssignedAirParticle: 0
 --- !u!4 &913572971
 Transform:
   m_ObjectHideFlags: 0

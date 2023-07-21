@@ -1,3 +1,4 @@
+using System.Numerics;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
@@ -50,12 +51,16 @@ namespace PhysicsSimulations
                 //impulse *= DeltaTime;
                 //rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
 
-                if (!airParticle.isForceApplied)
+                if (!airParticle.IsForceApplied)
                 {
                     float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
-                    airParticle.isForceApplied = true;
+                    airParticle.IsForceApplied = true;
                     rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
                 }
+
+                float3 lV = rigidBodyAspect.LinearVelocity;
+                Vector3 _vel = new(lV.x, lV.y, lV.z);
+                airParticle.ImpactForce = 0.5f * rigidBodyAspect.Mass * _vel.LengthSquared();
 
                 airParticle.Lifespan -= DeltaTime;
                 if (airParticle.Lifespan <= 0)

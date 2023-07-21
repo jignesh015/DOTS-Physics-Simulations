@@ -22,5 +22,6 @@ namespace Events
     public struct CollisionEvent : IComponentData
     {
         public int CollisionCount;
+        public float ImpactForce;
     }
 }

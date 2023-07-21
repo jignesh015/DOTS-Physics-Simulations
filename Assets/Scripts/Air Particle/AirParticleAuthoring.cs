@@ -49,6 +49,7 @@ namespace PhysicsSimulations
         public float3 Direction;
         public float3 Offset;
         public float Lifespan;
-        public bool isForceApplied;
+        public bool IsForceApplied;
+        public float ImpactForce;
     }
 }

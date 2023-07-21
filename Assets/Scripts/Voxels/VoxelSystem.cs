@@ -79,8 +79,8 @@ namespace PhysicsSimulations
                         voxel.IsVoxelReady = true;
 
                         SimConfigurationController scc = SimConfigurationController.Instance;
-                        if (scc != null && !scc.SpawnAirParticles)
-                            scc.SpawnAirParticles = true;
+                        if (scc != null && !scc.SpawnAirParticlesCommand && !scc.SpawnAirParticles)
+                            scc.SpawnAirParticlesWithDelay(2000);
                     }
                 }
             }
