@@ -15,7 +15,12 @@ namespace PhysicsSimulations
         [SerializeField] private Slider airParticleCountInput;
 
         [Header("INDICATORS")]
-        [SerializeField] private TextMeshProUGUI airSpeedText; 
+        [SerializeField] private TextMeshProUGUI airSpeedText;
+
+        [Header("UI")]
+        [SerializeField] private Image spawnAirButtonIcon;
+        [SerializeField] private Sprite spawnAirPlaySprite;
+        [SerializeField] private Sprite spawnAirStopSprite;
 
         private SimConfiguration config;
         private SimConfigurationSanity configSanity;
@@ -37,6 +42,11 @@ namespace PhysicsSimulations
             if (config != null)
             {
                 airSpeedText.text = $"{config.airSpeed:0} mph";
+
+                if(spawnAirButtonIcon != null)
+                {
+                    spawnAirButtonIcon.sprite = scc.SpawnAirParticles ? spawnAirStopSprite : spawnAirPlaySprite;
+                }
             }
         }
 
@@ -97,6 +107,14 @@ namespace PhysicsSimulations
 
             SetConfigUI();
             //initialValueCheck = true;
+        }
+
+        public void OnSpawnAirParticlesButtonClicked()
+        {
+            if (!scc.SpawnAirParticlesCommand && !scc.SpawnAirParticles)
+                scc.SpawnAirParticlesWithDelay(0);
+            else if(!scc.SpawnAirParticlesCommand && scc.SpawnAirParticles)
+                scc.StopAirParticles();
         }
     }
 }

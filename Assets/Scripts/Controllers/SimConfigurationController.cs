@@ -136,6 +136,8 @@ namespace PhysicsSimulations
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
         }
+
+        public void StopAirParticles() { SpawnAirParticles = false; }
     }
 
     [Serializable]
