@@ -7,6 +7,7 @@ namespace PhysicsSimulations
     public enum ViewAngle
     {
         Side,
-        Top
+        Top,
+        FreeLook
     }
 }

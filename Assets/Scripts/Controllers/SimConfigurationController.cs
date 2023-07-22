@@ -19,6 +19,8 @@ namespace PhysicsSimulations
         public SimConfigurationSanity configSanityCheck;
 
         [Header("CAMERA SETTINGS")]
+        [SerializeField] private GameObject mainCamera;
+        [SerializeField] private GameObject freeLookCamera;
         [SerializeField] private GameObject sideViewVC;
         [SerializeField] private GameObject topViewVC;
 
@@ -55,13 +57,13 @@ namespace PhysicsSimulations
         // Start is called before the first frame update
         void Start()
         {
-            
+                
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         private void FixedUpdate()
@@ -93,8 +95,12 @@ namespace PhysicsSimulations
 
         public void ChangeView(ViewAngle _angle)
         {
+            mainCamera.SetActive(false);
+            freeLookCamera.SetActive(false);
             sideViewVC.SetActive(false);
             topViewVC.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
             Debug.Log($"Change View: {_angle}");
             CurrentViewAngle = _angle;
@@ -102,10 +108,15 @@ namespace PhysicsSimulations
             switch (_angle)
             {
                 case ViewAngle.Side:
+                    mainCamera.SetActive(true);
                     sideViewVC.SetActive(true);
                     break;
                 case ViewAngle.Top:
+                    mainCamera.SetActive(true);
                     topViewVC.SetActive(true);
+                    break;
+                case ViewAngle.FreeLook:
+                    freeLookCamera.SetActive(true);
                     break;
             }
         }
