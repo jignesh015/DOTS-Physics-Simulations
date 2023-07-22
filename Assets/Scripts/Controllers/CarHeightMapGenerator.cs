@@ -14,6 +14,8 @@ namespace PhysicsSimulations
 
         public List<CarHeightMap> carHeightMaps = new List<CarHeightMap>();
 
+        public int VoxelCount {  get; private set; }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -29,6 +31,8 @@ namespace PhysicsSimulations
         public void GenerateHeightmap()
         {
             carHeightMaps = new List<CarHeightMap>();
+
+            VoxelCount = heightmapTexture.width * heightmapTexture.height;
 
             Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
 

@@ -6,6 +6,10 @@ namespace Events
 {
     public class CollisionEventAuthoring : MonoBehaviour
     {
+        public GameObject lowImpactMatRefPrefab;
+        public GameObject midImpactMatRefPrefab;
+        public GameObject highImpactMatRefPrefab;
+
         class Baker : Baker<CollisionEventAuthoring>
         {
             public override void Bake(CollisionEventAuthoring authoring)
@@ -14,6 +18,9 @@ namespace Events
                 AddComponent(entity, new CollisionEvent()
                 {
                     CollisionCount = 0,
+                    LowImpactMatRef = GetEntity(authoring.lowImpactMatRefPrefab, TransformUsageFlags.None),
+                    MidImpactMatRef = GetEntity(authoring.midImpactMatRefPrefab, TransformUsageFlags.None),
+                    HighImpactMatRef = GetEntity(authoring.highImpactMatRefPrefab, TransformUsageFlags.None),
                 });
             }
         }
@@ -23,5 +30,8 @@ namespace Events
     {
         public int CollisionCount;
         public float ImpactForce;
+        public Entity LowImpactMatRef;
+        public Entity MidImpactMatRef;
+        public Entity HighImpactMatRef;
     }
 }

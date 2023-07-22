@@ -33,6 +33,7 @@ namespace PhysicsSimulations
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
         public ViewAngle CurrentViewAngle;
+        public int VoxelCollisionCount;
 
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
@@ -152,6 +153,20 @@ namespace PhysicsSimulations
         }
 
         public void StopAirParticles() { SpawnAirParticles = false; }
+
+        public int GetImpactLevel(int collisionCount)
+        {
+            float averageCollisionCount =  (float)VoxelCollisionCount/carHeightMapGenerator.VoxelCount;
+            int _impactLevel = 0;
+            if (collisionCount > averageCollisionCount*2)
+                _impactLevel = 3;
+            else if(collisionCount > averageCollisionCount)
+                _impactLevel = 2;
+            else if(collisionCount > averageCollisionCount/2)
+                _impactLevel = 1;
+            return _impactLevel;
+
+        }
     }
 
     [Serializable]

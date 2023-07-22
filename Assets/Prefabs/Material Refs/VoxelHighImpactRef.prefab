@@ -12,14 +12,12 @@ GameObject:
   - component: {fileID: 8563398581904080828}
   - component: {fileID: 7442044827312087727}
   - component: {fileID: 2634264106641327522}
-  - component: {fileID: 1083273295222116247}
-  - component: {fileID: 1949918286415142693}
   m_Layer: 0
-  m_Name: Voxel 0.02
+  m_Name: VoxelHighImpactRef
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 126
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6477926457522831708
 Transform:
@@ -30,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6333382075221045024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -64,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a81e300eadf521547a3c43eab00aced6, type: 2}
+  - {fileID: 2100000, guid: 9336caa986e2aca4aadf699da537266b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -135,7 +133,7 @@ MonoBehaviour:
     m_Template: {fileID: 0}
     m_CollisionResponse:
       m_Override: 0
-      m_Value: 1
+      m_Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -229,37 +227,3 @@ MonoBehaviour:
         Tag07: 0
     m_SerializedVersion: 1
   m_SerializedVersion: 1
---- !u!114 &1083273295222116247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6333382075221045024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419ac7abf4236354ebf949262253141a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  row: 0
-  column: 0
-  minHeight: 0.02
-  maxHeight: 2
---- !u!114 &1949918286415142693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6333382075221045024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9caa85ee99d467341b93c29810ef6bde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lowImpactMatRefPrefab: {fileID: 6333382075221045024, guid: 4040718177020374d821c30323241614,
-    type: 3}
-  midImpactMatRefPrefab: {fileID: 6333382075221045024, guid: 72c1d3b3ab95d7b44b4db582371e4dc0,
-    type: 3}
-  highImpactMatRefPrefab: {fileID: 6333382075221045024, guid: caaa5c934c1990d47b8ecb4ad2fe726a,
-    type: 3}
