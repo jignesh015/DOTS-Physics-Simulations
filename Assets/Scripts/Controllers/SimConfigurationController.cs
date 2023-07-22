@@ -22,6 +22,9 @@ namespace PhysicsSimulations
         [SerializeField] private GameObject sideViewVC;
         [SerializeField] private GameObject topViewVC;
 
+        [Header("SCRIPT REFERENCES")]
+        public CarHeightMapGenerator carHeightMapGenerator;
+
         public SimConfiguration CurrentSimConfig { get; private set; }
 
         [Header("READ ONLY")]

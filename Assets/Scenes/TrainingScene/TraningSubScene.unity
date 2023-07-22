@@ -1506,10 +1506,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 90
-  height: 130
+  height: 110
   gridOffset: 0.02
   spawnInterval: 0.1
-  airParticlePrefab: {fileID: 4128185496858806000, guid: 6f43e846b98d2a0409bca8e1db61f217,
+  airParticlePrefab: {fileID: 4128185496858806000, guid: f6672d5ac1bf0fd4aa8b24443cd6b839,
     type: 3}
 --- !u!1 &1496076742
 GameObject:

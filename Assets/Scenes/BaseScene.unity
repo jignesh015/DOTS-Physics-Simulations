@@ -1011,6 +1011,7 @@ MonoBehaviour:
     airParticleGravityFactorMax: 2
   sideViewVC: {fileID: 88391333}
   topViewVC: {fileID: 385878987}
+  carHeightMapGenerator: {fileID: 0}
   WindMagnitude: 0
   ChangeCarIndex: -1
   CurrentViewAngle: 0

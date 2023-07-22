@@ -100,7 +100,8 @@ namespace PhysicsSimulations
                 Voxel voxel = em.GetComponentData<Voxel>(voxelEntity);
                 voxel.Row = lengthBuffer;
                 voxel.Column = i;
-                voxel.Height = lengthBuffer < (float)voxelGrid.Length / 3 || lengthBuffer > (float)voxelGrid.Length * 2 / 3 ? (float)voxel.MaxHeight / 2 : voxel.MaxHeight;
+                //voxel.Height = lengthBuffer < (float)voxelGrid.Length / 3 || lengthBuffer > (float)voxelGrid.Length * 2 / 3 ? (float)voxel.MaxHeight / 2 : voxel.MaxHeight;
+                voxel.Height = math.clamp(SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(lengthBuffer, i), voxel.MinHeight, voxel.MaxHeight);
                 voxel.VoxelSize = voxelGrid.GridOffset;
 
                 voxel.IsVoxelReady = false;

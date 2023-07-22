@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Jobs;
 using Unity.Physics;
+using Unity.Physics.Aspects;
 
 namespace PhysicsSimulations
 {
@@ -15,12 +16,13 @@ namespace PhysicsSimulations
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            //EntityCommandBuffer ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
-            //   .CreateCommandBuffer(state.WorldUnmanaged);
+            EntityCommandBuffer ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
+               .CreateCommandBuffer(state.WorldUnmanaged);
 
             JobHandle adjustHeight = new AdjustHeight
             {
-                DeltaTime = SystemAPI.Time.DeltaTime
+                DeltaTime = SystemAPI.Time.DeltaTime,
+                Ecb = ecb,
             }.Schedule<AdjustHeight>(state.Dependency);
 
             adjustHeight.Complete();            
@@ -30,12 +32,19 @@ namespace PhysicsSimulations
         public partial struct AdjustHeight : IJobEntity
         {
             public float DeltaTime;
+            public EntityCommandBuffer Ecb;
 
-            public void Execute(ref Voxel voxel, ref LocalToWorld localToWorld, ref PhysicsCollider collider)
+            public void Execute(ref Voxel voxel, ref LocalToWorld localToWorld, ref PhysicsCollider collider, in Entity entity)
             {
                 //Debug.Log($"{localToWorld.Value[0]} | {localToWorld.Value[1]} | {localToWorld.Value[2]} |{localToWorld.Value[3]}");
                 if (!voxel.IsVoxelReady)
                 {
+                    if(voxel.Height <= voxel.MinHeight)
+                    {
+                        Ecb.DestroyEntity(entity);
+                        return;
+                    }
+
                     if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.05f)
                     {
                         //Lerp the Y-scale of the voxel
@@ -78,9 +87,9 @@ namespace PhysicsSimulations
 
                         voxel.IsVoxelReady = true;
 
-                        SimConfigurationController scc = SimConfigurationController.Instance;
-                        if (scc != null && !scc.SpawnAirParticlesCommand && !scc.SpawnAirParticles)
-                            scc.SpawnAirParticlesWithDelay(2000);
+                        //SimConfigurationController scc = SimConfigurationController.Instance;
+                        //if (scc != null && !scc.SpawnAirParticlesCommand && !scc.SpawnAirParticles)
+                        //    scc.SpawnAirParticlesWithDelay(2000);
                     }
                 }
             }
