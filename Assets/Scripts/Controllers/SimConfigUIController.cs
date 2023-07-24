@@ -13,9 +13,12 @@ namespace PhysicsSimulations
         [Header("SETTINGS")]
         [SerializeField] private Slider airSpeedInput;
         [SerializeField] private Slider airParticleCountInput;
+        [SerializeField] private TMP_InputField airParticleSpawnDurationInput;
 
         [Header("INDICATORS")]
         [SerializeField] private TextMeshProUGUI airSpeedText;
+        [SerializeField] private TextMeshProUGUI avgKineticEnergyText;
+        [SerializeField] private TextMeshProUGUI airDurationText;
 
         [Header("UI")]
         [SerializeField] private Image spawnAirButtonIcon;
@@ -26,7 +29,7 @@ namespace PhysicsSimulations
         private SimConfigurationSanity configSanity;
 
         private SimConfigurationController scc;
-        private bool initialValueCheck;
+        private bool configUISet;
 
         // Start is called before the first frame update
         void Start()
@@ -41,9 +44,18 @@ namespace PhysicsSimulations
         {
             if (config != null)
             {
-                airSpeedText.text = $"{config.airSpeed:0} mph";
+                //Display air speed
+                airSpeedText.text = $"Speed: {config.airSpeed:0} mph";
 
-                if(spawnAirButtonIcon != null)
+                //Display avg kinetic energy
+                ToggleKineticEnergyIndicator(scc.AverageKineticEnergy);
+
+                //Display countdown timer
+                airDurationText.gameObject.SetActive(scc.SpawnAirParticles && scc.CurrentSimConfig.airParticleSpawnDuration != 0);
+                if (airDurationText.gameObject.activeSelf)
+                    airDurationText.text = $"Duration: {Mathf.CeilToInt( scc.CurrentSimConfig.airParticleSpawnDuration - (Time.time - scc.AirParticlesSpawnStartTime))}s";
+
+                if (spawnAirButtonIcon != null)
                 {
                     spawnAirButtonIcon.sprite = scc.SpawnAirParticles ? spawnAirStopSprite : spawnAirPlaySprite;
                 }
@@ -57,6 +69,7 @@ namespace PhysicsSimulations
 
             airSpeedInput.value = config.airSpeed;
             airParticleCountInput.value = config.airParticleRatio;
+            airParticleSpawnDurationInput.text = config.airParticleSpawnDuration.ToString();
 
             //Set min-max value
             airSpeedInput.minValue = configSanity.airSpeedMin;
@@ -64,6 +77,8 @@ namespace PhysicsSimulations
 
             airParticleCountInput.minValue = configSanity.airParticleRatioMin;
             airParticleCountInput.maxValue = configSanity.airParticleRatioMax;
+
+            configUISet = true;
         }
 
         public void UpdateConfigSettings()
@@ -71,36 +86,44 @@ namespace PhysicsSimulations
             if (scc == null)
                 return;
 
-            if(!initialValueCheck)
+            if(!configUISet)
             {
-                initialValueCheck = true;
                 return;
             }
 
-            
             config.airSpeed = airSpeedInput.value;
             config.airParticleRatio = airParticleCountInput.value;
 
             scc.SetCurrentConfig(config);
         }
 
+        public void OnDurationValueChange(string _value)
+        {
+            if (scc == null || !configUISet) return;
+
+            Debug.Log($"OnDurationValueChange {_value}");
+
+            config.airParticleSpawnDuration = int.Parse(_value);
+            scc.SetCurrentConfig(config);
+        }
+
         public void OnViewDropdownChange(int _value)
         {
-            if(scc == null) return;
+            if(scc == null || !configUISet) return;
 
             scc.ChangeView((ViewAngle)_value);
         }
 
         public void OnCarDropdownChange(int _value)
         {
-            if (scc == null) return;
+            if (scc == null || !configUISet) return;
 
             scc.ChangeCar(_value);
         }
 
         public async void OnResetConfigButtonClicked()
         {
-            initialValueCheck = false;
+            configUISet = false;
             scc.ResetToDefault();
 
             await Task.Delay(100);
@@ -115,6 +138,12 @@ namespace PhysicsSimulations
                 scc.SpawnAirParticlesWithDelay(0);
             else if(!scc.SpawnAirParticlesCommand && scc.SpawnAirParticles)
                 scc.StopAirParticles();
+        }
+
+        public void ToggleKineticEnergyIndicator(float _value)
+        {
+            avgKineticEnergyText.gameObject.SetActive(_value != 0f);
+            avgKineticEnergyText.text = $"Avg KE: {_value:F2}J";
         }
     }
 }

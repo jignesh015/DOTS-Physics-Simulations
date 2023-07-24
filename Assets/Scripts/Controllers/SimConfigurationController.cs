@@ -1,14 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
-using Unity.Physics.Authoring;
-using Unity.Transforms;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 namespace PhysicsSimulations
 {
@@ -34,9 +28,15 @@ namespace PhysicsSimulations
         public int ChangeCarIndex = -1;
         public ViewAngle CurrentViewAngle;
         public int VoxelCollisionCount;
+        public List<float> KineticEnergyList;
 
+
+        //AIR PARTICLE SPAWN SETTINGS
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
+        public float AirParticlesSpawnStartTime { get; private set; }
+        public float AverageKineticEnergy { get; private set; }
+
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -64,7 +64,13 @@ namespace PhysicsSimulations
         // Update is called once per frame
         void Update()
         {
-            
+            if(SpawnAirParticles && CurrentSimConfig.airParticleSpawnDuration > 0)
+            {
+                if(Time.time - AirParticlesSpawnStartTime > CurrentSimConfig.airParticleSpawnDuration)
+                {
+                    StopAirParticles();
+                }
+            }
         }
 
         private void FixedUpdate()
@@ -81,6 +87,7 @@ namespace PhysicsSimulations
         public SimConfiguration PerformSanityCheck(SimConfiguration config)
         {
             SimConfigurationSanity csc = configSanityCheck;
+            Debug.Log($"<color=green>Duration is set to {config.airParticleSpawnDuration} Min: {csc.airParticleSpawnDurationMin} Max: {csc.airParticleSpawnDurationMax}</color>");
             config.airSpeed = Mathf.Clamp(config.airSpeed, csc.airSpeedMin, csc.airSpeedMax);
             config.windSpawnZoneDimension = new Vector3(
                 Mathf.Clamp(config.windSpawnZoneDimension.x, csc.windSpawnZoneDimensionMin.x, csc.windSpawnZoneDimensionMax.x),
@@ -88,7 +95,9 @@ namespace PhysicsSimulations
                 Mathf.Clamp(config.windSpawnZoneDimension.z, csc.windSpawnZoneDimensionMin.z, csc.windSpawnZoneDimensionMax.z)
                 );
             config.airParticleRatio = Mathf.Clamp( config.airParticleRatio, csc.airParticleRatioMin, csc.airParticleRatioMax );
+            config.airParticleSpawnDuration = Mathf.Clamp(config.airParticleSpawnDuration, csc.airParticleSpawnDurationMin, csc.airParticleSpawnDurationMax );
             config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
+            Debug.Log($"<color=red>Duration is set to {config.airParticleSpawnDuration}</color>");
             return config;
         }
 
@@ -150,9 +159,16 @@ namespace PhysicsSimulations
             await Task.Delay( _delayInMS );
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
+            AirParticlesSpawnStartTime = Time.time;
+
+            ResetKineticEnergyList();
         }
 
-        public void StopAirParticles() { SpawnAirParticles = false; }
+        public void StopAirParticles() 
+        { 
+            SpawnAirParticles = false;
+            CalculateAverageKineticEnergy();
+        }
 
         public int GetImpactLevel(int collisionCount)
         {
@@ -167,6 +183,35 @@ namespace PhysicsSimulations
             return _impactLevel;
 
         }
+
+        public void ResetKineticEnergyList()
+        {
+            AverageKineticEnergy = 0;
+            KineticEnergyList = new List<float>();
+        }
+
+        public void UpdateKineticEnergyList(float _energyValue)
+        {
+            if(SpawnAirParticles && KineticEnergyList.Count < 10000)
+            {
+                KineticEnergyList.Add(_energyValue);
+            }
+        }
+
+        public void CalculateAverageKineticEnergy()
+        {
+            if(KineticEnergyList != null && KineticEnergyList.Count > 0)
+            {
+                AverageKineticEnergy = KineticEnergyList.Average();
+                Debug.Log($"<color=cyan>Average = {AverageKineticEnergy}</color>");
+                KineticEnergyList.Clear();
+            }
+            else
+            {
+                AverageKineticEnergy = 0;
+                Debug.Log($"<color=red>KineticEnergyList is empty</color>");
+            }
+        }
     }
 
     [Serializable]
@@ -179,16 +224,22 @@ namespace PhysicsSimulations
         [Range(0.1f,1f)]
         public float airParticleRatio;
 
+        [Range(0, 20)]
+        public int airParticleSpawnDuration;
+
         [Range(0,1)]
         public float airParticleGravityFactor;
 
         public SimConfiguration Clone()
         {
-            SimConfiguration config = new SimConfiguration();
-            config.airSpeed = this.airSpeed;
-            config.windSpawnZoneDimension = this.windSpawnZoneDimension;
-            config.airParticleRatio = this.airParticleRatio;
-            config.airParticleGravityFactor = this.airParticleGravityFactor;
+            SimConfiguration config = new SimConfiguration
+            {
+                airSpeed = this.airSpeed,
+                windSpawnZoneDimension = this.windSpawnZoneDimension,
+                airParticleRatio = this.airParticleRatio,
+                airParticleSpawnDuration = this.airParticleSpawnDuration,
+                airParticleGravityFactor = this.airParticleGravityFactor
+            };
             return config;
         }
     }
@@ -204,6 +255,9 @@ namespace PhysicsSimulations
 
         public float airParticleRatioMin;
         public float airParticleRatioMax;
+
+        public int airParticleSpawnDurationMin;
+        public int airParticleSpawnDurationMax;
 
         public float airParticleGravityFactorMin;
         public float airParticleGravityFactorMax;

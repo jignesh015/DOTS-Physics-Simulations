@@ -61,6 +61,7 @@ namespace PhysicsSimulations
                 if (airParticle.Lifespan <= 0)
                 {
                     //UnityEngine.Debug.Log($"<color=red>Impact on Death: {airParticle.KineticEnergy}</color>");
+                    SimConfigurationController.Instance.UpdateKineticEnergyList(airParticle.KineticEnergy);
                     Ecb.DestroyEntity(rigidBodyAspect.Entity);
                 }
             }

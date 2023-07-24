@@ -49,6 +49,7 @@ namespace PhysicsSimulations
                         if(airParticle.HasComponent(otherEntity))
                         {
                             //Debug.Log($"<color=orange>Impact on Trigger: {airParticle[otherEntity].KineticEnergy}</color>");
+                            SimConfigurationController.Instance.UpdateKineticEnergyList(airParticle[otherEntity].KineticEnergy);
                             ecb.DestroyEntity(otherEntity);
                         }
                     }
