@@ -13,6 +13,7 @@ namespace PhysicsSimulations
         public float gridOffset;
         public double spawnInterval;
         public GameObject airParticlePrefab;
+        public bool spawnOnce;
 
         class Baker : Baker<AirParticleSpawnAuthoring>
         {
@@ -26,6 +27,7 @@ namespace PhysicsSimulations
                     GridOffset = authoring.gridOffset,
                     SpawnInterval = authoring.spawnInterval,
                     AirParticlePrefab = GetEntity(authoring.airParticlePrefab, TransformUsageFlags.Dynamic),
+                    SpawnOnce = authoring.spawnOnce,
                     SpawnPlacesAdded = false,
                 });
             }
@@ -39,6 +41,7 @@ namespace PhysicsSimulations
         public float GridOffset;
         public double SpawnInterval;
         public Entity AirParticlePrefab;
+        public bool SpawnOnce;
         public bool SpawnPlacesAdded;
     }
 }

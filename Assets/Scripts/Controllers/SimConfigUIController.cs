@@ -56,14 +56,14 @@ namespace PhysicsSimulations
             configSanity = scc.configSanityCheck;
 
             airSpeedInput.value = config.airSpeed;
-            airParticleCountInput.value = config.airParticleCount;
+            airParticleCountInput.value = config.airParticleRatio;
 
             //Set min-max value
             airSpeedInput.minValue = configSanity.airSpeedMin;
             airSpeedInput.maxValue = configSanity.airSpeedMax;
 
-            airParticleCountInput.minValue = configSanity.airParticleCountMin;
-            airParticleCountInput.maxValue = configSanity.airParticleCountMax;
+            airParticleCountInput.minValue = configSanity.airParticleRatioMin;
+            airParticleCountInput.maxValue = configSanity.airParticleRatioMax;
         }
 
         public void UpdateConfigSettings()
@@ -79,7 +79,7 @@ namespace PhysicsSimulations
 
             
             config.airSpeed = airSpeedInput.value;
-            config.airParticleCount = (int)airParticleCountInput.value;
+            config.airParticleRatio = (int)airParticleCountInput.value;
 
             scc.SetCurrentConfig(config);
         }

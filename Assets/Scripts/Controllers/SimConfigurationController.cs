@@ -87,7 +87,7 @@ namespace PhysicsSimulations
                 Mathf.Clamp(config.windSpawnZoneDimension.y, csc.windSpawnZoneDimensionMin.y, csc.windSpawnZoneDimensionMax.y),
                 Mathf.Clamp(config.windSpawnZoneDimension.z, csc.windSpawnZoneDimensionMin.z, csc.windSpawnZoneDimensionMax.z)
                 );
-            config.airParticleCount = Mathf.Clamp( config.airParticleCount, csc.airParticleCountMin, csc.airParticleCountMax );
+            config.airParticleRatio = Mathf.Clamp( config.airParticleRatio, csc.airParticleRatioMin, csc.airParticleRatioMax );
             config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
             return config;
         }
@@ -176,8 +176,8 @@ namespace PhysicsSimulations
         public float airSpeed;
         public Vector3 windSpawnZoneDimension;
 
-        [Range(1,50)]
-        public int airParticleCount;
+        [Range(0.1f,2f)]
+        public float airParticleRatio;
 
         [Range(0,2)]
         public float airParticleGravityFactor;
@@ -187,7 +187,7 @@ namespace PhysicsSimulations
             SimConfiguration config = new SimConfiguration();
             config.airSpeed = this.airSpeed;
             config.windSpawnZoneDimension = this.windSpawnZoneDimension;
-            config.airParticleCount = this.airParticleCount;
+            config.airParticleRatio = this.airParticleRatio;
             config.airParticleGravityFactor = this.airParticleGravityFactor;
             return config;
         }
@@ -202,8 +202,8 @@ namespace PhysicsSimulations
         public Vector3 windSpawnZoneDimensionMin;
         public Vector3 windSpawnZoneDimensionMax;
 
-        public int airParticleCountMin;
-        public int airParticleCountMax;
+        public float airParticleRatioMin;
+        public float airParticleRatioMax;
 
         public float airParticleGravityFactorMin;
         public float airParticleGravityFactorMax;

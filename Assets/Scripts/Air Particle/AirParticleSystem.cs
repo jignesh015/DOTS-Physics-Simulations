@@ -47,24 +47,20 @@ namespace PhysicsSimulations
 
             public void Execute(ref AirParticle airParticle, RigidBodyAspect rigidBodyAspect)
             {
-                //float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
-                //impulse *= DeltaTime;
-                //rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
-
                 if (!airParticle.IsForceApplied)
                 {
                     float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
-                    airParticle.IsForceApplied = true;
                     rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
+                    airParticle.IsForceApplied = true;
                 }
 
-                float3 lV = rigidBodyAspect.LinearVelocity;
-                Vector3 _vel = new(lV.x, lV.y, lV.z);
-                airParticle.ImpactForce = 0.5f * rigidBodyAspect.Mass * _vel.LengthSquared();
+                airParticle.KineticEnergy = 0.5f * rigidBodyAspect.Mass * math.lengthsq(rigidBodyAspect.LinearVelocity);
+                //UnityEngine.Debug.Log($"<color=green>Impact: {airParticle.Force}</color>");
 
                 airParticle.Lifespan -= DeltaTime;
                 if (airParticle.Lifespan <= 0)
                 {
+                    //UnityEngine.Debug.Log($"<color=red>Impact on Death: {airParticle.KineticEnergy}</color>");
                     Ecb.DestroyEntity(rigidBodyAspect.Entity);
                 }
             }

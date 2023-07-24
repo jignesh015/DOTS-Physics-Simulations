@@ -44,7 +44,13 @@ namespace PhysicsSimulations
 
                     if (triggerEvent.State == StatefulEventState.Enter)
                     {
-                        ecb.DestroyEntity(otherEntity);
+                        //Check if air particle
+                        var airParticle = SystemAPI.GetComponentLookup<AirParticle>();
+                        if(airParticle.HasComponent(otherEntity))
+                        {
+                            //Debug.Log($"<color=orange>Impact on Trigger: {airParticle[otherEntity].KineticEnergy}</color>");
+                            ecb.DestroyEntity(otherEntity);
+                        }
                     }
                 }
             }

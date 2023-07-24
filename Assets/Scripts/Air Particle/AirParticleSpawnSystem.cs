@@ -16,6 +16,8 @@ namespace PhysicsSimulations
         private bool hasSpawned;
         private double spawnTime;
 
+        private int totalSpawnPosCount;
+
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
@@ -32,30 +34,35 @@ namespace PhysicsSimulations
                     var spawnerTransform = em.GetComponentData<LocalTransform>(spawnerEntity);
                     float3 spawnerPos = spawnerTransform.Position;
                     spawnPositions = new NativeArray<float3>(spawner.Width * spawner.Height, Allocator.Persistent);
-                    int spawnPosCount = 0;
+                    totalSpawnPosCount = 0;
 
                     //Add particle spawn positions to a list
                     for (int i = 0; i < spawner.Width; i++)
                     {
                         for (int j = 0; j < spawner.Height; j++)
                         {
-                            spawnPositions[spawnPosCount] = new float3(spawnerPos.x + spawner.GridOffset * i, spawnerPos.y + spawner.GridOffset * j, spawnerPos.z);
-                            spawnPosCount++;
+                            spawnPositions[totalSpawnPosCount] = new float3(spawnerPos.x + spawner.GridOffset * i, spawnerPos.y + spawner.GridOffset * j, spawnerPos.z);
+                            totalSpawnPosCount++;
                         }
                     }
-                    Debug.Log($"Total count: {spawnPosCount}");
+                    Debug.Log($"Total count: {totalSpawnPosCount}");
                     spawner.SpawnPlacesAdded = true;
                     em.SetComponentData(spawnerEntity, spawner);
                 }
                 else if (!hasSpawned && scc.SpawnAirParticles)
                 {
-                    var count = (spawner.Width * spawner.Height * scc.CurrentSimConfig.airParticleCount) / 100;
+                    var count = spawner.Width * spawner.Height;
+                    if(count > 100)
+                        count = (int)((spawner.Width * spawner.Height * scc.CurrentSimConfig.airParticleRatio) / 100);
                     //Debug.Log($"Spawn count: {count}");
                     var instances = new NativeArray<Entity>(count, Allocator.Temp);
                     em.Instantiate(spawner.AirParticlePrefab, instances);
 
                     var randomSpawnPositions = new NativeArray<float3>(count, Allocator.Temp);
-                    GetRandomSubset(spawnPositions, ref randomSpawnPositions, count, SystemAPI.Time.ElapsedTime);
+                    if (totalSpawnPosCount <= 100)
+                        randomSpawnPositions = spawnPositions;
+                    else
+                        GetRandomSubset(spawnPositions, ref randomSpawnPositions, count, SystemAPI.Time.ElapsedTime);
                     for (int i = 0; i < count; i++)
                     {
                         var instance = instances[i];
@@ -68,7 +75,7 @@ namespace PhysicsSimulations
                     hasSpawned = true;
                     spawnTime = SystemAPI.Time.ElapsedTime;
                 }
-                else if (hasSpawned && SystemAPI.Time.ElapsedTime - spawnTime > spawner.SpawnInterval)
+                else if (hasSpawned && SystemAPI.Time.ElapsedTime - spawnTime > spawner.SpawnInterval && !spawner.SpawnOnce)
                 {
                     hasSpawned = false;
                 }

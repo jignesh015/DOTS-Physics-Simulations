@@ -931,15 +931,15 @@ MonoBehaviour:
   defaultConfig:
     airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
-    airParticleCount: 1
+    airParticleRatio: 1
     airParticleGravityFactor: 0
   configSanityCheck:
     airSpeedMin: 10
     airSpeedMax: 120
     windSpawnZoneDimensionMin: {x: 0, y: 0, z: 0}
     windSpawnZoneDimensionMax: {x: 0, y: 0, z: 0}
-    airParticleCountMin: 1
-    airParticleCountMax: 40
+    airParticleRatioMin: 0.1
+    airParticleRatioMax: 2
     airParticleGravityFactorMin: 0
     airParticleGravityFactorMax: 2
   mainCamera: {fileID: 330585543}
@@ -950,6 +950,7 @@ MonoBehaviour:
   WindMagnitude: 0
   ChangeCarIndex: -1
   CurrentViewAngle: 0
+  VoxelCollisionCount: 0
 --- !u!4 &913572971
 Transform:
   m_ObjectHideFlags: 0

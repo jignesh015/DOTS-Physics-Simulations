@@ -1,6 +1,5 @@
 using PhysicsSimulations;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
@@ -63,8 +62,9 @@ namespace Events
                 var colliderComponent = CollisionEventData[colliderEntity];
                 colliderComponent.CollisionCount++;
                 scc.VoxelCollisionCount++;
-                colliderComponent.ImpactForce = AirParticle[airParticleEntity].ImpactForce;
+                colliderComponent.ImpactForce = AirParticle[airParticleEntity].KineticEnergy;
                 CollisionEventData[colliderEntity] = colliderComponent;
+                //Debug.Log($"<color=yellow>Impact on collision: {AirParticle[airParticleEntity].Force}</color>");
 
                 //Assign impact mat
                 int _impactLevel = scc.GetImpactLevel(colliderComponent.CollisionCount);
@@ -88,41 +88,6 @@ namespace Events
                     materialComponent.Material = refMaterialComponent.Material;
                     MaterialMesh[colliderEntity] = materialComponent;
                 }
-
-
-                //if (isBodyACollider && isBodyBDynamic)
-                //{
-                //    var colliderComponent = CollisionEventData[entityA];
-                //    colliderComponent.CollisionCount++;
-                //    scc.VoxelCollisionCount++;
-                //    colliderComponent.ImpactForce = AirParticle[entityB].ImpactForce;
-                //    CollisionEventData[entityA] = colliderComponent;
-
-                //    if(bodyAHasMaterial)
-                //    {
-                //        var materialComponent = MaterialMesh[entityA];
-                //        var refMaterialComponent = MaterialMesh[colliderComponent.NewMatRefEntity];
-                //        materialComponent.Material = refMaterialComponent.Material;
-                //        MaterialMesh[entityA] = materialComponent;
-                //    }
-                //}
-
-                //if (isBodyBCollider && isBodyADynamic)
-                //{
-                //    var colliderComponent = CollisionEventData[entityB];
-                //    colliderComponent.CollisionCount++;
-                //    scc.VoxelCollisionCount++;
-                //    colliderComponent.ImpactForce = AirParticle[entityA].ImpactForce;
-                //    CollisionEventData[entityB] = colliderComponent;
-
-                //    if (bodyBHasMaterial)
-                //    {
-                //        var materialComponent = MaterialMesh[entityB];
-                //        var refMaterialComponent = MaterialMesh[colliderComponent.NewMatRefEntity];
-                //        materialComponent.Material = refMaterialComponent.Material;
-                //        MaterialMesh[entityB] = materialComponent;
-                //    }
-                //}
             }
         }
     }

@@ -43,7 +43,7 @@ namespace PhysicsSimulations
                     // Limit the number of bodies on platforms with potentially low-end devices
                     var count = math.min(spawnSettings.Count, 500);
 #else
-                    var count = scc.CurrentSimConfig.airParticleCount;
+                    var count = (int)scc.CurrentSimConfig.airParticleRatio;
 #endif
                     if (scc.SpawnAirParticles && spawnSettings.SpawnViewAngle == (int)scc.CurrentViewAngle)
                     {
