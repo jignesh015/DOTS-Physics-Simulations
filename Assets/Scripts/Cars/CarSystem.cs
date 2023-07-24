@@ -30,27 +30,11 @@ namespace PhysicsSimulations
 
             if (isInitialized == 0)
             {
-                Debug.Log("Not init!");
+                //Debug.Log("Not init!");
                 isInitialized = 1;
                 scc.ChangeCar(0);
                 return;
             }
-            //SimConfigurationController.Instance.ChangeCar(0);
-
-            
-
-            //EntityManager em = state.EntityManager;
-            //EntityQuery carQuery = em.CreateEntityQuery(typeof(CarComponent));
-            //NativeArray<Entity> carArray = carQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-
-            //Debug.Log($"carArray system: {carArray.Length}");
-            //foreach (Entity entity in carArray)
-            //{
-            //    LocalTransform obj = em.GetComponentData<LocalTransform>(entity);
-            //    obj.Scale = 0;
-            //    em.SetComponentData(entity, obj);
-            //}
-            //isInitialized = true;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace PhysicsSimulations
                         return;
                     }
 
-                    if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.01f)
+                    if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.005f)
                     {
                         //Lerp the Y-scale of the voxel
                         float yScale = math.lerp(localToWorld.Value[1][1], voxel.Height, DeltaTime);
