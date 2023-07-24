@@ -14,6 +14,10 @@ namespace PhysicsSimulations
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            if(SimConfigurationController.Instance == null || 
+                !SimConfigurationController.Instance.carHeightMapGenerator.HeightmapReady )
+                return;
+
             EntityManager em = state.EntityManager;
 
             //Get all voxel grids

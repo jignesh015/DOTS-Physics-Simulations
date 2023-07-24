@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee7585c1b69d7742a3548689ace7eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightmapTexture: {fileID: 2800000, guid: 70893bfac3fa1ce4fac97b14d1d1103f, type: 3}
+  heightmapTexture: {fileID: 2800000, guid: 5544e8b62bc65fc44a264ce2082cb1f6, type: 3}
   heightmapScale: 1
   carHeightMaps: []
 --- !u!4 &1100855744
