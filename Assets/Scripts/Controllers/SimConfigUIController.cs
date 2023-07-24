@@ -79,7 +79,7 @@ namespace PhysicsSimulations
 
             
             config.airSpeed = airSpeedInput.value;
-            config.airParticleRatio = (int)airParticleCountInput.value;
+            config.airParticleRatio = airParticleCountInput.value;
 
             scc.SetCurrentConfig(config);
         }

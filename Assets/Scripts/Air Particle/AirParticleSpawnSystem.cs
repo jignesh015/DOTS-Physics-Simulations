@@ -52,9 +52,9 @@ namespace PhysicsSimulations
                 else if (!hasSpawned && scc.SpawnAirParticles)
                 {
                     var count = spawner.Width * spawner.Height;
-                    if(count > 100)
-                        count = (int)((spawner.Width * spawner.Height * scc.CurrentSimConfig.airParticleRatio) / 100);
-                    //Debug.Log($"Spawn count: {count}");
+                    if (count > 100)
+                        count = ((int)((spawner.Width * spawner.Height * scc.CurrentSimConfig.airParticleRatio) / 100));
+                    //Debug.Log($"<color=yellow>Spawn count: {count}</color>");
                     var instances = new NativeArray<Entity>(count, Allocator.Temp);
                     em.Instantiate(spawner.AirParticlePrefab, instances);
 

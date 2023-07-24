@@ -931,7 +931,7 @@ MonoBehaviour:
   defaultConfig:
     airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
-    airParticleRatio: 1
+    airParticleRatio: 0.65
     airParticleGravityFactor: 0
   configSanityCheck:
     airSpeedMin: 10
@@ -939,9 +939,9 @@ MonoBehaviour:
     windSpawnZoneDimensionMin: {x: 0, y: 0, z: 0}
     windSpawnZoneDimensionMax: {x: 0, y: 0, z: 0}
     airParticleRatioMin: 0.1
-    airParticleRatioMax: 2
+    airParticleRatioMax: 1
     airParticleGravityFactorMin: 0
-    airParticleGravityFactorMax: 2
+    airParticleGravityFactorMax: 1
   mainCamera: {fileID: 330585543}
   freeLookCamera: {fileID: 1551428645}
   sideViewVC: {fileID: 88391333}
@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee7585c1b69d7742a3548689ace7eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightmapTexture: {fileID: 2800000, guid: b59b1a2c287942d4b843abe34119f788, type: 3}
+  heightmapTexture: {fileID: 2800000, guid: 5544e8b62bc65fc44a264ce2082cb1f6, type: 3}
   heightmapScale: 1
   carHeightMaps: []
 --- !u!4 &1100855744

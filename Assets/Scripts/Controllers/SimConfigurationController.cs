@@ -176,10 +176,10 @@ namespace PhysicsSimulations
         public float airSpeed;
         public Vector3 windSpawnZoneDimension;
 
-        [Range(0.1f,2f)]
+        [Range(0.1f,1f)]
         public float airParticleRatio;
 
-        [Range(0,2)]
+        [Range(0,1)]
         public float airParticleGravityFactor;
 
         public SimConfiguration Clone()

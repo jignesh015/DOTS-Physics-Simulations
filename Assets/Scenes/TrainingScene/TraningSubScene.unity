@@ -1797,7 +1797,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1473981431}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: -2.52}
+  m_LocalPosition: {x: 0, y: 0.1, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1816,10 +1816,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798979f1bfdb1954e8ed43b377a30e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 90
-  height: 90
-  gridOffset: 0.02
-  spawnInterval: 0.1
+  width: 180
+  height: 110
+  gridOffset: 0.01
+  spawnInterval: 0.25
   airParticlePrefab: {fileID: 4128185496858806000, guid: f6672d5ac1bf0fd4aa8b24443cd6b839,
     type: 3}
   spawnOnce: 0
