@@ -13,12 +13,12 @@ namespace PhysicsSimulations
         [Header("SETTINGS")]
         [SerializeField] private Slider airSpeedInput;
         [SerializeField] private Slider airParticleCountInput;
-        [SerializeField] private TMP_InputField airParticleSpawnDurationInput;
+        [SerializeField] private TMP_InputField airParticleBurstCountInput;
 
         [Header("INDICATORS")]
         [SerializeField] private TextMeshProUGUI airSpeedText;
         [SerializeField] private TextMeshProUGUI avgKineticEnergyText;
-        [SerializeField] private TextMeshProUGUI airDurationText;
+        [SerializeField] private TextMeshProUGUI airBurstCountText;
 
         [Header("UI")]
         [SerializeField] private Image spawnAirButtonIcon;
@@ -50,10 +50,10 @@ namespace PhysicsSimulations
                 //Display avg kinetic energy
                 ToggleKineticEnergyIndicator(scc.AverageKineticEnergy);
 
-                //Display countdown timer
-                airDurationText.gameObject.SetActive(scc.SpawnAirParticles && scc.CurrentSimConfig.airParticleSpawnDuration != 0);
-                if (airDurationText.gameObject.activeSelf)
-                    airDurationText.text = $"Duration: {Mathf.CeilToInt( scc.CurrentSimConfig.airParticleSpawnDuration - (Time.time - scc.AirParticlesSpawnStartTime))}s";
+                //Display burst count
+                airBurstCountText.gameObject.SetActive(scc.SpawnAirParticles);
+                if (airBurstCountText.gameObject.activeSelf)
+                    airBurstCountText.text = $"Burst: {scc.AirParticlesBurstCount}";
 
                 if (spawnAirButtonIcon != null)
                 {
@@ -69,7 +69,7 @@ namespace PhysicsSimulations
 
             airSpeedInput.value = config.airSpeed;
             airParticleCountInput.value = config.airParticleRatio;
-            airParticleSpawnDurationInput.text = config.airParticleSpawnDuration.ToString();
+            airParticleBurstCountInput.text = config.airParticleBurstCount.ToString();
 
             //Set min-max value
             airSpeedInput.minValue = configSanity.airSpeedMin;
@@ -103,7 +103,7 @@ namespace PhysicsSimulations
 
             Debug.Log($"OnDurationValueChange {_value}");
 
-            config.airParticleSpawnDuration = int.Parse(_value);
+            config.airParticleBurstCount = int.Parse(_value);
             scc.SetCurrentConfig(config);
         }
 

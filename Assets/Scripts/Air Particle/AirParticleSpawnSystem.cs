@@ -74,6 +74,7 @@ namespace PhysicsSimulations
                     }
                     hasSpawned = true;
                     spawnTime = SystemAPI.Time.ElapsedTime;
+                    scc.AirParticlesBurstCount++;
                 }
                 else if (hasSpawned && SystemAPI.Time.ElapsedTime - spawnTime > spawner.SpawnInterval && !spawner.SpawnOnce)
                 {

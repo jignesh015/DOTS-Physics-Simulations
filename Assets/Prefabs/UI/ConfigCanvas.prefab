@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 5687696564280274346}
   - component: {fileID: 1491138733596261986}
   m_Layer: 5
-  m_Name: AirDurationText
+  m_Name: AirBurstCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -937,7 +937,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Duration: \u221E"
+  m_text: "Burst: \u221E"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f340b1fc510c9f149b65095e3be69e9f, type: 2}
   m_sharedMaterial: {fileID: -4161587639618137020, guid: f340b1fc510c9f149b65095e3be69e9f,
@@ -4764,7 +4764,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Duration
+  m_text: 'Burst Count
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f340b1fc510c9f149b65095e3be69e9f, type: 2}
   m_sharedMaterial: {fileID: -4161587639618137020, guid: f340b1fc510c9f149b65095e3be69e9f,
@@ -4792,7 +4794,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
+  m_fontSize: 29.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4953,10 +4955,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   airSpeedInput: {fileID: 1781110679988306286}
   airParticleCountInput: {fileID: 6435528607747721262}
-  airParticleSpawnDurationInput: {fileID: 3981897483046651463}
+  airParticleBurstCountInput: {fileID: 3981897483046651463}
   airSpeedText: {fileID: 517612798246716757}
   avgKineticEnergyText: {fileID: 8811866477239825560}
-  airDurationText: {fileID: 1491138733596261986}
+  airBurstCountText: {fileID: 1491138733596261986}
   spawnAirButtonIcon: {fileID: 7864867694775914170}
   spawnAirPlaySprite: {fileID: 21300000, guid: ea14fc2086a5bba49821bad2d5e83685, type: 3}
   spawnAirStopSprite: {fileID: 21300000, guid: f05091433d715a64bbafff594b302309, type: 3}
@@ -6002,7 +6004,7 @@ GameObject:
   - component: {fileID: 3434524024486957606}
   - component: {fileID: 3981897483046651463}
   m_Layer: 5
-  m_Name: AirSpawnDurationInput
+  m_Name: AirBurstCountInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

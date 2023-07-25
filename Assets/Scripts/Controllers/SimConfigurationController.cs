@@ -34,7 +34,7 @@ namespace PhysicsSimulations
         //AIR PARTICLE SPAWN SETTINGS
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
-        public float AirParticlesSpawnStartTime { get; private set; }
+        public int AirParticlesBurstCount { get; set; }
         public float AverageKineticEnergy { get; private set; }
 
 
@@ -58,25 +58,26 @@ namespace PhysicsSimulations
         // Start is called before the first frame update
         void Start()
         {
-                
         }
 
         // Update is called once per frame
         void Update()
         {
-            if(SpawnAirParticles && CurrentSimConfig.airParticleSpawnDuration > 0)
-            {
-                if(Time.time - AirParticlesSpawnStartTime > CurrentSimConfig.airParticleSpawnDuration)
-                {
-                    StopAirParticles();
-                }
-            }
+           
         }
 
         private void FixedUpdate()
         {
             //WindMagnitude = CurrentSimConfig.airSpeed / Time.fixedDeltaTime;
             WindMagnitude = CurrentSimConfig.airSpeed;
+
+            if (SpawnAirParticles && CurrentSimConfig.airParticleBurstCount > 0)
+            {
+                if (AirParticlesBurstCount >= CurrentSimConfig.airParticleBurstCount)
+                {
+                    StopAirParticles();
+                }
+            }
         }
 
         public void SetCurrentConfig(SimConfiguration config)
@@ -87,7 +88,7 @@ namespace PhysicsSimulations
         public SimConfiguration PerformSanityCheck(SimConfiguration config)
         {
             SimConfigurationSanity csc = configSanityCheck;
-            Debug.Log($"<color=green>Duration is set to {config.airParticleSpawnDuration} Min: {csc.airParticleSpawnDurationMin} Max: {csc.airParticleSpawnDurationMax}</color>");
+            Debug.Log($"<color=green>Duration is set to {config.airParticleBurstCount} Min: {csc.airParticleBurstCountMin} Max: {csc.airParticleBurstCountMax}</color>");
             config.airSpeed = Mathf.Clamp(config.airSpeed, csc.airSpeedMin, csc.airSpeedMax);
             config.windSpawnZoneDimension = new Vector3(
                 Mathf.Clamp(config.windSpawnZoneDimension.x, csc.windSpawnZoneDimensionMin.x, csc.windSpawnZoneDimensionMax.x),
@@ -95,9 +96,9 @@ namespace PhysicsSimulations
                 Mathf.Clamp(config.windSpawnZoneDimension.z, csc.windSpawnZoneDimensionMin.z, csc.windSpawnZoneDimensionMax.z)
                 );
             config.airParticleRatio = Mathf.Clamp( config.airParticleRatio, csc.airParticleRatioMin, csc.airParticleRatioMax );
-            config.airParticleSpawnDuration = Mathf.Clamp(config.airParticleSpawnDuration, csc.airParticleSpawnDurationMin, csc.airParticleSpawnDurationMax );
+            config.airParticleBurstCount = Mathf.Clamp(config.airParticleBurstCount, csc.airParticleBurstCountMin, csc.airParticleBurstCountMax );
             config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
-            Debug.Log($"<color=red>Duration is set to {config.airParticleSpawnDuration}</color>");
+            Debug.Log($"<color=red>Duration is set to {config.airParticleBurstCount}</color>");
             return config;
         }
 
@@ -159,7 +160,7 @@ namespace PhysicsSimulations
             await Task.Delay( _delayInMS );
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
-            AirParticlesSpawnStartTime = Time.time;
+            AirParticlesBurstCount = 0;
 
             ResetKineticEnergyList();
         }
@@ -224,8 +225,8 @@ namespace PhysicsSimulations
         [Range(0.1f,1f)]
         public float airParticleRatio;
 
-        [Range(0, 20)]
-        public int airParticleSpawnDuration;
+        [Range(0, 80)]
+        public int airParticleBurstCount;
 
         [Range(0,1)]
         public float airParticleGravityFactor;
@@ -237,7 +238,7 @@ namespace PhysicsSimulations
                 airSpeed = this.airSpeed,
                 windSpawnZoneDimension = this.windSpawnZoneDimension,
                 airParticleRatio = this.airParticleRatio,
-                airParticleSpawnDuration = this.airParticleSpawnDuration,
+                airParticleBurstCount = this.airParticleBurstCount,
                 airParticleGravityFactor = this.airParticleGravityFactor
             };
             return config;
@@ -256,8 +257,8 @@ namespace PhysicsSimulations
         public float airParticleRatioMin;
         public float airParticleRatioMax;
 
-        public int airParticleSpawnDurationMin;
-        public int airParticleSpawnDurationMax;
+        public int airParticleBurstCountMin;
+        public int airParticleBurstCountMax;
 
         public float airParticleGravityFactorMin;
         public float airParticleGravityFactorMax;
