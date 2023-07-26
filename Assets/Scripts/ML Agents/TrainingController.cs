@@ -11,14 +11,17 @@ namespace PhysicsSimulations
         public AdjustHeightAgent adjustHeightAgent;
 
         [Header("TRAINING SETTINGS")]
-        [Range(0.001f,0.1f)]
-        public float maxVoxelVariance;
+        [Range(0.001f,1f)]
+        public float maxVoxelHeightVariance;
+        public float adjacentRowMaxHeightVariance;
         public float maxKineticEnergyVariance;
+        public int decisionPeriod;
 
         private SimConfigurationController scc;
 
         public bool SetNewVoxelHeight;
         public float VoxelHeightFactor;
+        public List<float> VoxelHeightFactorList;
 
         private static TrainingController _instance;
         public static TrainingController Instance { get { return _instance; } }
@@ -60,6 +63,16 @@ namespace PhysicsSimulations
             //Debug.Log($"<color=cyan>EnableAdjustHeightAgent 1</color>");
             adjustHeightAgent.continuousActionSpecCount = scc.carHeightMapGenerator.carHeightMaps.Count;
             adjustHeightAgent.gameObject.SetActive(true);
+        }
+
+        public float GetHeightFactor(int _rowIndex)
+        {
+            if(VoxelHeightFactorList != null && VoxelHeightFactorList.Count > 0)
+            {
+                return VoxelHeightFactorList[Mathf.FloorToInt(_rowIndex/VoxelHeightFactorList.Count)];
+            }
+
+            return 0;
         }
 
     }

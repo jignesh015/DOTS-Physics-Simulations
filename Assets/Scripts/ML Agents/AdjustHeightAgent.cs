@@ -53,20 +53,32 @@ namespace PhysicsSimulations
         {
             if(scc.AverageKineticEnergy != 0)
             {
-                Debug.Log($"<color=yellow>CollectObservations {scc.AverageKineticEnergy}</color>");
+                Debug.Log($"<color=yellow>CollectObservations {scc.AverageKineticEnergy} | {scc.VoxelCollisionCount}</color>");
                 sensor.AddObservation(scc.AverageKineticEnergy);
+                sensor.AddObservation(scc.VoxelCollisionCount);
             }
-            //sensor.AddObservation(scc.carHeightMapGenerator.GetHeightList());
         }
 
         public override void OnActionReceived(ActionBuffers actions)
         {
+            //Continuous Actions
             Debug.Log($"<color=cyan>Continuous Action: {actions.ContinuousActions.Length} | {actions.ContinuousActions[0]}</color>");
+            float _heightFactor = actions.ContinuousActions[0];
+
+            //Discreet Actions
+            //Debug.Log($"<color=cyan>Continuous Action: {actions.DiscreteActions.Length} | {actions.DiscreteActions[0]} | {actions.DiscreteActions[1]}</color>");
+            //float _heightFactor = actions.DiscreteActions[0]/100f;
+
+            //Set height factor as per new actions
             TrainingController.Instance.SetNewVoxelHeight = true;
-            TrainingController.Instance.VoxelHeightFactor = actions.ContinuousActions[0];
-            //scc.carHeightMapGenerator.UpdateHeightmap(actions.ContinuousActions[0]);
-            //scc.carHeightMapGenerator.UpdateHeightmap(actions.ContinuousActions.ToList());
-            scc.SpawnAirParticlesWithDelay(2500);
+            TrainingController.Instance.VoxelHeightFactor = _heightFactor;
+            TrainingController.Instance.VoxelHeightFactorList = actions.ContinuousActions.ToList();
+
+            //Restart Air Particles
+            //scc.SpawnAirParticlesWithDelay(2500);
+
+            //float nonZero = actions.DiscreteActions.ToList().Find(v => v != 0 && v != 1);
+            //Debug.Log($"<color=magenta>Non Zero Val: {nonZero}</color>");
 
         }
 
@@ -77,14 +89,14 @@ namespace PhysicsSimulations
             {
                 if (Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.maxKineticEnergyVariance)
                 {
-                    AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? 1f : -0.5f);
+                    AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? 0.1f : -2f);
                     Debug.Log($"<color=red>========== End Episode ============</color>");
                     EndEpisode();
                 }
                 else if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
                 {
                     Debug.Log($"<color=green>++++++++++ Add Reward ++++++++++ </color>");
-                    AddReward(1);
+                    AddReward(0.1f);
                 }
                 else if (previousAvgKineticEnergy > scc.AverageKineticEnergy)
                 {
@@ -95,7 +107,7 @@ namespace PhysicsSimulations
             previousAvgKineticEnergy = scc.AverageKineticEnergy;
             if (baseLineAvgKineticEnergy == 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
             airStoppedCount++;
-            if (airStoppedCount % 5 == 0) RequestDecision();
+            if (airStoppedCount % tc.decisionPeriod == 0) RequestDecision();
             else RequestAction();
         }
     }

@@ -45,7 +45,7 @@ namespace PhysicsSimulations
             
             if(TrainingController.Instance != null && TrainingController.Instance.SetNewVoxelHeight)
             {
-                UnityEngine.Debug.Log($"<color=magenta>SetNewVoxelHeight {TrainingController.Instance.VoxelHeightFactor}</color>");
+                UnityEngine.Debug.Log($"<color=magenta>SetNewVoxelHeight {TrainingController.Instance.VoxelHeightFactorList[0]}</color>");
                 JobHandle getNewHeight = new GetNewHeight
                 {
                 }.ScheduleParallel<GetNewHeight>(state.Dependency);
@@ -65,7 +65,7 @@ namespace PhysicsSimulations
                 //Debug.Log($"{localToWorld.Value[0]} | {localToWorld.Value[1]} | {localToWorld.Value[2]} |{localToWorld.Value[3]}");
                 if (!voxel.IsVoxelReady)
                 {
-                    if(voxel.Height <= voxel.MinHeight)
+                    if(voxel.Height < voxel.MinHeight)
                     {
                         Ecb.DestroyEntity(entity);
                         return;
@@ -112,8 +112,6 @@ namespace PhysicsSimulations
                         });
 
                         voxel.IsVoxelReady = true;
-
-                        
                     }
                 }
             }
@@ -126,11 +124,32 @@ namespace PhysicsSimulations
             {
                 if(voxel.IsVoxelReady)
                 {
-                    //voxel.Height = SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(voxel.Row, voxel.Column);
-                    voxel.Height = voxel.OgHeight + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
-                    //voxel.Height += (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+                    //float _newHeight = voxel.Height + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+
+                    //Adjust Height factor according to adjacent row's factor
+                    float _currentRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row);
+                    float _maxVoxelHeightVariance = TrainingController.Instance.maxVoxelHeightVariance;
+                    float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
+                    if (voxel.Row > 0)
+                    {
+                        float _previousRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row - 1);
+                        float _variance = math.abs(_previousRowFactor - _currentRowFactor);
+
+                        if (_variance > _adjacentRowMaxHeightVariance)
+                            _currentRowFactor = math.clamp((_currentRowFactor / _variance), -_adjacentRowMaxHeightVariance, _adjacentRowMaxHeightVariance);
+                    }
+
+                    //Calculate new height as per previous height and adjusted height factor
+                    float _newHeight = voxel.Height + (_currentRowFactor * _maxVoxelHeightVariance);
+
+                    //Clamp the new height to be within the acceptable variance of the og height
+                    _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight + _maxVoxelHeightVariance);
+
+                    //Make sure the height is within limit
+                    voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.MaxHeight);
                     voxel.IsVoxelReady = false;
                 }
+                SimConfigurationController.Instance.VoxelsReady = false;
                 TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
             }
         }

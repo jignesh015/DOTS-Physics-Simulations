@@ -109,7 +109,7 @@ namespace PhysicsSimulations
                 foreach(CarHeightMap _voxel in _entireRow)
                 {
                     float _newHeight = _voxel.height;
-                    _newHeight += TrainingController.Instance.maxVoxelVariance * _heights[i];
+                    _newHeight += TrainingController.Instance.maxVoxelHeightVariance * _heights[i];
                     carHeightMaps.Find(h => h.row == _voxel.row && h.column == _voxel.column).height = _newHeight;
                 }
             }
@@ -121,7 +121,7 @@ namespace PhysicsSimulations
             if (TrainingController.Instance == null) return;
             foreach (CarHeightMap _voxel in carHeightMaps)
             {
-                _voxel.height += TrainingController.Instance.maxVoxelVariance * _heightVariance;
+                _voxel.height += TrainingController.Instance.maxVoxelHeightVariance * _heightVariance;
             }
 
             TrainingController.Instance.SetNewVoxelHeight = true;

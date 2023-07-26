@@ -187,6 +187,7 @@ namespace PhysicsSimulations
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
 
+            VoxelCollisionCount = 0;
             AirParticlesBurstCount = 0;
             OnAirSpawnStarted?.Invoke();
             ResetKineticEnergyList();
@@ -233,7 +234,7 @@ namespace PhysicsSimulations
             if(KineticEnergyList != null && KineticEnergyList.Count > 0)
             {
                 AverageKineticEnergy = KineticEnergyList.Average();
-                Debug.Log($"<color=olive>Average = {AverageKineticEnergy}</color>");
+                Debug.Log($"<color=olive>Average KE = {AverageKineticEnergy}</color>");
                 KineticEnergyList.Clear();
             }
             else
