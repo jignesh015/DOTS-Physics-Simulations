@@ -28,6 +28,18 @@ namespace PhysicsSimulations
                 }.Schedule<AdjustHeight>(state.Dependency);
 
                 adjustHeight.Complete();
+
+                //Voxels Ready job
+                if(!SimConfigurationController.Instance.VoxelsReady)
+                {
+                    JobHandle allVoxelsReady = new AllVoxelsReady
+                    {
+                    }.ScheduleParallel<AllVoxelsReady>(state.Dependency);
+
+                    allVoxelsReady.Complete();
+                    SimConfigurationController.Instance.OnVoxelsReady?.Invoke();
+                }
+                
             }
             
             
@@ -100,6 +112,8 @@ namespace PhysicsSimulations
                         });
 
                         voxel.IsVoxelReady = true;
+
+                        
                     }
                 }
             }
@@ -115,6 +129,15 @@ namespace PhysicsSimulations
                 //voxel.Height += (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
                 voxel.IsVoxelReady = false;
                 TrainingController.Instance.SetNewVoxelHeight = false;
+            }
+        }
+
+        [BurstCompile]
+        public partial struct AllVoxelsReady : IJobEntity
+        {
+            public readonly void Execute(ref Voxel voxel)
+            {
+                SimConfigurationController.Instance.VoxelsReady = voxel.IsVoxelReady;
             }
         }
     }

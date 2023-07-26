@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 namespace PhysicsSimulations
 {
@@ -21,7 +22,12 @@ namespace PhysicsSimulations
         [Header("SCRIPT REFERENCES")]
         public CarHeightMapGenerator carHeightMapGenerator;
 
-        public SimConfiguration CurrentSimConfig { get; private set; }
+        [Header("AIR PARTICLE SPAWN SETTINGS")]
+        public bool SpawnAirParticlesAutomatically;
+        public bool SpawnAirParticlesCommand { get; set; }
+        public bool SpawnAirParticles { get; private set; }
+        public int AirParticlesBurstCount { get; set; }
+        public float AverageKineticEnergy { get; private set; }
 
         [Header("READ ONLY")]
         public float WindMagnitude;
@@ -29,18 +35,15 @@ namespace PhysicsSimulations
         public ViewAngle CurrentViewAngle;
         public int VoxelCollisionCount;
         public List<float> KineticEnergyList;
+        
+        public SimConfiguration CurrentSimConfig { get; private set; }
 
         //VOXEL GRID SETTINGS
         public bool VoxelGridReady { get; set; }
-
-
-        //AIR PARTICLE SPAWN SETTINGS
-        public bool SpawnAirParticlesCommand { get; set; }
-        public bool SpawnAirParticles { get; private set; }
-        public int AirParticlesBurstCount { get; set; }
-        public float AverageKineticEnergy { get; private set; }
+        public bool VoxelsReady { get; set; }
 
         //EVENT DELEGATES
+        public Action OnVoxelsReady;
         public Action OnAirSpawnStarted;
         public Action OnAirSpawnStopped;
 
@@ -65,6 +68,7 @@ namespace PhysicsSimulations
         // Start is called before the first frame update
         void Start()
         {
+            OnVoxelsReady += OnVoxelsReadyListener;
         }
 
         // Update is called once per frame
@@ -120,7 +124,6 @@ namespace PhysicsSimulations
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            Debug.Log($"Change View: {_angle}");
             CurrentViewAngle = _angle;
 
             switch (_angle)
@@ -161,15 +164,31 @@ namespace PhysicsSimulations
             CurrentSimConfig = defaultConfig;
         }
 
-        public async void SpawnAirParticlesWithDelay(int _delayInMS)
+        public void OnVoxelsReadyListener()
         {
+            if(VoxelsReady)
+            {
+                Debug.Log($"<color=magenta>OnVoxelsReadyListener {VoxelsReady}</color>");
+                SpawnAirParticlesWithDelay(2000);
+            }
+        }
+
+        public void SpawnAirParticlesWithDelay(int _delayInMS)
+        {
+            if (SpawnAirParticlesCommand) return;
             SpawnAirParticlesCommand = true;
-            await Task.Delay( _delayInMS );
+            //Debug.Log($"<color=cyan>SpawnAirParticlesWithDelay {_delayInMS}</color>");
+            StartCoroutine(SpawnAirParticlesWithDelayAsync(_delayInMS));
+        }
+
+        private IEnumerator SpawnAirParticlesWithDelayAsync(int _delayInMS)
+        {
+            yield return new WaitForSeconds((float)_delayInMS / 1000);
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
+
             AirParticlesBurstCount = 0;
             OnAirSpawnStarted?.Invoke();
-
             ResetKineticEnergyList();
         }
 
