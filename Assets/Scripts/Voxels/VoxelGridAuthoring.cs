@@ -9,6 +9,7 @@ namespace PhysicsSimulations
     {
         public int length;
         public int width;
+        public int spawnBufferSize;
         public float gridOffset;
         public GameObject voxelPrefab;
 
@@ -21,6 +22,7 @@ namespace PhysicsSimulations
                 {
                     Length = authoring.length,
                     Width = authoring.width,
+                    SpawnBufferSize = authoring.spawnBufferSize,
                     GridOffset = authoring.gridOffset,
                     VoxelPrefab = GetEntity(authoring.voxelPrefab, TransformUsageFlags.Dynamic),
                     IsGridComplete = false,
@@ -33,6 +35,7 @@ namespace PhysicsSimulations
     {
         public int Length;
         public int Width;
+        public int SpawnBufferSize;
         public float GridOffset;
         public Entity VoxelPrefab;
         public bool IsGridComplete;

@@ -23,6 +23,7 @@ namespace PhysicsSimulations
                     Row = authoring.row,
                     Column = authoring.column,
                     Height = 0,
+                    OgHeight = 0,
                     MinHeight = authoring.minHeight,
                     MaxHeight = authoring.maxHeight,
                     IsVoxelReady = true,
@@ -36,6 +37,7 @@ namespace PhysicsSimulations
         public int Row;
         public int Column;
         public float Height;
+        public float OgHeight;
         public float MinHeight;
         public float MaxHeight;
         public float VoxelSize;

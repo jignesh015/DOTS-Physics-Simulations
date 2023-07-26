@@ -4,7 +4,6 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Jobs;
 using Unity.Physics;
-using Unity.Physics.Aspects;
 
 namespace PhysicsSimulations
 {
@@ -19,13 +18,28 @@ namespace PhysicsSimulations
             EntityCommandBuffer ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
                .CreateCommandBuffer(state.WorldUnmanaged);
 
-            JobHandle adjustHeight = new AdjustHeight
-            {
-                DeltaTime = SystemAPI.Time.DeltaTime,
-                Ecb = ecb,
-            }.Schedule<AdjustHeight>(state.Dependency);
 
-            adjustHeight.Complete();            
+            if(SimConfigurationController.Instance != null && SimConfigurationController.Instance.VoxelGridReady)
+            {
+                JobHandle adjustHeight = new AdjustHeight
+                {
+                    DeltaTime = SystemAPI.Time.DeltaTime,
+                    Ecb = ecb,
+                }.Schedule<AdjustHeight>(state.Dependency);
+
+                adjustHeight.Complete();
+            }
+            
+            
+            if(TrainingController.Instance != null && TrainingController.Instance.SetNewVoxelHeight)
+            {
+                UnityEngine.Debug.Log($"<color=magenta>SetNewVoxelHeight {TrainingController.Instance.VoxelHeightFactor}</color>");
+                JobHandle getNewHeight = new GetNewHeight
+                {
+                }.ScheduleParallel<GetNewHeight>(state.Dependency);
+
+                getNewHeight.Complete();
+            }
         }
 
         [BurstCompile]
@@ -45,10 +59,10 @@ namespace PhysicsSimulations
                         return;
                     }
 
-                    if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.005f)
+                    if (math.abs(localToWorld.Value[1][1] - voxel.Height) > 0.001f)
                     {
                         //Lerp the Y-scale of the voxel
-                        float yScale = math.lerp(localToWorld.Value[1][1], voxel.Height, DeltaTime);
+                        float yScale = math.lerp(localToWorld.Value[1][1], voxel.Height, DeltaTime * 2f);
                         localToWorld.Value[1][1] = yScale;
 
                         //Lerp the Y-position of the voxel to keep it grounded
@@ -86,12 +100,21 @@ namespace PhysicsSimulations
                         });
 
                         voxel.IsVoxelReady = true;
-
-                        //SimConfigurationController scc = SimConfigurationController.Instance;
-                        //if (scc != null && !scc.SpawnAirParticlesCommand && !scc.SpawnAirParticles)
-                        //    scc.SpawnAirParticlesWithDelay(2000);
                     }
                 }
+            }
+        }
+
+        [BurstCompile]
+        public partial struct GetNewHeight : IJobEntity
+        {
+            public readonly void Execute(ref Voxel voxel)
+            {
+                //voxel.Height = SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(voxel.Row, voxel.Column);
+                voxel.Height = voxel.OgHeight + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+                //voxel.Height += (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+                voxel.IsVoxelReady = false;
+                TrainingController.Instance.SetNewVoxelHeight = false;
             }
         }
     }

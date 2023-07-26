@@ -69,17 +69,21 @@ namespace PhysicsSimulations
                 if (!voxelGrid.IsGridComplete && lengthBuffer < voxelGrid.Length)
                 {
                     var voxelGridTransform = em.GetComponentData<LocalTransform>(voxelGridEntity);
-                    SpawnSingleRow(em, voxelGridEntity, voxelGrid, voxelGridTransform);
-                    lengthBuffer++;
+                    for(int i=0; i < voxelGrid.SpawnBufferSize; i++ )
+                    {
+                        if(lengthBuffer < voxelGrid.Length)
+                        {
+                            SpawnSingleRow(em, voxelGridEntity, voxelGrid, voxelGridTransform);
+                            lengthBuffer++;
+                        }
+                    }
                 }
                 else if (lengthBuffer >= voxelGrid.Length)
                 {
                     voxelGrid.IsGridComplete = true;
                     em.SetComponentData(voxelGridEntity, voxelGrid);
 
-                    //Add physics shape and physics body to the completed grid
-                    //em.AddComponent<PhysicsBodyAuthoringData>(voxelGridEntity);
-                    //em.AddComponent<PhysicsShapeAuthoring>(voxelGridEntity);
+                    SimConfigurationController.Instance.VoxelGridReady = true;
                 }
             }
             #endregion
@@ -90,6 +94,9 @@ namespace PhysicsSimulations
             float3 vgPos = voxelGridTransform.Position;
             for (int i = 0; i < voxelGrid.Width; i++)
             {
+                float _height = SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(lengthBuffer, i);
+                if (_height < 0.01f) continue;
+
                 //Set voxel position on the grid
                 Entity voxelEntity = em.Instantiate(voxelGrid.VoxelPrefab);
                 var voxelTransform = em.GetComponentData<LocalTransform>(voxelEntity);
@@ -104,8 +111,8 @@ namespace PhysicsSimulations
                 Voxel voxel = em.GetComponentData<Voxel>(voxelEntity);
                 voxel.Row = lengthBuffer;
                 voxel.Column = i;
-                //voxel.Height = lengthBuffer < (float)voxelGrid.Length / 3 || lengthBuffer > (float)voxelGrid.Length * 2 / 3 ? (float)voxel.MaxHeight / 2 : voxel.MaxHeight;
-                voxel.Height = math.clamp(SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(lengthBuffer, i), voxel.MinHeight, voxel.MaxHeight);
+                voxel.Height = math.clamp(_height, voxel.MinHeight, voxel.MaxHeight);
+                voxel.OgHeight = voxel.Height;
                 voxel.VoxelSize = voxelGrid.GridOffset;
 
                 voxel.IsVoxelReady = false;

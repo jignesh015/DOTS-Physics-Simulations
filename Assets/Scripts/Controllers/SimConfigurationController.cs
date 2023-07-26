@@ -30,12 +30,19 @@ namespace PhysicsSimulations
         public int VoxelCollisionCount;
         public List<float> KineticEnergyList;
 
+        //VOXEL GRID SETTINGS
+        public bool VoxelGridReady { get; set; }
+
 
         //AIR PARTICLE SPAWN SETTINGS
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
         public int AirParticlesBurstCount { get; set; }
         public float AverageKineticEnergy { get; private set; }
+
+        //EVENT DELEGATES
+        public Action OnAirSpawnStarted;
+        public Action OnAirSpawnStopped;
 
 
         private static SimConfigurationController _instance;
@@ -161,6 +168,7 @@ namespace PhysicsSimulations
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
             AirParticlesBurstCount = 0;
+            OnAirSpawnStarted?.Invoke();
 
             ResetKineticEnergyList();
         }
@@ -169,6 +177,8 @@ namespace PhysicsSimulations
         { 
             SpawnAirParticles = false;
             CalculateAverageKineticEnergy();
+
+            OnAirSpawnStopped?.Invoke();
         }
 
         public int GetImpactLevel(int collisionCount)
@@ -204,7 +214,7 @@ namespace PhysicsSimulations
             if(KineticEnergyList != null && KineticEnergyList.Count > 0)
             {
                 AverageKineticEnergy = KineticEnergyList.Average();
-                Debug.Log($"<color=cyan>Average = {AverageKineticEnergy}</color>");
+                Debug.Log($"<color=olive>Average = {AverageKineticEnergy}</color>");
                 KineticEnergyList.Clear();
             }
             else

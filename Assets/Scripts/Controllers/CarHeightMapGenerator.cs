@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using System.Linq;
 using System.IO;
@@ -58,6 +57,7 @@ namespace PhysicsSimulations
         {
             List<CarHeightMap> _carHeightMaps = new();
             VoxelCount = heightmapTexture.width * heightmapTexture.height;
+            Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
 
             for (int i = 0; i < heightmapTexture.width; i++)
             {
@@ -92,6 +92,39 @@ namespace PhysicsSimulations
 
             float _height = carHeightMaps.Find(c => c.row == row && c.column == column).height;
             return _height;
+        }
+
+        public List<float> GetHeightList()
+        {
+            List<float> heights = carHeightMaps.Select(carHeightMap => carHeightMap.height).ToList();
+            return heights;
+        }
+
+        public void UpdateHeightmap(List<float> _heights)
+        {
+            if (TrainingController.Instance == null) return;
+            for (int i = 0; i < _heights.Count; i++)
+            {
+                List<CarHeightMap> _entireRow = carHeightMaps.FindAll(h => h.row == i);
+                foreach(CarHeightMap _voxel in _entireRow)
+                {
+                    float _newHeight = _voxel.height;
+                    _newHeight += TrainingController.Instance.maxVoxelVariance * _heights[i];
+                    carHeightMaps.Find(h => h.row == _voxel.row && h.column == _voxel.column).height = _newHeight;
+                }
+            }
+            TrainingController.Instance.SetNewVoxelHeight = true;
+        }
+
+        public void UpdateHeightmap(float _heightVariance)
+        {
+            if (TrainingController.Instance == null) return;
+            foreach (CarHeightMap _voxel in carHeightMaps)
+            {
+                _voxel.height += TrainingController.Instance.maxVoxelVariance * _heightVariance;
+            }
+
+            TrainingController.Instance.SetNewVoxelHeight = true;
         }
 
         public void LoadHeightmap(string fileName)

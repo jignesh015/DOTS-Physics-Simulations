@@ -45,7 +45,7 @@ namespace PhysicsSimulations
                             totalSpawnPosCount++;
                         }
                     }
-                    Debug.Log($"Total count: {totalSpawnPosCount}");
+                    Debug.Log($"Total air spawner count: {totalSpawnPosCount}");
                     spawner.SpawnPlacesAdded = true;
                     em.SetComponentData(spawnerEntity, spawner);
                 }
