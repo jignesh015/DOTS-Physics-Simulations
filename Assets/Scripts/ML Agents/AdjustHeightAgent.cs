@@ -20,6 +20,8 @@ namespace PhysicsSimulations
         private float previousAvgKineticEnergy;
         private float baseLineAvgKineticEnergy;
 
+        private int airStoppedCount;
+
         private void Start()
         {
             scc = SimConfigurationController.Instance;
@@ -41,9 +43,10 @@ namespace PhysicsSimulations
 
         public override void OnEpisodeBegin()
         {
+            airStoppedCount = 0;
             baseLineAvgKineticEnergy = 0;
             Debug.Log($"<color=green>OnEpisodeBegin</color>");
-            //RequestAction();
+            //RequestDecision();
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -77,7 +80,6 @@ namespace PhysicsSimulations
                     AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? 1f : -0.5f);
                     Debug.Log($"<color=red>========== End Episode ============</color>");
                     EndEpisode();
-                    //return;
                 }
                 else if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
                 {
@@ -90,9 +92,11 @@ namespace PhysicsSimulations
                     AddReward(-2f);
                 }
             }
-            RequestDecision();
             previousAvgKineticEnergy = scc.AverageKineticEnergy;
             if (baseLineAvgKineticEnergy == 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
+            airStoppedCount++;
+            if (airStoppedCount % 5 == 0) RequestDecision();
+            else RequestAction();
         }
     }
 }

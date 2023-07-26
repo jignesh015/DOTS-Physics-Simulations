@@ -124,11 +124,14 @@ namespace PhysicsSimulations
         {
             public readonly void Execute(ref Voxel voxel)
             {
-                //voxel.Height = SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(voxel.Row, voxel.Column);
-                voxel.Height = voxel.OgHeight + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
-                //voxel.Height += (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
-                voxel.IsVoxelReady = false;
-                TrainingController.Instance.SetNewVoxelHeight = false;
+                if(voxel.IsVoxelReady)
+                {
+                    //voxel.Height = SimConfigurationController.Instance.carHeightMapGenerator.GetHeight(voxel.Row, voxel.Column);
+                    voxel.Height = voxel.OgHeight + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+                    //voxel.Height += (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
+                    voxel.IsVoxelReady = false;
+                }
+                TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
             }
         }
 

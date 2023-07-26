@@ -57,7 +57,7 @@ namespace PhysicsSimulations
 
         public void EnableAdjustHeightAgent()
         {
-            Debug.Log($"<color=cyan>EnableAdjustHeightAgent 1</color>");
+            //Debug.Log($"<color=cyan>EnableAdjustHeightAgent 1</color>");
             adjustHeightAgent.continuousActionSpecCount = scc.carHeightMapGenerator.carHeightMaps.Count;
             adjustHeightAgent.gameObject.SetActive(true);
         }
