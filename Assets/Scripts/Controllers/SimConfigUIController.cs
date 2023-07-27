@@ -97,11 +97,9 @@ namespace PhysicsSimulations
             scc.SetCurrentConfig(config);
         }
 
-        public void OnDurationValueChange(string _value)
+        public void OnBurstCountValueChange(string _value)
         {
             if (scc == null || !configUISet) return;
-
-            Debug.Log($"OnDurationValueChange {_value}");
 
             config.airParticleBurstCount = int.Parse(_value);
             scc.SetCurrentConfig(config);

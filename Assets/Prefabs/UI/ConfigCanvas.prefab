@@ -6151,7 +6151,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 869861020758672022}
         m_TargetAssemblyTypeName: PhysicsSimulations.SimConfigUIController, Assembly-CSharp
-        m_MethodName: OnDurationValueChange
+        m_MethodName: OnBurstCountValueChange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

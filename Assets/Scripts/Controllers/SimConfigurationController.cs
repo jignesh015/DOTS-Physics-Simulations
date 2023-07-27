@@ -100,7 +100,6 @@ namespace PhysicsSimulations
         public SimConfiguration PerformSanityCheck(SimConfiguration config)
         {
             SimConfigurationSanity csc = configSanityCheck;
-            Debug.Log($"<color=green>Duration is set to {config.airParticleBurstCount} Min: {csc.airParticleBurstCountMin} Max: {csc.airParticleBurstCountMax}</color>");
             config.airSpeed = Mathf.Clamp(config.airSpeed, csc.airSpeedMin, csc.airSpeedMax);
             config.windSpawnZoneDimension = new Vector3(
                 Mathf.Clamp(config.windSpawnZoneDimension.x, csc.windSpawnZoneDimensionMin.x, csc.windSpawnZoneDimensionMax.x),
@@ -110,7 +109,6 @@ namespace PhysicsSimulations
             config.airParticleRatio = Mathf.Clamp( config.airParticleRatio, csc.airParticleRatioMin, csc.airParticleRatioMax );
             config.airParticleBurstCount = Mathf.Clamp(config.airParticleBurstCount, csc.airParticleBurstCountMin, csc.airParticleBurstCountMax );
             config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
-            Debug.Log($"<color=red>Duration is set to {config.airParticleBurstCount}</color>");
             return config;
         }
 
