@@ -169,7 +169,7 @@ namespace PhysicsSimulations
         {
             if(VoxelsReady)
             {
-                Debug.Log($"<color=magenta>OnVoxelsReadyListener {VoxelsReady}</color>");
+                Debug.Log($"<color=magenta>Voxels Ready</color>");
                 SpawnAirParticlesWithDelay(2000);
             }
         }
@@ -235,7 +235,7 @@ namespace PhysicsSimulations
             if(KineticEnergyList != null && KineticEnergyList.Count > 0)
             {
                 AverageKineticEnergy = KineticEnergyList.Average();
-                Debug.Log($"<color=olive>Average KE = {AverageKineticEnergy}</color>");
+                //Debug.Log($"<color=olive>Average KE = {AverageKineticEnergy}</color>");
                 KineticEnergyList.Clear();
             }
             else

@@ -47,7 +47,7 @@ namespace PhysicsSimulations
             
             if(TrainingController.Instance != null && TrainingController.Instance.SetNewVoxelHeight)
             {
-                UnityEngine.Debug.Log($"<color=magenta>SetNewVoxelHeight {TrainingController.Instance.VoxelHeightFactorList[0]}</color>");
+                //UnityEngine.Debug.Log($"<color=magenta>SetNewVoxelHeight {TrainingController.Instance.VoxelHeightFactorList[0]}</color>");
                 JobHandle getNewHeight = new GetNewHeight
                 {
                 }.ScheduleParallel<GetNewHeight>(state.Dependency);
@@ -146,17 +146,17 @@ namespace PhysicsSimulations
                     //float _newHeight = voxel.Height + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
 
                     //Adjust Height factor according to adjacent row's factor
-                    float _currentRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row);
+                    float _currentRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row, voxel.Column);
                     float _maxVoxelHeightVariance = TrainingController.Instance.maxVoxelHeightVariance;
                     float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
-                    if (voxel.Row > 0)
-                    {
-                        float _previousRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row - 1);
-                        float _variance = math.abs(_previousRowFactor - _currentRowFactor);
+                    //if (voxel.Row > 0 && voxel.Column > 0)
+                    //{
+                    //    float _previousRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row - 1);
+                    //    float _variance = math.abs(_previousRowFactor - _currentRowFactor);
 
-                        if (_variance > _adjacentRowMaxHeightVariance)
-                            _currentRowFactor = math.clamp((_currentRowFactor / _variance), -_adjacentRowMaxHeightVariance, _adjacentRowMaxHeightVariance);
-                    }
+                    //    if (_variance > _adjacentRowMaxHeightVariance)
+                    //        _currentRowFactor = math.clamp((_currentRowFactor / _variance), -_adjacentRowMaxHeightVariance, _adjacentRowMaxHeightVariance);
+                    //}
 
                     //Calculate new height as per previous height and adjusted height factor
                     float _newHeight = voxel.Height + (_currentRowFactor * _maxVoxelHeightVariance);

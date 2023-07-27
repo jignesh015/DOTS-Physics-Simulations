@@ -116,17 +116,6 @@ namespace PhysicsSimulations
             TrainingController.Instance.SetNewVoxelHeight = true;
         }
 
-        public void UpdateHeightmap(float _heightVariance)
-        {
-            if (TrainingController.Instance == null) return;
-            foreach (CarHeightMap _voxel in carHeightMaps)
-            {
-                _voxel.height += TrainingController.Instance.maxVoxelHeightVariance * _heightVariance;
-            }
-
-            TrainingController.Instance.SetNewVoxelHeight = true;
-        }
-
         public void LoadHeightmap(string fileName)
         {
             HeightmapReady = false;

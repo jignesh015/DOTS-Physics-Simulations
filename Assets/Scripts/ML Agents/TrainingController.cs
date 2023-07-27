@@ -90,5 +90,15 @@ namespace PhysicsSimulations
             return 0;
         }
 
+        public float GetHeightFactor(int _rowIndex, int _columnIndex)
+        {
+            if (VoxelHeightFactorList != null && VoxelHeightFactorList.Count > 0)
+            {
+                return VoxelHeightFactorList[_rowIndex + _columnIndex * heightMapTextureLength];
+            }
+
+            return 0;
+        }
+
     }
 }

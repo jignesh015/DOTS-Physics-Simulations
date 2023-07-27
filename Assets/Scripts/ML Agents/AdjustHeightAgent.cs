@@ -50,6 +50,7 @@ namespace PhysicsSimulations
         {
             airStoppedCount = 0;
             baseLineAvgKineticEnergy = 0;
+            baseLineCollisionCount = 0;
             Debug.Log($"<color=green>OnEpisodeBegin</color>");
             //RequestDecision();
         }
@@ -87,49 +88,57 @@ namespace PhysicsSimulations
             //Positive if KE increases, negative if KE decreases
             if (previousAvgKineticEnergy != 0)
             {
-                if (Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.maxKineticEnergyVariance)
+                string _debugColor = "orange";
+                if (baseLineAvgKineticEnergy != 0 && Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.maxKineticEnergyVariance)
                 {
                     AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? tc.kineticEnergyPositiveScore : tc.kineticEnergyNegativeScore);
-                    Debug.Log($"<color=red>========== End Episode: AKE ============</color>");
+                    _debugColor = baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? "green" : "red";
+                    Debug.Log($"<color=orange>========== End Episode : <color={_debugColor}>[AKE]  Base Var: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color> ============</color>");
                     EndEpisode();
                 }
                 else if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
                 {
-                    Debug.Log($"<color=green>++++++++++ Add Reward: AKE ++++++++++ </color>");
+                    _debugColor = "green";
                     AddReward(tc.kineticEnergyPositiveScore);
                 }
                 else if (previousAvgKineticEnergy > scc.AverageKineticEnergy)
                 {
-                    Debug.Log($"<color=red>----------- Subtract Reward: AKE ----------- </color>");
+                    _debugColor = "red";
                     AddReward(tc.kineticEnergyNegativeScore);
                 }
+                Debug.Log($"<color={_debugColor}> Baseline {baseLineAvgKineticEnergy} | AKE Variance: {scc.AverageKineticEnergy - previousAvgKineticEnergy} " +
+                    $"| AKE Base Variance: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color>");
             }
             previousAvgKineticEnergy = scc.AverageKineticEnergy;
-            if (baseLineAvgKineticEnergy == 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
+            if (baseLineAvgKineticEnergy == 0 && scc.AverageKineticEnergy != 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
 
             //Give rewards as per collision count difference
             //Positive if collision count decreases, negative if collision count increases
             if (previousCollisionCount != 0)
             {
-                if(Mathf.Abs(baseLineCollisionCount - scc.VoxelCollisionCount) > tc.maxCollisionCountVariance)
+                string _debugColor = "orange";
+                if (baseLineCollisionCount != 0 && Mathf.Abs(baseLineCollisionCount - scc.VoxelCollisionCount) > tc.maxCollisionCountVariance)
                 {
                     AddReward(baseLineCollisionCount < scc.VoxelCollisionCount ? tc.collisionCountNegativeScore : tc.collisionCountPositiveScore);
-                    Debug.Log($"<color=red>========== End Episode : VCC ============</color>");
+                    _debugColor = baseLineCollisionCount < scc.VoxelCollisionCount ? "red" : "green";
+                    Debug.Log($"<color=orange>========== End Episode : <color={_debugColor}>[VCC]  Base Var {scc.VoxelCollisionCount - baseLineCollisionCount}</color> ============</color>");
                     EndEpisode();
                 }
                 else if(previousCollisionCount > scc.VoxelCollisionCount)
                 {
-                    Debug.Log($"<color=green>++++++++++ Add Reward: VCC ++++++++++ </color>");
+                    _debugColor = "green";
                     AddReward(tc.collisionCountPositiveScore);
                 }
                 else if(previousCollisionCount < scc.VoxelCollisionCount)
                 {
-                    Debug.Log($"<color=red>----------- Subtract Reward: VCC ----------- </color>");
+                    _debugColor = "red";
                     AddReward(tc.collisionCountNegativeScore);
                 }
+                Debug.Log($"<color={_debugColor}> Baseline {baseLineCollisionCount} | VCC Variance: {scc.VoxelCollisionCount - previousCollisionCount} " +
+                   $"| VCC Base Variance: {scc.VoxelCollisionCount - baseLineCollisionCount} </color>");
             }
             previousCollisionCount = scc.VoxelCollisionCount;
-            if (baseLineCollisionCount == 0) baseLineCollisionCount = scc.VoxelCollisionCount;
+            if (baseLineCollisionCount == 0 && scc.VoxelCollisionCount != 0) baseLineCollisionCount = scc.VoxelCollisionCount;
 
 
             //Check wheter to take decision or an action
