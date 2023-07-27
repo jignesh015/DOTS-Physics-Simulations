@@ -16,12 +16,16 @@ namespace PhysicsSimulations
         public float adjacentRowMaxHeightVariance;
         public float maxKineticEnergyVariance;
         public int decisionPeriod;
+        public bool compareWithOgHeight;
 
         private SimConfigurationController scc;
 
+        [Header("READ ONLY")]
         public bool SetNewVoxelHeight;
         public float VoxelHeightFactor;
         public List<float> VoxelHeightFactorList;
+
+        private int heightMapTextureLength;
 
         private static TrainingController _instance;
         public static TrainingController Instance { get { return _instance; } }
@@ -43,6 +47,8 @@ namespace PhysicsSimulations
         {
             scc = SimConfigurationController.Instance;
             scc.OnAirSpawnStarted += EnableAdjustHeightAgent;
+
+            heightMapTextureLength = scc.carHeightMapGenerator.heightmapTexture.height;
         }
 
         private void OnEnable()
@@ -69,7 +75,7 @@ namespace PhysicsSimulations
         {
             if(VoxelHeightFactorList != null && VoxelHeightFactorList.Count > 0)
             {
-                return VoxelHeightFactorList[Mathf.FloorToInt(_rowIndex/VoxelHeightFactorList.Count)];
+                return VoxelHeightFactorList[Mathf.FloorToInt(_rowIndex/(heightMapTextureLength/VoxelHeightFactorList.Count))];
             }
 
             return 0;

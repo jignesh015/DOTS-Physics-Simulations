@@ -245,6 +245,12 @@ MonoBehaviour:
   column: 0
   minHeight: 0.01
   maxHeight: 2
+  baseMatRefPrefab: {fileID: 6333382075221045024, guid: 621d240135c65754aaa79b5826a3c6b1,
+    type: 3}
+  positiveMatRefPrefab: {fileID: 6333382075221045024, guid: 0fe54309fd8f30f4c9f964fbe490049d,
+    type: 3}
+  negativeMatRefPrefab: {fileID: 6333382075221045024, guid: 0c389d579935d114f92d59ab4831553d,
+    type: 3}
 --- !u!114 &1949918286415142693
 MonoBehaviour:
   m_ObjectHideFlags: 0

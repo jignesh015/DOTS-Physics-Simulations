@@ -15,7 +15,7 @@ namespace Events
             public override void Bake(CollisionEventAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new CollisionEvent()
+                AddComponent(entity, new CustomCollisionEvent()
                 {
                     CollisionCount = 0,
                     LowImpactMatRef = GetEntity(authoring.lowImpactMatRefPrefab, TransformUsageFlags.None),
@@ -26,7 +26,7 @@ namespace Events
         }
     }
 
-    public struct CollisionEvent : IComponentData
+    public struct CustomCollisionEvent : IComponentData
     {
         public int CollisionCount;
         public float ImpactForce;

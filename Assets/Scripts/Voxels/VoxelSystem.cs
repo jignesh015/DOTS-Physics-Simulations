@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Jobs;
 using Unity.Physics;
+using Unity.Rendering;
 
 namespace PhysicsSimulations
 {
@@ -25,6 +26,7 @@ namespace PhysicsSimulations
                 {
                     DeltaTime = SystemAPI.Time.DeltaTime,
                     Ecb = ecb,
+                    MaterialMeshComp = SystemAPI.GetComponentLookup<MaterialMeshInfo>(),
                 }.Schedule<AdjustHeight>(state.Dependency);
 
                 adjustHeight.Complete();
@@ -59,6 +61,7 @@ namespace PhysicsSimulations
         {
             public float DeltaTime;
             public EntityCommandBuffer Ecb;
+            public ComponentLookup<MaterialMeshInfo> MaterialMeshComp;
 
             public void Execute(ref Voxel voxel, ref LocalToWorld localToWorld, ref PhysicsCollider collider, in Entity entity)
             {
@@ -111,6 +114,22 @@ namespace PhysicsSimulations
                             CollisionResponse = CollisionResponsePolicy.CollideRaiseCollisionEvents
                         });
 
+                        //Set appropriate mesh material
+                        var materialComponent = MaterialMeshComp[entity];
+                        switch (voxel.MatRefIndex)
+                        {
+                            case 0:
+                                materialComponent.Material = MaterialMeshComp[voxel.BaseMatRef].Material;
+                                break;
+                            case 1:
+                                materialComponent.Material = MaterialMeshComp[voxel.PositiveMatRef].Material;
+                                break;
+                            case 2:
+                                materialComponent.Material = MaterialMeshComp[voxel.NegativeMatRef].Material;
+                                break;
+                        }
+                        MaterialMeshComp[entity] = materialComponent;
+
                         voxel.IsVoxelReady = true;
                     }
                 }
@@ -144,6 +163,15 @@ namespace PhysicsSimulations
 
                     //Clamp the new height to be within the acceptable variance of the og height
                     _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight + _maxVoxelHeightVariance);
+
+                    //Check if height increased, decreased or remained same
+                    float _heightToCheck = TrainingController.Instance.compareWithOgHeight ? voxel.OgHeight : voxel.Height;
+                    if (_newHeight < _heightToCheck)
+                        voxel.MatRefIndex = 2;
+                    else if(_newHeight > _heightToCheck)
+                        voxel.MatRefIndex = 1;
+                    else
+                        voxel.MatRefIndex = 0;
 
                     //Make sure the height is within limit
                     voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.MaxHeight);

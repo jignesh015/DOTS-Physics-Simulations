@@ -13,6 +13,10 @@ namespace PhysicsSimulations
         public float minHeight;
         public int maxHeight;
 
+        public GameObject baseMatRefPrefab;
+        public GameObject positiveMatRefPrefab;
+        public GameObject negativeMatRefPrefab;
+
         class Baker : Baker<VoxelAuthoring>
         {
             public override void Bake(VoxelAuthoring authoring)
@@ -27,7 +31,11 @@ namespace PhysicsSimulations
                     MinHeight = authoring.minHeight,
                     MaxHeight = authoring.maxHeight,
                     IsVoxelReady = true,
-                });
+                    BaseMatRef = GetEntity(authoring.baseMatRefPrefab, TransformUsageFlags.None),
+                    PositiveMatRef = GetEntity(authoring.positiveMatRefPrefab, TransformUsageFlags.None),
+                    NegativeMatRef = GetEntity(authoring.negativeMatRefPrefab, TransformUsageFlags.None),
+                    MatRefIndex = 0
+                }); ;
             }
         }
     }
@@ -42,5 +50,9 @@ namespace PhysicsSimulations
         public float MaxHeight;
         public float VoxelSize;
         public bool IsVoxelReady;
+        public Entity BaseMatRef;
+        public Entity PositiveMatRef;
+        public Entity NegativeMatRef;
+        public int MatRefIndex;
     }
 }

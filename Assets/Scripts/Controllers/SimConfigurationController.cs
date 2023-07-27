@@ -29,6 +29,11 @@ namespace PhysicsSimulations
         public int AirParticlesBurstCount { get; set; }
         public float AverageKineticEnergy { get; private set; }
 
+        [Header("VOXEL GRID SETTINGS")]
+        public bool ShowCollisionHeatmap;
+        public bool VoxelGridReady { get; set; }
+        public bool VoxelsReady { get; set; }
+
         [Header("READ ONLY")]
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
@@ -37,10 +42,6 @@ namespace PhysicsSimulations
         public List<float> KineticEnergyList;
         
         public SimConfiguration CurrentSimConfig { get; private set; }
-
-        //VOXEL GRID SETTINGS
-        public bool VoxelGridReady { get; set; }
-        public bool VoxelsReady { get; set; }
 
         //EVENT DELEGATES
         public Action OnVoxelsReady;
@@ -205,9 +206,9 @@ namespace PhysicsSimulations
         {
             float averageCollisionCount =  (float)VoxelCollisionCount/carHeightMapGenerator.VoxelCount;
             int _impactLevel = 0;
-            if (collisionCount > averageCollisionCount*2)
+            if (collisionCount > averageCollisionCount*5)
                 _impactLevel = 3;
-            else if(collisionCount > averageCollisionCount)
+            else if(collisionCount > averageCollisionCount*2)
                 _impactLevel = 2;
             else if(collisionCount > averageCollisionCount/2)
                 _impactLevel = 1;

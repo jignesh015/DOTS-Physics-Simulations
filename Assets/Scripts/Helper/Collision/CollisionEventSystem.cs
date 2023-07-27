@@ -18,7 +18,7 @@ namespace Events
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CollisionEvent>();
+            state.RequireForUpdate<CustomCollisionEvent>();
             state.RequireForUpdate<SimulationSingleton>();
         }
 
@@ -27,7 +27,7 @@ namespace Events
         {
             state.Dependency = new CollisionEventJob
             {
-                CollisionEventData = SystemAPI.GetComponentLookup<CollisionEvent>(),
+                CollisionEventData = SystemAPI.GetComponentLookup<CustomCollisionEvent>(),
                 AirParticle = SystemAPI.GetComponentLookup<AirParticle>(),
                 MaterialMesh = SystemAPI.GetComponentLookup<MaterialMeshInfo>(),
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
@@ -36,7 +36,7 @@ namespace Events
         [BurstCompile]
         struct CollisionEventJob : ICollisionEventsJob
         {
-            public ComponentLookup<CollisionEvent> CollisionEventData;
+            public ComponentLookup<CustomCollisionEvent> CollisionEventData;
             public ComponentLookup<AirParticle> AirParticle;
             public ComponentLookup<MaterialMeshInfo> MaterialMesh;
 
@@ -67,27 +67,31 @@ namespace Events
                 //Debug.Log($"<color=yellow>Impact on collision: {AirParticle[airParticleEntity].Force}</color>");
 
                 //Assign impact mat
-                int _impactLevel = scc.GetImpactLevel(colliderComponent.CollisionCount);
-                var refMaterialComponent = MaterialMesh[colliderEntity];
-                switch (_impactLevel)
+                if(scc.ShowCollisionHeatmap)
                 {
-                    case 1:
-                        refMaterialComponent = MaterialMesh[colliderComponent.LowImpactMatRef];
-                        break;
-                    case 2:
-                        refMaterialComponent = MaterialMesh[colliderComponent.MidImpactMatRef];
-                        break;
-                    case 3:
-                        refMaterialComponent = MaterialMesh[colliderComponent.HighImpactMatRef];
-                        break;
+                    int _impactLevel = scc.GetImpactLevel(colliderComponent.CollisionCount);
+                    var refMaterialComponent = MaterialMesh[colliderEntity];
+                    switch (_impactLevel)
+                    {
+                        case 1:
+                            refMaterialComponent = MaterialMesh[colliderComponent.LowImpactMatRef];
+                            break;
+                        case 2:
+                            refMaterialComponent = MaterialMesh[colliderComponent.MidImpactMatRef];
+                            break;
+                        case 3:
+                            refMaterialComponent = MaterialMesh[colliderComponent.HighImpactMatRef];
+                            break;
+                    }
+
+                    if (bodyAHasMaterial)
+                    {
+                        var materialComponent = MaterialMesh[colliderEntity];
+                        materialComponent.Material = refMaterialComponent.Material;
+                        MaterialMesh[colliderEntity] = materialComponent;
+                    }
                 }
 
-                if (bodyAHasMaterial)
-                {
-                    var materialComponent = MaterialMesh[colliderEntity];
-                    materialComponent.Material = refMaterialComponent.Material;
-                    MaterialMesh[colliderEntity] = materialComponent;
-                }
             }
         }
     }
