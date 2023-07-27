@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee7585c1b69d7742a3548689ace7eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightmapTexture: {fileID: 2800000, guid: b59b1a2c287942d4b843abe34119f788, type: 3}
+  heightmapTexture: {fileID: 2800000, guid: 5544e8b62bc65fc44a264ce2082cb1f6, type: 3}
   heightmapScale: 1
   carHeightMaps: []
 --- !u!4 &1100855744
@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 2
     NumStackedVectorObservations: 2
     m_ActionSpec:
       m_NumContinuousActions: 500
@@ -1147,9 +1147,14 @@ MonoBehaviour:
   adjustHeightAgent: {fileID: 1165965474}
   maxVoxelHeightVariance: 0.025
   adjacentRowMaxHeightVariance: 0.25
-  maxKineticEnergyVariance: 80
-  decisionPeriod: 3
+  decisionPeriod: 2
   compareWithOgHeight: 0
+  maxKineticEnergyVariance: 80
+  maxCollisionCountVariance: 5000
+  kineticEnergyPositiveScore: 0.1
+  kineticEnergyNegativeScore: -2
+  collisionCountPositiveScore: 0.1
+  collisionCountNegativeScore: -1
   SetNewVoxelHeight: 0
   VoxelHeightFactor: 0
   VoxelHeightFactorList: []

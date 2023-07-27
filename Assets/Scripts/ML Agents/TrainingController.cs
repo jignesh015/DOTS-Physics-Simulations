@@ -14,9 +14,18 @@ namespace PhysicsSimulations
         [Range(0.001f,1f)]
         public float maxVoxelHeightVariance;
         public float adjacentRowMaxHeightVariance;
-        public float maxKineticEnergyVariance;
         public int decisionPeriod;
         public bool compareWithOgHeight;
+
+        [Header("REWARD SETTINGS")]
+        public float maxKineticEnergyVariance;
+        public int maxCollisionCountVariance;
+
+        [Header("REWARD SCORES")]
+        public float kineticEnergyPositiveScore;
+        public float kineticEnergyNegativeScore;
+        public float collisionCountPositiveScore;
+        public float collisionCountNegativeScore;
 
         private SimConfigurationController scc;
 
