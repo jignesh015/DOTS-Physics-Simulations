@@ -255,7 +255,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  m_GravityFactor: 0
+  m_GravityFactor: 1
   m_OverrideDefaultMassDistribution: 0
   m_CenterOfMass:
     x: 0
@@ -296,7 +296,7 @@ MonoBehaviour:
   Magnitude: 300
   LocalDirection: {x: -0, y: 0, z: -1}
   LocalOffset: {x: 0, y: 0, z: 0}
-  Lifespan: 0.5
+  Lifespan: 0.75
 --- !u!114 &5244594237998106344
 MonoBehaviour:
   m_ObjectHideFlags: 0

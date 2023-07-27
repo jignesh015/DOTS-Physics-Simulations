@@ -30,6 +30,7 @@ namespace Events
                 CollisionEventData = SystemAPI.GetComponentLookup<CustomCollisionEvent>(),
                 AirParticle = SystemAPI.GetComponentLookup<AirParticle>(),
                 MaterialMesh = SystemAPI.GetComponentLookup<MaterialMeshInfo>(),
+                Voxel = SystemAPI.GetComponentLookup<Voxel>(),
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
         }
 
@@ -39,6 +40,7 @@ namespace Events
             public ComponentLookup<CustomCollisionEvent> CollisionEventData;
             public ComponentLookup<AirParticle> AirParticle;
             public ComponentLookup<MaterialMeshInfo> MaterialMesh;
+            public ComponentLookup<Voxel> Voxel;
 
             public void Execute(Unity.Physics.CollisionEvent collisionEvent)
             {
@@ -64,7 +66,11 @@ namespace Events
                 scc.VoxelCollisionCount++;
                 colliderComponent.ImpactForce = AirParticle[airParticleEntity].KineticEnergy;
                 CollisionEventData[colliderEntity] = colliderComponent;
-                //Debug.Log($"<color=yellow>Impact on collision: {AirParticle[airParticleEntity].Force}</color>");
+
+                //Mark voxel as collided
+                var voxelComponent = Voxel[colliderEntity];
+                voxelComponent.HasCollided = true;
+                Voxel[colliderEntity] = voxelComponent;
 
                 //Assign impact mat
                 if(scc.ShowCollisionHeatmap)

@@ -12,6 +12,8 @@ namespace PhysicsSimulations
         public Texture2D heightmapTexture;
         public float heightmapScale;
 
+        [SerializeField] private bool loadHeightmap;
+
         public List<CarHeightMap> carHeightMaps = new List<CarHeightMap>();
 
         public int VoxelCount {  get; private set; }
@@ -20,7 +22,10 @@ namespace PhysicsSimulations
         // Start is called before the first frame update
         void Start()
         {
-            LoadHeightmap(heightmapTexture.name);
+            if(loadHeightmap)
+                LoadHeightmap(heightmapTexture.name);
+            else
+                HeightmapReady = true;
         }
 
         // Update is called once per frame

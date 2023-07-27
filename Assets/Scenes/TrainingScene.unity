@@ -1003,6 +1003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heightmapTexture: {fileID: 2800000, guid: 5544e8b62bc65fc44a264ce2082cb1f6, type: 3}
   heightmapScale: 1
+  loadHeightmap: 1
   carHeightMaps: []
 --- !u!4 &1100855744
 Transform:
@@ -1115,7 +1116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1372184769
 Transform:
   m_ObjectHideFlags: 0
@@ -1145,16 +1146,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustHeightAgent: {fileID: 1165965474}
-  maxVoxelHeightVariance: 0.75
+  maxVoxelHeightVariance: 0.015
   adjacentRowMaxHeightVariance: 0.25
   decisionPeriod: 2
+  onlyModifyCollidedVoxels: 1
   compareWithOgHeight: 0
   maxKineticEnergyVariance: 100
   maxCollisionCountVariance: 4000
-  kineticEnergyPositiveScore: 1
-  kineticEnergyNegativeScore: -5
-  collisionCountPositiveScore: 1
-  collisionCountNegativeScore: -100
+  kineticEnergyPositiveScore: 10
+  kineticEnergyNegativeScore: -1
+  collisionCountPositiveScore: 10
+  collisionCountNegativeScore: -1
   SetNewVoxelHeight: 0
   VoxelHeightFactor: 0
   VoxelHeightFactorList: []

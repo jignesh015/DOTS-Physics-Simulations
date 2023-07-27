@@ -141,7 +141,9 @@ namespace PhysicsSimulations
         {
             public readonly void Execute(ref Voxel voxel)
             {
-                if(voxel.IsVoxelReady)
+                //Check if this voxel needs to get new height
+                bool _getNewHeightCondition = TrainingController.Instance.onlyModifyCollidedVoxels ? voxel.IsVoxelReady && voxel.HasCollided : voxel.IsVoxelReady;
+                if (_getNewHeightCondition)
                 {
                     //float _newHeight = voxel.Height + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
 
@@ -175,10 +177,23 @@ namespace PhysicsSimulations
 
                     //Make sure the height is within limit
                     voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.MaxHeight);
+                    voxel.HasCollided = false;
+                    voxel.HadPreviouslyCollided = true;
                     voxel.IsVoxelReady = false;
+
+                    SimConfigurationController.Instance.VoxelsReady = false;
+                    TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
                 }
-                SimConfigurationController.Instance.VoxelsReady = false;
-                TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
+                else if(voxel.IsVoxelReady && voxel.HadPreviouslyCollided)
+                {
+                    //Reset mat ref
+                    voxel.MatRefIndex = 0;
+                    voxel.HadPreviouslyCollided = false;
+                    voxel.IsVoxelReady = false;
+
+                    SimConfigurationController.Instance.VoxelsReady = false;
+                    TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
+                }
             }
         }
 

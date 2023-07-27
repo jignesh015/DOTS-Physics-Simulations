@@ -34,7 +34,9 @@ namespace PhysicsSimulations
                     BaseMatRef = GetEntity(authoring.baseMatRefPrefab, TransformUsageFlags.None),
                     PositiveMatRef = GetEntity(authoring.positiveMatRefPrefab, TransformUsageFlags.None),
                     NegativeMatRef = GetEntity(authoring.negativeMatRefPrefab, TransformUsageFlags.None),
-                    MatRefIndex = 0
+                    MatRefIndex = 0,
+                    HasCollided = false,
+                    HadPreviouslyCollided = false,
                 }); ;
             }
         }
@@ -54,5 +56,7 @@ namespace PhysicsSimulations
         public Entity PositiveMatRef;
         public Entity NegativeMatRef;
         public int MatRefIndex;
+        public bool HasCollided;
+        public bool HadPreviouslyCollided;
     }
 }

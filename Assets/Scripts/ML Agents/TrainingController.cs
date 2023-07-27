@@ -15,6 +15,7 @@ namespace PhysicsSimulations
         public float maxVoxelHeightVariance;
         public float adjacentRowMaxHeightVariance;
         public int decisionPeriod;
+        public bool onlyModifyCollidedVoxels;
         public bool compareWithOgHeight;
 
         [Header("REWARD SETTINGS")]
