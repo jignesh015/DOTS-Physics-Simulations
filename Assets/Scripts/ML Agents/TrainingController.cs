@@ -15,6 +15,7 @@ namespace PhysicsSimulations
         public float maxVoxelHeightVariance;
         public float adjacentRowMaxHeightVariance;
         public int decisionPeriod;
+        public int episodePeriod;
         public bool onlyModifyCollidedVoxels;
         public bool compareWithOgHeight;
 
@@ -95,6 +96,9 @@ namespace PhysicsSimulations
         {
             if (VoxelHeightFactorList != null && VoxelHeightFactorList.Count > 0)
             {
+                if (VoxelHeightFactorList.Count == 1)
+                    return VoxelHeightFactor;
+
                 return VoxelHeightFactorList[_rowIndex + _columnIndex * heightMapTextureLength];
             }
 

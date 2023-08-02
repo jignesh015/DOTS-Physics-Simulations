@@ -59,7 +59,7 @@ namespace PhysicsSimulations
         {
             if(scc.AverageKineticEnergy != 0)
             {
-                Debug.Log($"<color=yellow>CollectObservations {scc.AverageKineticEnergy} | {scc.VoxelCollisionCount}</color>");
+                Debug.Log($"<color=orange>CollectObservations {scc.AverageKineticEnergy} | {scc.VoxelCollisionCount}</color>");
                 sensor.AddObservation(scc.AverageKineticEnergy);
                 sensor.AddObservation(scc.VoxelCollisionCount);
             }
@@ -82,21 +82,21 @@ namespace PhysicsSimulations
 
         private void AirSpawnStopped()
         {
-            Debug.Log($"<color=maroon>AirSpawnStopped</color>");
+            //Debug.Log($"<color=maroon>AirSpawnStopped</color>");
 
             //Give rewards as per kinectic energy difference
             //Positive if KE increases, negative if KE decreases
             if (previousAvgKineticEnergy != 0)
             {
-                string _debugColor = "orange";
+                string _debugColor = "yellow";
                 if (baseLineAvgKineticEnergy != 0 && Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.maxKineticEnergyVariance)
                 {
                     AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? tc.kineticEnergyPositiveScore : tc.kineticEnergyNegativeScore);
                     _debugColor = baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? "green" : "red";
-                    Debug.Log($"<color=orange>========== End Episode : <color={_debugColor}>[AKE]  Base Var: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color> ============</color>");
+                    Debug.Log($"<color=lime>========== End Episode : <color={_debugColor}>[AKE]  Base Var: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color> ============</color>");
                     EndEpisode();
                 }
-                else if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
+                if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
                 {
                     _debugColor = "green";
                     AddReward(tc.kineticEnergyPositiveScore);
@@ -109,6 +109,7 @@ namespace PhysicsSimulations
                 Debug.Log($"<color={_debugColor}> Baseline {baseLineAvgKineticEnergy} | AKE Variance: {scc.AverageKineticEnergy - previousAvgKineticEnergy} " +
                     $"| AKE Base Variance: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color>");
             }
+            
             previousAvgKineticEnergy = scc.AverageKineticEnergy;
             if (baseLineAvgKineticEnergy == 0 && scc.AverageKineticEnergy != 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
 
@@ -116,15 +117,15 @@ namespace PhysicsSimulations
             //Positive if collision count decreases, negative if collision count increases
             if (previousCollisionCount != 0)
             {
-                string _debugColor = "orange";
+                string _debugColor = "yellow";
                 if (baseLineCollisionCount != 0 && Mathf.Abs(baseLineCollisionCount - scc.VoxelCollisionCount) > tc.maxCollisionCountVariance)
                 {
                     AddReward(baseLineCollisionCount < scc.VoxelCollisionCount ? tc.collisionCountNegativeScore : tc.collisionCountPositiveScore);
                     _debugColor = baseLineCollisionCount < scc.VoxelCollisionCount ? "red" : "green";
-                    Debug.Log($"<color=orange>========== End Episode : <color={_debugColor}>[VCC]  Base Var {scc.VoxelCollisionCount - baseLineCollisionCount}</color> ============</color>");
+                    Debug.Log($"<color=lime>========== End Episode : <color={_debugColor}>[VCC]  Base Var {scc.VoxelCollisionCount - baseLineCollisionCount}</color> ============</color>");
                     EndEpisode();
                 }
-                else if(previousCollisionCount > scc.VoxelCollisionCount)
+                if (previousCollisionCount > scc.VoxelCollisionCount)
                 {
                     _debugColor = "green";
                     AddReward(tc.collisionCountPositiveScore);
@@ -143,6 +144,7 @@ namespace PhysicsSimulations
 
             //Check wheter to take decision or an action
             airStoppedCount++;
+            //if (airStoppedCount % tc.episodePeriod == 0) EndEpisode();
             if (airStoppedCount % tc.decisionPeriod == 0) RequestDecision();
             else RequestAction();
         }

@@ -48,9 +48,9 @@ namespace PhysicsSimulations
                 for(int j = 0; j < heightmapTexture.height; j++)
                 {
                     CarHeightMap heightMap = new CarHeightMap();
-                    heightMap.row = j;
-                    heightMap.column = i;
-                    heightMap.height = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
+                    heightMap.r = j;
+                    heightMap.c = i;
+                    heightMap.h = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
 
                     carHeightMaps.Add(heightMap);
                 }
@@ -69,9 +69,9 @@ namespace PhysicsSimulations
                 for (int j = 0; j < heightmapTexture.height; j++)
                 {
                     CarHeightMap heightMap = new CarHeightMap();
-                    heightMap.row = j;
-                    heightMap.column = i;
-                    heightMap.height = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
+                    heightMap.r = j;
+                    heightMap.c = i;
+                    heightMap.h = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
 
                     _carHeightMaps.Add(heightMap);
                 }
@@ -95,13 +95,13 @@ namespace PhysicsSimulations
             if(carHeightMaps == null || carHeightMaps.Count == 0)
                 return 0f;
 
-            float _height = carHeightMaps.Find(c => c.row == row && c.column == column).height;
+            float _height = carHeightMaps.Find(c => c.r == row && c.c == column).h;
             return _height;
         }
 
         public List<float> GetHeightList()
         {
-            List<float> heights = carHeightMaps.Select(carHeightMap => carHeightMap.height).ToList();
+            List<float> heights = carHeightMaps.Select(carHeightMap => carHeightMap.h).ToList();
             return heights;
         }
 
@@ -110,12 +110,12 @@ namespace PhysicsSimulations
             if (TrainingController.Instance == null) return;
             for (int i = 0; i < _heights.Count; i++)
             {
-                List<CarHeightMap> _entireRow = carHeightMaps.FindAll(h => h.row == i);
+                List<CarHeightMap> _entireRow = carHeightMaps.FindAll(hm => hm.r == i);
                 foreach(CarHeightMap _voxel in _entireRow)
                 {
-                    float _newHeight = _voxel.height;
+                    float _newHeight = _voxel.h;
                     _newHeight += TrainingController.Instance.maxVoxelHeightVariance * _heights[i];
-                    carHeightMaps.Find(h => h.row == _voxel.row && h.column == _voxel.column).height = _newHeight;
+                    carHeightMaps.Find(h => h.r == _voxel.r && h.c == _voxel.c).h = _newHeight;
                 }
             }
             TrainingController.Instance.SetNewVoxelHeight = true;
@@ -152,9 +152,20 @@ namespace PhysicsSimulations
     [Serializable]
     public class CarHeightMap
     {
-        public int row;
-        public int column;
-        public float height;
+        /// <summary>
+        /// Row index
+        /// </summary>
+        public int r;
+
+        /// <summary>
+        /// Column index
+        /// </summary>
+        public int c;
+
+        /// <summary>
+        /// Height value
+        /// </summary>
+        public float h;     //height
     }
 
     [Serializable]

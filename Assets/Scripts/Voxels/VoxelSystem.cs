@@ -145,12 +145,13 @@ namespace PhysicsSimulations
                 bool _getNewHeightCondition = TrainingController.Instance.onlyModifyCollidedVoxels ? voxel.IsVoxelReady && voxel.HasCollided : voxel.IsVoxelReady;
                 if (_getNewHeightCondition)
                 {
-                    //float _newHeight = voxel.Height + (TrainingController.Instance.VoxelHeightFactor * TrainingController.Instance.maxVoxelVariance);
-
-                    //Adjust Height factor according to adjacent row's factor
-                    float _currentRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row, voxel.Column);
+                    //Get height factor for current voxel cell
+                    float _currentHeightFactor = TrainingController.Instance.GetHeightFactor(voxel.Row, voxel.Column);
                     float _maxVoxelHeightVariance = TrainingController.Instance.maxVoxelHeightVariance;
-                    float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
+                    
+                    
+                    //Adjust Height factor according to adjacent row's factor
+                    //float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
                     //if (voxel.Row > 0 && voxel.Column > 0)
                     //{
                     //    float _previousRowFactor = TrainingController.Instance.GetHeightFactor(voxel.Row - 1);
@@ -161,7 +162,7 @@ namespace PhysicsSimulations
                     //}
 
                     //Calculate new height as per previous height and adjusted height factor
-                    float _newHeight = voxel.Height + (_currentRowFactor * _maxVoxelHeightVariance);
+                    float _newHeight = voxel.Height + (_currentHeightFactor * _maxVoxelHeightVariance);
 
                     //Clamp the new height to be within the acceptable variance of the og height
                     _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight + _maxVoxelHeightVariance);
@@ -169,11 +170,11 @@ namespace PhysicsSimulations
                     //Check if height increased, decreased or remained same
                     float _heightToCheck = TrainingController.Instance.compareWithOgHeight ? voxel.OgHeight : voxel.Height;
                     if (_newHeight < _heightToCheck)
-                        voxel.MatRefIndex = 2;
+                        voxel.MatRefIndex = 2;              //Height Decreased
                     else if(_newHeight > _heightToCheck)
-                        voxel.MatRefIndex = 1;
+                        voxel.MatRefIndex = 1;              //Height Increased
                     else
-                        voxel.MatRefIndex = 0;
+                        voxel.MatRefIndex = 0;              //Height Remained Same
 
                     //Make sure the height is within limit
                     voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.MaxHeight);
