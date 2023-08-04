@@ -25,6 +25,10 @@ namespace PhysicsSimulations
         private int previousCollisionCount;
         private int baseLineCollisionCount;
 
+        //Drag Force
+        private float previousDragForce;
+        private float baseLineDragForce;
+
         private int airStoppedCount;
 
         private void Start()
@@ -51,17 +55,17 @@ namespace PhysicsSimulations
             airStoppedCount = 0;
             baseLineAvgKineticEnergy = 0;
             baseLineCollisionCount = 0;
+            baseLineDragForce = 0;
             Debug.Log($"<color=green>OnEpisodeBegin</color>");
-            //RequestDecision();
         }
 
         public override void CollectObservations(VectorSensor sensor)
         {
             if(scc.AverageKineticEnergy != 0)
             {
-                Debug.Log($"<color=orange>CollectObservations {scc.AverageKineticEnergy} | {scc.VoxelCollisionCount}</color>");
+                Debug.Log($"<color=orange>CollectObservations {scc.AverageKineticEnergy} | {scc.AverageDragForce} | {scc.VoxelCollisionCount}</color>");
                 sensor.AddObservation(scc.AverageKineticEnergy);
-                sensor.AddObservation(scc.VoxelCollisionCount);
+                sensor.AddObservation(scc.AverageDragForce);
             }
         }
 
@@ -75,15 +79,15 @@ namespace PhysicsSimulations
             TrainingController.Instance.SetNewVoxelHeight = true;
             TrainingController.Instance.VoxelHeightFactor = _heightFactor;
             TrainingController.Instance.VoxelHeightFactorList = actions.ContinuousActions.ToList();
-
-            //Restart Air Particles
-            //scc.SpawnAirParticlesWithDelay(2500);
         }
 
         private void AirSpawnStopped()
         {
             //Debug.Log($"<color=maroon>AirSpawnStopped</color>");
 
+            bool shouldEndEpisode = false;
+
+            #region KINETIC ENERGY REWARD
             //Give rewards as per kinectic energy difference
             //Positive if KE increases, negative if KE decreases
             if (previousAvgKineticEnergy != 0)
@@ -94,9 +98,9 @@ namespace PhysicsSimulations
                     AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? tc.kineticEnergyPositiveScore : tc.kineticEnergyNegativeScore);
                     _debugColor = baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? "green" : "red";
                     Debug.Log($"<color=lime>========== End Episode : <color={_debugColor}>[AKE]  Base Var: {scc.AverageKineticEnergy - baseLineAvgKineticEnergy}</color> ============</color>");
-                    EndEpisode();
+                    shouldEndEpisode = true;
                 }
-                if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
+                else if (previousAvgKineticEnergy < scc.AverageKineticEnergy)
                 {
                     _debugColor = "green";
                     AddReward(tc.kineticEnergyPositiveScore);
@@ -112,7 +116,9 @@ namespace PhysicsSimulations
             
             previousAvgKineticEnergy = scc.AverageKineticEnergy;
             if (baseLineAvgKineticEnergy == 0 && scc.AverageKineticEnergy != 0) baseLineAvgKineticEnergy = scc.AverageKineticEnergy;
+            #endregion
 
+            #region COLLISION COUNT REWARDS
             //Give rewards as per collision count difference
             //Positive if collision count decreases, negative if collision count increases
             if (previousCollisionCount != 0)
@@ -123,14 +129,14 @@ namespace PhysicsSimulations
                     AddReward(baseLineCollisionCount < scc.VoxelCollisionCount ? tc.collisionCountNegativeScore : tc.collisionCountPositiveScore);
                     _debugColor = baseLineCollisionCount < scc.VoxelCollisionCount ? "red" : "green";
                     Debug.Log($"<color=lime>========== End Episode : <color={_debugColor}>[VCC]  Base Var {scc.VoxelCollisionCount - baseLineCollisionCount}</color> ============</color>");
-                    EndEpisode();
+                    shouldEndEpisode = true;
                 }
-                if (previousCollisionCount > scc.VoxelCollisionCount)
+                else if (previousCollisionCount > scc.VoxelCollisionCount)
                 {
                     _debugColor = "green";
                     AddReward(tc.collisionCountPositiveScore);
                 }
-                else if(previousCollisionCount < scc.VoxelCollisionCount)
+                else if (previousCollisionCount < scc.VoxelCollisionCount)
                 {
                     _debugColor = "red";
                     AddReward(tc.collisionCountNegativeScore);
@@ -140,11 +146,44 @@ namespace PhysicsSimulations
             }
             previousCollisionCount = scc.VoxelCollisionCount;
             if (baseLineCollisionCount == 0 && scc.VoxelCollisionCount != 0) baseLineCollisionCount = scc.VoxelCollisionCount;
+            #endregion
 
+            #region DRAG FORCE REWARDS
+            //Give rewards as per drag force difference
+            //Positive if drag force decreases, negative if drag force increases
+            if (previousDragForce != 0)
+            {
+                string _debugColor = "yellow";
+                if(baseLineDragForce != 0 && Mathf.Abs(baseLineDragForce - scc.AverageDragForce) > tc.maxDragForceVariance)
+                {
+                    AddReward(baseLineDragForce < scc.AverageDragForce ? tc.dragForceNegativeScore : tc.dragForcePositiveScore);
+                    _debugColor = baseLineDragForce < scc.AverageDragForce ? "red" : "green";
+                    Debug.Log($"<color=lime>========== End Episode : <color={_debugColor}>[ADF]  Base Var {scc.AverageDragForce - baseLineDragForce}</color> ============</color>");
+                    shouldEndEpisode = true;
+                }
+                else if(previousDragForce > scc.AverageDragForce)
+                {
+                    _debugColor = "green";
+                    AddReward(tc.dragForcePositiveScore);
+                }
+                else if(previousDragForce < scc.AverageDragForce)
+                {
+                    _debugColor = "red";
+                    AddReward(tc.dragForceNegativeScore);
+                }
+                Debug.Log($"<color={_debugColor}> Baseline {baseLineDragForce} | ADF Variance: {scc.AverageDragForce - previousDragForce} " +
+                   $"| ADF Base Variance: {scc.AverageDragForce - baseLineDragForce} </color>");
+            }
+            previousDragForce = scc.AverageDragForce;
+            if (baseLineDragForce == 0 && scc.AverageDragForce != 0) baseLineDragForce = scc.AverageDragForce;
+            #endregion
+
+            //Check whether to end the episode
+            if (shouldEndEpisode) EndEpisode();
+            //if (airStoppedCount % tc.episodePeriod == 0) EndEpisode();
 
             //Check wheter to take decision or an action
             airStoppedCount++;
-            //if (airStoppedCount % tc.episodePeriod == 0) EndEpisode();
             if (airStoppedCount % tc.decisionPeriod == 0) RequestDecision();
             else RequestAction();
         }

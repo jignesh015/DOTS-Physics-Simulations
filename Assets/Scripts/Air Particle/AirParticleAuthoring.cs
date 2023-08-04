@@ -50,6 +50,11 @@ namespace PhysicsSimulations
         public float3 Offset;
         public float Lifespan;
         public bool IsForceApplied;
+        public float3 InitialVelocity;
+
+        //Metrics
         public float KineticEnergy;
+        public float Drag;
+        public float DragCoefficient;
     }
 }

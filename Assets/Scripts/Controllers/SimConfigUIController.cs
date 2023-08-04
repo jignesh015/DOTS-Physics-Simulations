@@ -18,6 +18,7 @@ namespace PhysicsSimulations
         [Header("INDICATORS")]
         [SerializeField] private TextMeshProUGUI airSpeedText;
         [SerializeField] private TextMeshProUGUI avgKineticEnergyText;
+        [SerializeField] private TextMeshProUGUI avgDragForceText;
         [SerializeField] private TextMeshProUGUI airBurstCountText;
 
         [Header("UI")]
@@ -49,6 +50,9 @@ namespace PhysicsSimulations
 
                 //Display avg kinetic energy
                 ToggleKineticEnergyIndicator(scc.AverageKineticEnergy);
+
+                //Display Average Drag force
+                ToggleDragForceIndicator(scc.AverageDragForce);
 
                 //Display burst count
                 airBurstCountText.gameObject.SetActive(scc.SpawnAirParticles);
@@ -142,6 +146,12 @@ namespace PhysicsSimulations
         {
             avgKineticEnergyText.gameObject.SetActive(_value != 0f);
             avgKineticEnergyText.text = $"Avg KE: {_value:F2}J";
+        }
+
+        public void ToggleDragForceIndicator(float _value)
+        {
+            avgDragForceText.gameObject.SetActive(_value != 0f);
+            avgDragForceText.text = $"Drag: {_value:F2}N";
         }
     }
 }

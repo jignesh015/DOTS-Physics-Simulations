@@ -22,12 +22,18 @@ namespace PhysicsSimulations
         [Header("REWARD SETTINGS")]
         public float maxKineticEnergyVariance;
         public int maxCollisionCountVariance;
+        public int maxDragForceVariance;
 
         [Header("REWARD SCORES")]
+        //KINETIC ENERGY REWARD
         public float kineticEnergyPositiveScore;
         public float kineticEnergyNegativeScore;
+        //COLLISION COUNT REWARD
         public float collisionCountPositiveScore;
         public float collisionCountNegativeScore;
+        //DRAG FORCE REWARD
+        public float dragForcePositiveScore;
+        public float dragForceNegativeScore;
 
         private SimConfigurationController scc;
 

@@ -51,17 +51,31 @@ namespace PhysicsSimulations
                 {
                     float3 impulse = -airParticle.Direction * SimConfigurationController.Instance.WindMagnitude;
                     rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, airParticle.Offset);
+                    airParticle.InitialVelocity = rigidBodyAspect.LinearVelocity;
                     airParticle.IsForceApplied = true;
                 }
 
+                //Calculate the current kinetic energy of the air particle
                 airParticle.KineticEnergy = 0.5f * rigidBodyAspect.Mass * math.lengthsq(rigidBodyAspect.LinearVelocity);
-                //UnityEngine.Debug.Log($"<color=green>Impact: {airParticle.Force}</color>");
+
+                //Calculate the change in momentum
+                float3 changeInMomentum = rigidBodyAspect.Mass * (rigidBodyAspect.LinearVelocity - airParticle.InitialVelocity);
+
+                //Calculate the total drag force
+                float dragForce = math.length(changeInMomentum / DeltaTime);
+                airParticle.Drag = dragForce;
+
+                //Calculate drag coefficient
+                float frontalArea = 0.01f; 
+                float airDensity = Data.AirDensity;
+                airParticle.DragCoefficient = dragForce / (0.5f * airDensity * math.lengthsq(rigidBodyAspect.LinearVelocity) * frontalArea);
 
                 airParticle.Lifespan -= DeltaTime;
                 if (airParticle.Lifespan <= 0)
                 {
                     //UnityEngine.Debug.Log($"<color=red>Impact on Death: {airParticle.KineticEnergy}</color>");
                     SimConfigurationController.Instance.UpdateKineticEnergyList(airParticle.KineticEnergy);
+                    SimConfigurationController.Instance.UpdateDragForceList(airParticle.Drag);
                     Ecb.DestroyEntity(rigidBodyAspect.Entity);
                 }
             }

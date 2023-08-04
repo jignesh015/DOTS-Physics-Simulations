@@ -758,10 +758,13 @@ MonoBehaviour:
   compareWithOgHeight: 0
   maxKineticEnergyVariance: 50
   maxCollisionCountVariance: 1000
+  maxDragForceVariance: 0
   kineticEnergyPositiveScore: 2
   kineticEnergyNegativeScore: -1
   collisionCountPositiveScore: 2
   collisionCountNegativeScore: -1
+  dragForcePositiveScore: 0
+  dragForceNegativeScore: 0
   SetNewVoxelHeight: 0
   VoxelHeightFactor: 0
   VoxelHeightFactorList: []
@@ -993,7 +996,7 @@ MonoBehaviour:
     airSpeed: 50
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
     airParticleRatio: 0.5
-    airParticleBurstCount: 40
+    airParticleBurstCount: 20
     airParticleGravityFactor: 0
   configSanityCheck:
     airSpeedMin: 10
@@ -1018,6 +1021,7 @@ MonoBehaviour:
   CurrentViewAngle: 0
   VoxelCollisionCount: 0
   KineticEnergyList: []
+  DragForceList: []
 --- !u!4 &913572971
 Transform:
   m_ObjectHideFlags: 0
@@ -1373,12 +1377,15 @@ MonoBehaviour:
   episodePeriod: 5
   onlyModifyCollidedVoxels: 1
   compareWithOgHeight: 0
-  maxKineticEnergyVariance: 100
+  maxKineticEnergyVariance: 35
   maxCollisionCountVariance: 4000
+  maxDragForceVariance: 280
   kineticEnergyPositiveScore: 2
   kineticEnergyNegativeScore: -1
   collisionCountPositiveScore: 2
   collisionCountNegativeScore: -1
+  dragForcePositiveScore: 2
+  dragForceNegativeScore: -1
   SetNewVoxelHeight: 0
   VoxelHeightFactor: 0
   VoxelHeightFactorList: []
@@ -1570,6 +1577,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 322440252502793929, guid: e677248a762492b44a9c4ed6aec5725d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 495366247976074426, guid: e677248a762492b44a9c4ed6aec5725d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 495366247976074426, guid: e677248a762492b44a9c4ed6aec5725d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 495366247976074426, guid: e677248a762492b44a9c4ed6aec5725d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 495366247976074426, guid: e677248a762492b44a9c4ed6aec5725d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -2270,10 +2297,13 @@ MonoBehaviour:
   compareWithOgHeight: 0
   maxKineticEnergyVariance: 100
   maxCollisionCountVariance: 4000
+  maxDragForceVariance: 0
   kineticEnergyPositiveScore: 2
   kineticEnergyNegativeScore: -1
   collisionCountPositiveScore: 2
   collisionCountNegativeScore: -1
+  dragForcePositiveScore: 0
+  dragForceNegativeScore: 0
   SetNewVoxelHeight: 0
   VoxelHeightFactor: 0
   VoxelHeightFactorList: []

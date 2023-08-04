@@ -27,7 +27,6 @@ namespace PhysicsSimulations
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
         public int AirParticlesBurstCount { get; set; }
-        public float AverageKineticEnergy { get; private set; }
 
         [Header("VOXEL GRID SETTINGS")]
         public bool ShowCollisionHeatmap;
@@ -40,8 +39,13 @@ namespace PhysicsSimulations
         public ViewAngle CurrentViewAngle;
         public int VoxelCollisionCount;
         public List<float> KineticEnergyList;
+        public List<float> DragForceList;
         
         public SimConfiguration CurrentSimConfig { get; private set; }
+
+        //METRICS
+        public float AverageKineticEnergy { get; private set; }
+        public float AverageDragForce { get; private set; }
 
         //EVENT DELEGATES
         public Action OnVoxelsReady;
@@ -165,7 +169,7 @@ namespace PhysicsSimulations
 
         public void OnVoxelsReadyListener()
         {
-            if(VoxelsReady)
+            if(VoxelsReady && SpawnAirParticlesAutomatically)
             {
                 Debug.Log($"<color=magenta>Voxels Ready</color>");
                 SpawnAirParticlesWithDelay(2000);
@@ -190,12 +194,14 @@ namespace PhysicsSimulations
             AirParticlesBurstCount = 0;
             OnAirSpawnStarted?.Invoke();
             ResetKineticEnergyList();
+            ResetDragForceList();
         }
 
         public void StopAirParticles() 
         { 
             SpawnAirParticles = false;
             CalculateAverageKineticEnergy();
+            CalculateAverageDragForce();
 
             OnAirSpawnStopped?.Invoke();
         }
@@ -214,6 +220,7 @@ namespace PhysicsSimulations
 
         }
 
+        #region KINETIC ENERGY
         public void ResetKineticEnergyList()
         {
             AverageKineticEnergy = 0;
@@ -242,6 +249,39 @@ namespace PhysicsSimulations
                 Debug.Log($"<color=red>KineticEnergyList is empty</color>");
             }
         }
+        #endregion
+
+        #region DRAG FORCE
+        public void ResetDragForceList()
+        {
+            AverageDragForce = 0;
+            DragForceList = new List<float>();
+        }
+
+        public void UpdateDragForceList(float _forceValue)
+        {
+            if (SpawnAirParticles && DragForceList.Count < 10000)
+            {
+                DragForceList.Add(_forceValue);
+            }
+        }
+
+        public void CalculateAverageDragForce()
+        {
+            if(DragForceList != null && DragForceList.Count > 0)
+            {
+                AverageDragForce = DragForceList.Average();
+                DragForceList.Clear();
+                //Debug.Log($"<color=olive>Average Drag = {AverageDragForce}</color>");
+            }
+            else
+            { 
+                AverageDragForce = 0;
+                Debug.Log($"<color=red>DragForceList is empty</color>");
+            }
+        }
+
+        #endregion
     }
 
     [Serializable]
