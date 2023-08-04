@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Rendering;
-using UnityEngine;
 
 namespace Events
 {
@@ -34,7 +33,6 @@ namespace Events
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
         }
 
-        [BurstCompile]
         struct CollisionEventJob : ICollisionEventsJob
         {
             public ComponentLookup<CustomCollisionEvent> CollisionEventData;

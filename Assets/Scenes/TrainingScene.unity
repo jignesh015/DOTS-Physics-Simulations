@@ -1371,7 +1371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustHeightAgent: {fileID: 1165965474}
-  maxVoxelHeightVariance: 0.075
+  maxVoxelHeightVariance: 0.1
   adjacentRowMaxHeightVariance: 0.25
   decisionPeriod: 2
   episodePeriod: 5

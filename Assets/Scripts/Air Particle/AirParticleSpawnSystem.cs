@@ -18,7 +18,6 @@ namespace PhysicsSimulations
 
         private int totalSpawnPosCount;
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             EntityManager em = state.EntityManager;

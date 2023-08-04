@@ -1,4 +1,3 @@
-using System.Numerics;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
@@ -38,7 +37,6 @@ namespace PhysicsSimulations
             thurstJob.Complete();
         }
 
-        [BurstCompile]
         public partial struct ThurstJob : IJobEntity
         {
             public float DeltaTime;

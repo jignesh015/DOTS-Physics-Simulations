@@ -11,7 +11,6 @@ namespace PhysicsSimulations
     {
         private int lengthBuffer;
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             if(SimConfigurationController.Instance == null || 

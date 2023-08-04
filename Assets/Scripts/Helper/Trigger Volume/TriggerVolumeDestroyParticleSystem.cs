@@ -11,13 +11,11 @@ namespace PhysicsSimulations
     [UpdateAfter(typeof(StatefulTriggerEventSystem))]
     public partial struct TriggerVolumeDestroyParticleSystem : ISystem
     {
-        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<TriggerVolumeDestroyParticle>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
@@ -49,13 +47,19 @@ namespace PhysicsSimulations
                         if(airParticle.HasComponent(otherEntity))
                         {
                             //Debug.Log($"<color=orange>Impact on Trigger: {airParticle[otherEntity].KineticEnergy}</color>");
-                            SimConfigurationController.Instance.UpdateKineticEnergyList(airParticle[otherEntity].KineticEnergy);
-                            SimConfigurationController.Instance.UpdateDragForceList(airParticle[otherEntity].Drag);
+                            UpdateMetrics(airParticle[otherEntity].KineticEnergy, airParticle[otherEntity].Drag);
                             ecb.DestroyEntity(otherEntity);
                         }
                     }
                 }
             }
+        }
+
+        private void UpdateMetrics(float _kineticEnergy, float _drag)
+        {
+            SimConfigurationController scc = SimConfigurationController.Instance;
+            scc.UpdateKineticEnergyList(_kineticEnergy);
+            scc.UpdateDragForceList(_drag);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace PhysicsSimulations
         {
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var entities =  state.GetEntityQuery(new ComponentType[] { typeof(VfxEmitter) }).ToEntityArray(Allocator.TempJob);

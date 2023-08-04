@@ -13,7 +13,6 @@ namespace PhysicsSimulations
     {
         bool isDone;
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             EntityCommandBuffer ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
@@ -136,7 +135,7 @@ namespace PhysicsSimulations
             }
         }
 
-        [BurstCompile]
+
         public partial struct GetNewHeight : IJobEntity
         {
             public readonly void Execute(ref Voxel voxel)
@@ -198,7 +197,6 @@ namespace PhysicsSimulations
             }
         }
 
-        [BurstCompile]
         public partial struct AllVoxelsReady : IJobEntity
         {
             public readonly void Execute(ref Voxel voxel)

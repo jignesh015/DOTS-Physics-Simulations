@@ -22,7 +22,6 @@ namespace PhysicsSimulations
             isInitialized = 0;
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             SimConfigurationController scc = SimConfigurationController.Instance;

@@ -6,15 +6,12 @@ using Unity.Entities;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace PhysicsSimulations
 {
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial struct CarSpawnSystem : ISystem
     {
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             SimConfigurationController scc = SimConfigurationController.Instance;

@@ -16,7 +16,6 @@ namespace PhysicsSimulations
     [UpdateAfter(typeof(PhysicsSystemGroup))]
     public partial struct VfxParticleSystem : ISystem
     {
-        [BurstCompile]
         public readonly void OnUpdate(ref SystemState state)
         {
             var entities = state.GetEntityQuery(new ComponentType[] { typeof(VfxParticle) }).ToEntityArray(Allocator.TempJob);
