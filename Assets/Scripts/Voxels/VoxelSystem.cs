@@ -97,6 +97,9 @@ namespace PhysicsSimulations
                         localToWorld.Value[1][1] = voxel.Height;
                         localToWorld.Value[3][1] = voxel.Height / 2f;
 
+                        //Update the heightmap list
+                        SimConfigurationController.Instance.carHeightMapGenerator.UpdateHeight(voxel.Row, voxel.Column, voxel.Height);
+
                         //Scale the collider
                         collider.Value = BoxCollider.Create(new BoxGeometry
                         {

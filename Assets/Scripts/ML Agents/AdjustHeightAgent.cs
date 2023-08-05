@@ -66,6 +66,7 @@ namespace PhysicsSimulations
                 Debug.Log($"<color=orange>CollectObservations {scc.AverageKineticEnergy} | {scc.AverageDragForce} | {scc.VoxelCollisionCount}</color>");
                 sensor.AddObservation(scc.AverageKineticEnergy);
                 sensor.AddObservation(scc.AverageDragForce);
+                sensor.AddObservation(scc.carHeightMapGenerator.updatedHeightmapList.ToArray());
             }
         }
 

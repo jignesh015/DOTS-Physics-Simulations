@@ -15,9 +15,12 @@ namespace PhysicsSimulations
         [SerializeField] private bool loadHeightmap;
 
         public List<float> carHeightMapList = new List<float>();
+        public List<float> updatedHeightmapList = new List<float>();
 
         public int VoxelCount {  get; private set; }
         public bool HeightmapReady {  get; private set; }
+
+        private int textureHeight;
 
         // Start is called before the first frame update
         void Start()
@@ -88,11 +91,21 @@ namespace PhysicsSimulations
             return _height;
         }
 
+        public void UpdateHeight(int row, int column, float value)
+        {
+            if (updatedHeightmapList == null || updatedHeightmapList.Count == 0)
+                return;
+
+            updatedHeightmapList[row + column * textureHeight] = value;
+        }
+
         public void LoadHeightmap(string fileName)
         {
             HeightmapReady = false;
+            textureHeight = heightmapTexture.height;
+
             // Combine the folder path and the file name to get the full file path.
-            string filePath = Path.Combine(Data.CarHeightmapRoot, fileName);
+            string filePath = Path.Combine(Data.CarHeightmapRoot, $"{fileName}.json");
 
             // Check if the file exists.
             if (File.Exists(filePath))
@@ -105,13 +118,15 @@ namespace PhysicsSimulations
 
                 if (dataContainer != null)
                 {
-                    carHeightMapList =  dataContainer.items;
+                    carHeightMapList = dataContainer.items;
+                    updatedHeightmapList =  dataContainer.items;
                     HeightmapReady = true;
                 }
             }
             else
             {
-                GenerateHeightmap();
+                Debug.Log($"Heightmap not found at {filePath}");
+                //GenerateHeightmap();
             }
         }
     }
