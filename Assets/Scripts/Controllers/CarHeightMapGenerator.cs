@@ -14,7 +14,7 @@ namespace PhysicsSimulations
 
         [SerializeField] private bool loadHeightmap;
 
-        public List<CarHeightMap> carHeightMaps = new List<CarHeightMap>();
+        public List<float> carHeightMapList = new List<float>();
 
         public int VoxelCount {  get; private set; }
         public bool HeightmapReady {  get; private set; }
@@ -28,18 +28,13 @@ namespace PhysicsSimulations
                 HeightmapReady = true;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
         public void GenerateHeightmap()
         {
             HeightmapReady = false;
-            carHeightMaps = new List<CarHeightMap>();
 
             VoxelCount = heightmapTexture.width * heightmapTexture.height;
+            float[] carHeightMapListArr = new float[VoxelCount];
+            int _textureHeight = heightmapTexture.height;
 
             Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
 
@@ -47,38 +42,32 @@ namespace PhysicsSimulations
             {
                 for(int j = 0; j < heightmapTexture.height; j++)
                 {
-                    CarHeightMap heightMap = new CarHeightMap();
-                    heightMap.r = j;
-                    heightMap.c = i;
-                    heightMap.h = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
-
-                    carHeightMaps.Add(heightMap);
+                    carHeightMapListArr[j + i * _textureHeight] = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
                 }
             }
+            carHeightMapList = carHeightMapListArr.ToList();
             HeightmapReady = true;
         }
 
         public void GenerateHeightmapJSON()
         {
-            List<CarHeightMap> _carHeightMaps = new();
             VoxelCount = heightmapTexture.width * heightmapTexture.height;
+            float[] carHeightMapListArr = new float[VoxelCount];
+            int _textureHeight = heightmapTexture.height;
+
             Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
 
             for (int i = 0; i < heightmapTexture.width; i++)
             {
                 for (int j = 0; j < heightmapTexture.height; j++)
                 {
-                    CarHeightMap heightMap = new CarHeightMap();
-                    heightMap.r = j;
-                    heightMap.c = i;
-                    heightMap.h = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
-
-                    _carHeightMaps.Add(heightMap);
+                    carHeightMapListArr[j + i * _textureHeight] = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
                 }
             }
+            List<float> _carHeightMapList = carHeightMapListArr.ToList();
 
             // Convert the list to JSON format using JsonUtility.
-            string jsonData = JsonUtility.ToJson(new SerializableList<CarHeightMap>(_carHeightMaps));
+            string jsonData = JsonUtility.ToJson(new SerializableList<float>(_carHeightMapList));
 
             // Get a path to save the json file
             string fileName = $"{heightmapTexture.name}.json";
@@ -87,38 +76,16 @@ namespace PhysicsSimulations
             // Write the JSON data to the file.
             File.WriteAllText(filePath, jsonData);
             Debug.Log("Saved to " + filePath);
-            _carHeightMaps.Clear();
+            _carHeightMapList.Clear();
         }
 
         public float GetHeight(int row, int column)
         {
-            if(carHeightMaps == null || carHeightMaps.Count == 0)
+            if(carHeightMapList == null ||  carHeightMapList.Count == 0) 
                 return 0f;
 
-            float _height = carHeightMaps.Find(c => c.r == row && c.c == column).h;
+            float _height = carHeightMapList[row + column * heightmapTexture.height];
             return _height;
-        }
-
-        public List<float> GetHeightList()
-        {
-            List<float> heights = carHeightMaps.Select(carHeightMap => carHeightMap.h).ToList();
-            return heights;
-        }
-
-        public void UpdateHeightmap(List<float> _heights)
-        {
-            if (TrainingController.Instance == null) return;
-            for (int i = 0; i < _heights.Count; i++)
-            {
-                List<CarHeightMap> _entireRow = carHeightMaps.FindAll(hm => hm.r == i);
-                foreach(CarHeightMap _voxel in _entireRow)
-                {
-                    float _newHeight = _voxel.h;
-                    _newHeight += TrainingController.Instance.maxVoxelHeightVariance * _heights[i];
-                    carHeightMaps.Find(h => h.r == _voxel.r && h.c == _voxel.c).h = _newHeight;
-                }
-            }
-            TrainingController.Instance.SetNewVoxelHeight = true;
         }
 
         public void LoadHeightmap(string fileName)
@@ -134,11 +101,11 @@ namespace PhysicsSimulations
                 string jsonData = File.ReadAllText(filePath);
 
                 // Deserialize the JSON data back to a list using JsonUtility.
-                SerializableList<CarHeightMap> dataContainer = JsonUtility.FromJson<SerializableList<CarHeightMap>>(jsonData);
+                SerializableList<float> dataContainer = JsonUtility.FromJson<SerializableList<float>>(jsonData);
 
                 if (dataContainer != null)
                 {
-                    carHeightMaps =  dataContainer.items;
+                    carHeightMapList =  dataContainer.items;
                     HeightmapReady = true;
                 }
             }
@@ -147,25 +114,6 @@ namespace PhysicsSimulations
                 GenerateHeightmap();
             }
         }
-    }
-
-    [Serializable]
-    public class CarHeightMap
-    {
-        /// <summary>
-        /// Row index
-        /// </summary>
-        public int r;
-
-        /// <summary>
-        /// Column index
-        /// </summary>
-        public int c;
-
-        /// <summary>
-        /// Height value
-        /// </summary>
-        public float h;     //height
     }
 
     [Serializable]

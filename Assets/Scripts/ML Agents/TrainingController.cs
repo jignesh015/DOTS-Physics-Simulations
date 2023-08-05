@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -9,6 +11,12 @@ namespace PhysicsSimulations
     {
         [Header("AGENTS")]
         public AdjustHeightAgent adjustHeightAgent;
+
+        [Header("TRAINING PATHS")]
+        [SerializeField] private string mlagentPath = "[path to ml agent]";
+        [SerializeField] private string resultOutputName = "[result folder name]";
+        [SerializeField] private string buildPath = "[path to build]";
+        [SerializeField] private string venvPath = "[path to venv]";
 
         [Header("TRAINING SETTINGS")]
         [Range(0.001f,1f)]
@@ -66,6 +74,8 @@ namespace PhysicsSimulations
             scc.OnAirSpawnStarted += EnableAdjustHeightAgent;
 
             heightMapTextureLength = scc.carHeightMapGenerator.heightmapTexture.height;
+
+            venvPath = VirtualEnvironmentPath();
         }
 
         private void OnEnable()
@@ -84,7 +94,7 @@ namespace PhysicsSimulations
         public void EnableAdjustHeightAgent()
         {
             //Debug.Log($"<color=cyan>EnableAdjustHeightAgent 1</color>");
-            adjustHeightAgent.continuousActionSpecCount = scc.carHeightMapGenerator.carHeightMaps.Count;
+            adjustHeightAgent.continuousActionSpecCount = scc.carHeightMapGenerator.carHeightMapList.Count;
             adjustHeightAgent.gameObject.SetActive(true);
         }
 
@@ -94,7 +104,6 @@ namespace PhysicsSimulations
             {
                 return VoxelHeightFactorList[Mathf.FloorToInt(_rowIndex/(heightMapTextureLength/VoxelHeightFactorList.Count))];
             }
-
             return 0;
         }
 
@@ -111,5 +120,44 @@ namespace PhysicsSimulations
             return 0;
         }
 
+        public void StartTraining()
+        {
+            // Construct the full command
+            string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
+            string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml --run-id={resultOutputName}";
+
+#if !UNITY_EDITOR
+            //Add executable path for standalone builds
+            string executablePath = Directory.GetParent(Application.dataPath).FullName;
+            trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={resultOutputName}";
+#endif
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/K {activateCommand} && {trainCommand}", // Use /K to keep the Command Prompt window open
+                UseShellExecute = true,
+                CreateNoWindow = false
+            };
+
+            Process.Start(startInfo);
+        }
+
+
+        private string VirtualEnvironmentPath()
+        {
+            // Get the path to the "Assets" folder in your Unity project
+            string assetsFolderPath = Application.dataPath;
+
+            // Get the parent directory (folder just outside "Assets")
+            string parentFolderPath = Directory.GetParent(assetsFolderPath).FullName;
+
+            // Combine the parent folder path with the folder name you want to access
+            string targetFolderPath = Path.Combine(parentFolderPath, "venv");
+
+            UnityEngine.Debug.Log($"Path: {targetFolderPath}");
+
+            return targetFolderPath;
+        }
     }
 }
