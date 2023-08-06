@@ -13,7 +13,6 @@ namespace PhysicsSimulations
         public AdjustHeightAgent adjustHeightAgent;
 
         [Header("TRAINING PATHS")]
-        [SerializeField] private string mlagentPath = "[path to ml agent]";
         [SerializeField] private string resultOutputName = "[result folder name]";
         [SerializeField] private string buildPath = "[path to build]";
         [SerializeField] private string venvPath = "[path to venv]";

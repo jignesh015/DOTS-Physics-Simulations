@@ -105,16 +105,14 @@ namespace PhysicsSimulations
             textureHeight = heightmapTexture.height;
 
             // Combine the folder path and the file name to get the full file path.
-            string filePath = Path.Combine(Data.CarHeightmapRoot, $"{fileName}.json");
+            string filePath = Path.Combine(Data.CarHeightmapRoot, $"{fileName}");
+            var textFile = Resources.Load<TextAsset>(filePath);
 
             // Check if the file exists.
-            if (File.Exists(filePath))
+            if (textFile != null)
             {
-                // Read the JSON data from the file.
-                string jsonData = File.ReadAllText(filePath);
-
                 // Deserialize the JSON data back to a list using JsonUtility.
-                SerializableList<float> dataContainer = JsonUtility.FromJson<SerializableList<float>>(jsonData);
+                SerializableList<float> dataContainer = JsonUtility.FromJson<SerializableList<float>>(textFile.text);
 
                 if (dataContainer != null)
                 {

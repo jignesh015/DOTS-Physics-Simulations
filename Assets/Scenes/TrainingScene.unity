@@ -885,7 +885,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustHeightAgent: {fileID: 1249308988}
-  mlagentPath: '[path to ml agent]'
   resultOutputName: '[path to mlagents-learn executable]'
   buildPath: '[root]/Builds/Test_0.1'
   venvPath: '[path to venv]'
@@ -1651,7 +1650,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustHeightAgent: {fileID: 1165965474}
-  mlagentPath: C:\Users\Jignesh\OneDrive\Documents\GitHub\DOTS-Physics-Simulations\venv\Lib\site-packages\mlagents
   resultOutputName: TestEd1
   buildPath: '[root]/Builds/Test_0.1'
   venvPath: '[path to venv]'
@@ -2577,7 +2575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustHeightAgent: {fileID: 1103305771}
-  mlagentPath: '[path to ml agent]'
   resultOutputName: '[path to mlagents-learn executable]'
   buildPath: '[root]/Builds/Test_0.1'
   venvPath: '[path to venv]'
