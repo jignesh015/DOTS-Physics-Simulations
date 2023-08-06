@@ -126,7 +126,7 @@ namespace PhysicsSimulations
             else
             {
                 Debug.Log($"Heightmap not found at {filePath}");
-                //GenerateHeightmap();
+                GenerateHeightmap();
             }
         }
     }

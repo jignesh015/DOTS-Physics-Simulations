@@ -55,7 +55,6 @@ namespace PhysicsSimulations
             }
         }
 
-        [BurstCompile]
         public partial struct AdjustHeight : IJobEntity
         {
             public float DeltaTime;

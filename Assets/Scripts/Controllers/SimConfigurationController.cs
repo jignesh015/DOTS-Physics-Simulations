@@ -272,7 +272,6 @@ namespace PhysicsSimulations
             {
                 AverageDragForce = DragForceList.Average();
                 DragForceList.Clear();
-                //Debug.Log($"<color=olive>Average Drag = {AverageDragForce}</color>");
             }
             else
             { 
