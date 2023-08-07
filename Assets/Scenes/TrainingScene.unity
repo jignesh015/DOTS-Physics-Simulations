@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17757891, g: 0.22232291, b: 0.3045183, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1136,23 +1136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e637a71acfef454380a4930c30e69da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultConfig:
-    airSpeed: 50
-    windSpawnZoneDimension: {x: 0, y: 0, z: 0}
-    airParticleRatio: 0.5
-    airParticleBurstCount: 20
-    airParticleGravityFactor: 0
-  configSanityCheck:
-    airSpeedMin: 10
-    airSpeedMax: 120
-    windSpawnZoneDimensionMin: {x: 0, y: 0, z: 0}
-    windSpawnZoneDimensionMax: {x: 0, y: 0, z: 0}
-    airParticleRatioMin: 0.1
-    airParticleRatioMax: 1
-    airParticleBurstCountMin: 0
-    airParticleBurstCountMax: 80
-    airParticleGravityFactorMin: 0
-    airParticleGravityFactorMax: 1
+  defaultConfig: {fileID: 11400000, guid: 3b15ff42ee7cb9d4587405d0ccc0f698, type: 2}
+  configSanityCheck: {fileID: 11400000, guid: 3480ac1dc7897b848b3d528450e1bb68, type: 2}
   mainCamera: {fileID: 330585543}
   freeLookCamera: {fileID: 1551428645}
   sideViewVC: {fileID: 88391333}
@@ -1620,7 +1605,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1372184769
 Transform:
   m_ObjectHideFlags: 0

@@ -112,7 +112,6 @@ namespace PhysicsSimulations
                 );
             config.airParticleRatio = Mathf.Clamp( config.airParticleRatio, csc.airParticleRatioMin, csc.airParticleRatioMax );
             config.airParticleBurstCount = Mathf.Clamp(config.airParticleBurstCount, csc.airParticleBurstCountMin, csc.airParticleBurstCountMax );
-            config.airParticleGravityFactor = Mathf.Clamp(config.airParticleGravityFactor, csc.airParticleGravityFactorMin, csc.airParticleGravityFactorMax);
             return config;
         }
 
@@ -279,56 +278,6 @@ namespace PhysicsSimulations
                 Debug.Log($"<color=red>DragForceList is empty</color>");
             }
         }
-
         #endregion
-    }
-
-    [Serializable]
-    public class SimConfiguration
-    {
-        [Range(10, 100)]
-        public float airSpeed;
-        public Vector3 windSpawnZoneDimension;
-
-        [Range(0.1f,1f)]
-        public float airParticleRatio;
-
-        [Range(0, 80)]
-        public int airParticleBurstCount;
-
-        [Range(0,1)]
-        public float airParticleGravityFactor;
-
-        public SimConfiguration Clone()
-        {
-            SimConfiguration config = new SimConfiguration
-            {
-                airSpeed = this.airSpeed,
-                windSpawnZoneDimension = this.windSpawnZoneDimension,
-                airParticleRatio = this.airParticleRatio,
-                airParticleBurstCount = this.airParticleBurstCount,
-                airParticleGravityFactor = this.airParticleGravityFactor
-            };
-            return config;
-        }
-    }
-
-    [Serializable]
-    public class SimConfigurationSanity
-    {
-        public float airSpeedMin;
-        public float airSpeedMax;
-
-        public Vector3 windSpawnZoneDimensionMin;
-        public Vector3 windSpawnZoneDimensionMax;
-
-        public float airParticleRatioMin;
-        public float airParticleRatioMax;
-
-        public int airParticleBurstCountMin;
-        public int airParticleBurstCountMax;
-
-        public float airParticleGravityFactorMin;
-        public float airParticleGravityFactorMax;
     }
 }
