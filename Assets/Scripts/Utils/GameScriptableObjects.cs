@@ -33,6 +33,12 @@ namespace PhysicsSimulations
             };
             return config;
         }
+
+        // Deserialize JSON and update properties
+        public void LoadFromJson(string json)
+        {
+            JsonUtility.FromJsonOverwrite(json, this);
+        }
     }
 
     [CreateAssetMenu(fileName = "SimConfigSanity", menuName = "Config/SimConfigSanity")]

@@ -26,7 +26,7 @@ namespace PhysicsSimulations
             DateTime now = DateTime.Now;
 
             // Create a format string for the timestamp.
-            string format = "dd-MM-yy HH-mm-ss";
+            string format = "dd-MM-yy_HH-mm-ss";
 
             // Convert the timestamp to a string using the format string.
             return now.ToString(format);

@@ -4,6 +4,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SimpleFileBrowser;
+using System.Threading.Tasks;
 
 namespace PhysicsSimulations
 {
@@ -27,13 +29,12 @@ namespace PhysicsSimulations
 
         private void Awake()
         {
-            ResetToDefault();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            SetConfigUI(defaultConfig, configSanityCheck);
+            ResetToDefault();
 
             Invoke(nameof(InitiateSimConfigFiles), 1f);
         }
@@ -47,11 +48,13 @@ namespace PhysicsSimulations
             }
         }
 
-        private void SetConfigUI(SimConfiguration config, SimConfigurationSanity configSanity)
+        private void SetConfigUI(SimConfiguration config, SimConfigurationSanity configSanity, string _configName = "")
         {
             airSpeedInput.value = config.airSpeed;
             airParticleCountInput.value = config.airParticleRatio;
             airParticleBurstCountInput.text = config.airParticleBurstCount.ToString();
+            spawnAirParticlesToggle.isOn = config.spawnAirParticlesAutomatically;
+            configNameText.text = _configName;
 
             //Set min-max value
             airSpeedInput.minValue = configSanity.airSpeedMin;
@@ -63,9 +66,14 @@ namespace PhysicsSimulations
             configUISet = true;
         }
 
-        public void ResetToDefault()
+        public async void ResetToDefault()
         {
+            configUISet = false;
             CurrentSimConfig = defaultConfig;
+
+            await Task.Delay(100);
+
+            SetConfigUI(CurrentSimConfig, configSanityCheck);
         }
 
         public void SaveCurrentSimConfigToJSON()
@@ -85,11 +93,11 @@ namespace PhysicsSimulations
                 _configName = $"SimConfig_{Data.Timestamp()}";
 
             string fileName = $"{_configName}.json";
-            while(File.Exists(fileName))
-            {
-                _configName += $"_{Data.Timestamp()}";
-                fileName = $"{_configName}.json";
-            }
+            //while(File.Exists(fileName))
+            //{
+            //    _configName += $"_{Data.Timestamp()}";
+            //    fileName = $"{_configName}.json";
+            //}
             string newFilePath = Path.Combine(Data.ConfigRootPathLauncher, fileName);
             Debug.Log($"File path : {newFilePath}");
 
@@ -100,6 +108,31 @@ namespace PhysicsSimulations
             File.WriteAllText(newFilePath, jsonData);
             File.WriteAllText(currentConfigPath, jsonData);
             Debug.Log($"Saved Config to {newFilePath} and {currentConfigPath}");
+        }
+
+        public void LoadSimConfigJSON()
+        {
+            string pathToFile;
+            FileBrowser.ShowLoadDialog((chosenFilePath) =>
+            {
+                pathToFile = chosenFilePath[0];
+                if(File.Exists(pathToFile))
+                {
+                    // Read the JSON file content
+                    string jsonContent = File.ReadAllText(pathToFile);
+
+                    Debug.Log($"{jsonContent}");
+
+                    //Convert to config
+                    SimConfiguration _simConfig = ScriptableObject.CreateInstance<SimConfiguration>();
+                    _simConfig.LoadFromJson(jsonContent);
+                    CurrentSimConfig = PerformSanityCheck(_simConfig);
+                    SetConfigUI(CurrentSimConfig, configSanityCheck, Path.GetFileNameWithoutExtension(pathToFile));
+                }
+            }, () =>
+            {
+                Debug.Log("Load file cancelled");
+            }, FileBrowser.PickMode.Files, false, Data.ConfigRootPathLauncher);
         }
 
         public void SetCurrentConfig(SimConfiguration config)
