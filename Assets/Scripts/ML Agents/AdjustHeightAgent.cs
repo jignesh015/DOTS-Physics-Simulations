@@ -11,9 +11,6 @@ namespace PhysicsSimulations
 {
     public class AdjustHeightAgent : Agent
     {
-
-        public int continuousActionSpecCount;
-
         private SimConfigurationController scc;
         private TrainingController tc;
 

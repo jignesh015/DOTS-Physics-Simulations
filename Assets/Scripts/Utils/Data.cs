@@ -12,10 +12,16 @@ namespace PhysicsSimulations
         public static string CarHeightmapRoot = "Heightmaps";
 
         //CONFIGURATION JSON ROOT PATH FOR LAUNCHER
-        public static string ConfigRootPathLauncher = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "simconfig")}";
+        public static string ConfigRootPathLauncher = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "custom_config")}";
+        public static string SimConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "sim_config")}";
+        public static string TrainingConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "train_config")}";
+        public static string CurrentConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "current_config")}";
 
         //FILE NAME FOR CURRENT SIM CONFIG
         public static string CurrentSimConfigFileName = "CurrentSimConfig";
+
+        //FILE NAME FOR CURRENT TRAINING CONFIG
+        public static string CurrentTrainingConfigFileName = "CurrentTrainingConfig";
 
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;
