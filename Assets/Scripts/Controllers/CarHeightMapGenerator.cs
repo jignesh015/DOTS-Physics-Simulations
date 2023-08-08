@@ -104,6 +104,7 @@ namespace PhysicsSimulations
             HeightmapReady = false;
             selectedHeightmapTexture = _heightmap;
             TextureHeight = selectedHeightmapTexture.height;
+            VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
 
             // Combine the folder path and the file name to get the full file path.
             string filePath = Path.Combine(Data.CarHeightmapRoot, $"{selectedHeightmapTexture.name}");

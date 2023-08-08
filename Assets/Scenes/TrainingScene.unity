@@ -752,7 +752,6 @@ MonoBehaviour:
   adjustHeightAgent: {fileID: 1249308988}
   resultOutputName: '[path to mlagents-learn executable]'
   buildPath: '[root]/Builds/Test_0.1'
-  venvPath: '[path to venv]'
   maxVoxelHeightVariance: 0.075
   adjacentRowMaxHeightVariance: 0.25
   decisionPeriod: 2
@@ -1000,7 +999,7 @@ MonoBehaviour:
     windSpawnZoneDimension: {x: 0, y: 0, z: 0}
     airParticleRatio: 0.5
     airParticleBurstCount: 20
-    spawnAirParticlesAutomatically: 0
+    spawnAirParticlesAutomatically: 1
     carId: 0
   configSanityCheck:
     airSpeedMin: 10
@@ -1376,7 +1375,6 @@ MonoBehaviour:
   adjustHeightAgent: {fileID: 1165965474}
   resultOutputName: TestEd1
   buildPath: '[root]/Builds/Test_0.1'
-  venvPath: '[path to venv]'
   maxVoxelHeightVariance: 0.1
   adjacentRowMaxHeightVariance: 0.25
   decisionPeriod: 2
@@ -2297,7 +2295,6 @@ MonoBehaviour:
   adjustHeightAgent: {fileID: 1103305771}
   resultOutputName: '[path to mlagents-learn executable]'
   buildPath: '[root]/Builds/Test_0.1'
-  venvPath: '[path to venv]'
   maxVoxelHeightVariance: 0.075
   adjacentRowMaxHeightVariance: 0.25
   decisionPeriod: 2

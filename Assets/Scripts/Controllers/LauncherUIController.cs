@@ -162,12 +162,15 @@ namespace PhysicsSimulations
             if (!simConfigUISet) return;
 
             //Create new instance of scriptable object
-            SimConfiguration _config = new SimConfiguration();
-            _config.airSpeed = float.Parse(airSpeedInput.text);
-            _config.airParticleRatio = float.Parse(airParticleRatioInput.text);
-            _config.spawnAirParticlesAutomatically = spawnAirParticlesToggle.isOn;
-            _config.carId = carDropdown.value;
-            
+            SimConfiguration _config = new()
+            {
+                airSpeed = float.Parse(airSpeedInput.text),
+                airParticleRatio = float.Parse(airParticleRatioInput.text),
+                airParticleBurstCount = int.Parse(airParticleBurstCountInput.text),
+                spawnAirParticlesAutomatically = spawnAirParticlesToggle.isOn,
+                carId = carDropdown.value
+            };
+
             //Perform Sanity Check
             CurrentSimConfig = PerformSimConfigSanityCheck(_config);
             

@@ -55,6 +55,7 @@ namespace PhysicsSimulations
             }
         }
 
+        [BurstCompile]
         public partial struct AdjustHeight : IJobEntity
         {
             public float DeltaTime;
@@ -96,9 +97,6 @@ namespace PhysicsSimulations
                         localToWorld.Value[1][1] = voxel.Height;
                         localToWorld.Value[3][1] = voxel.Height / 2f;
 
-                        //Update the heightmap list
-                        SimConfigurationController.Instance.carHeightMapGenerator.UpdateHeight(voxel.Row, voxel.Column, voxel.Height);
-
                         //Scale the collider
                         collider.Value = BoxCollider.Create(new BoxGeometry
                         {
@@ -136,7 +134,6 @@ namespace PhysicsSimulations
                 }
             }
         }
-
 
         public partial struct GetNewHeight : IJobEntity
         {
@@ -184,6 +181,7 @@ namespace PhysicsSimulations
                     voxel.IsVoxelReady = false;
 
                     SimConfigurationController.Instance.VoxelsReady = false;
+                    SimConfigurationController.Instance.carHeightMapGenerator.UpdateHeight(voxel.Row, voxel.Column, voxel.Height);
                     TrainingController.Instance.SetNewVoxelHeight = voxel.IsVoxelReady;
                 }
                 else if(voxel.IsVoxelReady && voxel.HadPreviouslyCollided)
