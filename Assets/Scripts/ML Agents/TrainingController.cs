@@ -2,44 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Unity.MLAgents;
+using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace PhysicsSimulations
 {
     public class TrainingController : MonoBehaviour
     {
+        [Header("CONFIG SETTINGS")]
+        [SerializeField] private TrainingConfiguration defaultTrainConfig;
+
         [Header("AGENTS")]
         public AdjustHeightAgent adjustHeightAgent;
 
         [Header("TRAINING PATHS")]
         [SerializeField] private string resultOutputName = "[result folder name]";
-        [SerializeField] private string buildPath = "[path to build]";
 
         [Header("TRAINING SETTINGS")]
-        [Range(0.001f,1f)]
-        public float maxVoxelHeightVariance;
-        public float adjacentRowMaxHeightVariance;
-        public int decisionPeriod;
-        public int episodePeriod;
-        public bool onlyModifyCollidedVoxels;
         public bool compareWithOgHeight;
-
-        [Header("REWARD SETTINGS")]
-        public float maxKineticEnergyVariance;
-        public int maxCollisionCountVariance;
-        public int maxDragForceVariance;
-
-        [Header("REWARD SCORES")]
-        //KINETIC ENERGY REWARD
-        public float kineticEnergyPositiveScore;
-        public float kineticEnergyNegativeScore;
-        //COLLISION COUNT REWARD
-        public float collisionCountPositiveScore;
-        public float collisionCountNegativeScore;
-        //DRAG FORCE REWARD
-        public float dragForcePositiveScore;
-        public float dragForceNegativeScore;
 
         private SimConfigurationController scc;
 
@@ -49,6 +30,8 @@ namespace PhysicsSimulations
         public List<float> VoxelHeightFactorList;
 
         private int heightMapTextureLength;
+
+        public TrainingConfiguration CurrentTrainConfig;
 
         private static TrainingController _instance;
         public static TrainingController Instance { get { return _instance; } }
@@ -69,6 +52,11 @@ namespace PhysicsSimulations
         void Start()
         {
             scc = SimConfigurationController.Instance;
+
+            //Load config 
+            LoadTrainConfig();
+
+            //Assign listeners
             scc.OnAirSpawnStarted += EnableAdjustHeightAgent;
 
             heightMapTextureLength = scc.carHeightMapGenerator.TextureHeight;
@@ -87,9 +75,34 @@ namespace PhysicsSimulations
             scc.OnAirSpawnStarted -= EnableAdjustHeightAgent;
         }
 
+        private async void LoadTrainConfig()
+        {
+            //Path to current sim config file
+            string pathToTrainConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentTrainingConfigFileName);
+            if (!Directory.Exists(Data.ConfigRootPathLander)
+               || !Directory.Exists(Data.CurrentConfigRootPathLander)
+               || !File.Exists(pathToTrainConfigFile))
+            {
+                Debug.Log("<color=red>Training Config file not found. Using default training config</color>");
+                CurrentTrainConfig = defaultTrainConfig.Clone();
+            }
+            else
+            {
+                // Read the JSON file content
+                string jsonContent = File.ReadAllText(pathToTrainConfigFile);
+
+                //Convert and save as current train config
+                CurrentTrainConfig = new TrainingConfiguration();
+                CurrentTrainConfig.LoadFromJson(jsonContent);
+            }
+
+            await Task.Delay(100);
+
+            scc.OnTrainConfigLoaded?.Invoke();
+        }
+
         public void EnableAdjustHeightAgent()
         {
-            //Debug.Log($"<color=cyan>EnableAdjustHeightAgent 1</color>");
             adjustHeightAgent.gameObject.SetActive(true);
         }
 
@@ -138,23 +151,6 @@ namespace PhysicsSimulations
             };
 
             Process.Start(startInfo);
-        }
-
-
-        private string VirtualEnvironmentPath()
-        {
-            // Get the path to the "Assets" folder in your Unity project
-            string assetsFolderPath = Application.dataPath;
-
-            // Get the parent directory (folder just outside "Assets")
-            string parentFolderPath = Directory.GetParent(assetsFolderPath).FullName;
-
-            // Combine the parent folder path with the folder name you want to access
-            string targetFolderPath = Path.Combine(parentFolderPath, "venv");
-
-            UnityEngine.Debug.Log($"Path: {targetFolderPath}");
-
-            return targetFolderPath;
         }
     }
 }

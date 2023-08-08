@@ -140,15 +140,14 @@ namespace PhysicsSimulations
             public readonly void Execute(ref Voxel voxel)
             {
                 //Check if this voxel needs to get new height
-                bool _getNewHeightCondition = TrainingController.Instance.onlyModifyCollidedVoxels ? voxel.IsVoxelReady && voxel.HasCollided : voxel.IsVoxelReady;
+                bool _getNewHeightCondition = TrainingController.Instance.CurrentTrainConfig.onlyModifyCollidedVoxels ? voxel.IsVoxelReady && voxel.HasCollided : voxel.IsVoxelReady;
                 if (_getNewHeightCondition)
                 {
                     //Get height factor for current voxel cell
                     float _currentHeightFactor = TrainingController.Instance.GetHeightFactor(voxel.Row, voxel.Column);
-                    float _maxVoxelHeightVariance = TrainingController.Instance.maxVoxelHeightVariance;
-                    
-                    
-                    //Adjust Height factor according to adjacent row's factor
+                    float _maxVoxelHeightVariance = TrainingController.Instance.CurrentTrainConfig.maxVoxelHeightVariance;
+
+                    #region Adjust Height factor according to adjacent row's factor ->
                     //float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
                     //if (voxel.Row > 0 && voxel.Column > 0)
                     //{
@@ -158,6 +157,7 @@ namespace PhysicsSimulations
                     //    if (_variance > _adjacentRowMaxHeightVariance)
                     //        _currentRowFactor = math.clamp((_currentRowFactor / _variance), -_adjacentRowMaxHeightVariance, _adjacentRowMaxHeightVariance);
                     //}
+                    #endregion
 
                     //Calculate new height as per previous height and adjusted height factor
                     float _newHeight = voxel.Height + (_currentHeightFactor * _maxVoxelHeightVariance);

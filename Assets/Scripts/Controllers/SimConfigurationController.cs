@@ -49,6 +49,7 @@ namespace PhysicsSimulations
 
         //EVENT DELEGATES
         public Action OnSimConfigLoaded;
+        public Action OnTrainConfigLoaded;
         public Action OnVoxelsReady;
         public Action OnAirSpawnStarted;
         public Action OnAirSpawnStopped;
@@ -82,7 +83,6 @@ namespace PhysicsSimulations
         {
             //Path to current sim config file
             string pathToSimConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentSimConfigFileName);
-            Debug.Log($"<color=red>{pathToSimConfigFile}</color>");
             if (!Directory.Exists(Data.ConfigRootPathLander)
                || !Directory.Exists(Data.CurrentConfigRootPathLander)
                || !File.Exists(pathToSimConfigFile))
@@ -107,6 +107,11 @@ namespace PhysicsSimulations
 
             //Load heightmap as per current sim config
             carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);
+
+            //Enable training if applicable
+            if(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 1 
+                && FindObjectOfType<TrainingController>(true) != null)
+                FindObjectOfType<TrainingController>(true).gameObject.SetActive(true);
         }
 
         private void FixedUpdate()
@@ -197,7 +202,7 @@ namespace PhysicsSimulations
         {
             if(VoxelsReady && CurrentSimConfig.spawnAirParticlesAutomatically)
             {
-                Debug.Log($"<color=magenta>Voxels Ready</color>");
+                //Debug.Log($"<color=magenta>Voxels Ready</color>");
                 SpawnAirParticlesWithDelay(2000);
             }
         }

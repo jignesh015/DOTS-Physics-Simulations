@@ -24,6 +24,7 @@ namespace PhysicsSimulations
                 || !File.Exists(pathToSimIndicator))
             {
                 Debug.Log("Config files not found. Starting simulation");
+                PlayerPrefs.SetInt(Data.SimIndicatorPref, 0);
                 LoadSimulation();
                 return;
             }
@@ -31,12 +32,16 @@ namespace PhysicsSimulations
             //Read from sim indicator file
             string indicatorText = File.ReadAllText(pathToSimIndicator);
             if(indicatorText.Equals("0")) 
-            { 
+            {
+                PlayerPrefs.SetInt(Data.SimIndicatorPref, 0);
+
                 //Load Test Simulation
                 LoadSimulation();
             }
             else
             {
+                PlayerPrefs.SetInt(Data.SimIndicatorPref, 1);
+
                 //Load Training
                 LoadTraining();
             }

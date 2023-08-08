@@ -17,14 +17,15 @@ namespace PhysicsSimulations
 
         public SimConfiguration Clone()
         {
-            SimConfiguration config = new SimConfiguration
+            return new SimConfiguration
             {
-                airSpeed = this.airSpeed,
-                windSpawnZoneDimension = this.windSpawnZoneDimension,
-                airParticleRatio = this.airParticleRatio,
-                airParticleBurstCount = this.airParticleBurstCount,
+                airSpeed = airSpeed,
+                windSpawnZoneDimension = windSpawnZoneDimension,
+                airParticleRatio = airParticleRatio,
+                airParticleBurstCount = airParticleBurstCount,
+                spawnAirParticlesAutomatically = spawnAirParticlesAutomatically,
+                carId = carId
             };
-            return config;
         }
 
         // Deserialize JSON and update properties
@@ -82,6 +83,32 @@ namespace PhysicsSimulations
 
         [Header("RESULT")]
         public string configName;
+
+        public TrainingConfiguration Clone()
+        {
+            return new TrainingConfiguration
+            {
+                maxVoxelHeightVariance = maxVoxelHeightVariance,
+                decisionPeriod = decisionPeriod,
+                episodePeriod = episodePeriod,
+                onlyModifyCollidedVoxels = onlyModifyCollidedVoxels,
+                fixedEpisodeLength = fixedEpisodeLength,
+                enableKineticEnergyMetric = enableKineticEnergyMetric,
+                enableDragForceMetric = enableDragForceMetric,
+                enableCollisionCountMetric = enableCollisionCountMetric,
+                maxKineticEnergyVariance = maxKineticEnergyVariance,
+                maxDragForceVariance = maxDragForceVariance,
+                maxCollisionCountVariance = maxCollisionCountVariance,
+                kineticEnergyPositiveScore = kineticEnergyPositiveScore,
+                kineticEnergyNegativeScore = kineticEnergyNegativeScore,
+                dragForcePositiveScore = dragForcePositiveScore,
+                dragForceNegativeScore = dragForceNegativeScore,
+                collisionCountPositiveScore = collisionCountPositiveScore,
+                collisionCountNegativeScore = collisionCountNegativeScore,
+                configName = configName
+            };
+        }
+
 
         // Deserialize JSON and update properties
         public void LoadFromJson(string json)

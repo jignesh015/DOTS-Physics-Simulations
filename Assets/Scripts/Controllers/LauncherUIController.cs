@@ -398,6 +398,9 @@ namespace PhysicsSimulations
             string venvPath = Data.VirtualEnvironmentPath();
             string executablePath = Data.LanderBuildPath;
 
+            Debug.Log($"Venv: {venvPath}");
+            Debug.Log($"executablePath: {executablePath}");
+
             // Construct the full command
             string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
             string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName}";

@@ -43,6 +43,9 @@ namespace PhysicsSimulations
         public static string TestSimulationSceneName = "TrainingScene";
         public static string TrainingSceneName = "TrainingScene";
 
+        //PLAYER PREFS
+        public static string SimIndicatorPref = "SimIndicatorPref";
+
         public static string Timestamp()
         {
             // Get the current timestamp.
