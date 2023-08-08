@@ -57,11 +57,18 @@ namespace PhysicsSimulations
         [SerializeField] private TMP_InputField trainingConfigNameInput;
         [SerializeField] private GameObject trainingConfigNameError;
 
+        [Header("PROCESS INDICATOR UI")]
+        [SerializeField] private GameObject testSimProcessIndicator;
+        [SerializeField] private GameObject trainingProcessIndicator;
+
         public SimConfiguration CurrentSimConfig { get; private set; }
         public TrainingConfiguration CurrentTrainingConfig { get; private set; }
 
         private bool simConfigUISet;
         private bool trainConfigUISet;
+
+        private Process testSimProcess;
+        private Process trainingProcess;
 
         // Start is called before the first frame update
         void Start()
@@ -70,6 +77,7 @@ namespace PhysicsSimulations
 
             ResetSimConfigToDefault();
             ResetTrainingConfigToDefault();
+            ToggleProcessRunningIndicator();
 
             //Create the root directories if doesn't exist
             List<string> _directories = new()
@@ -327,7 +335,7 @@ namespace PhysicsSimulations
 
         #endregion
 
-        #region GENERIC PUBLIC METHODS
+        #region UI INTERACTION METHODS
         public async void OnTestSimButtonClicked()
         {
             if (!Directory.Exists(Data.LanderBuildPath))
@@ -376,6 +384,10 @@ namespace PhysicsSimulations
             string indicatorFilePath = Path.Combine(Data.CurrentConfigRootPathLauncher, Data.SimIndicatorFileName);
             File.WriteAllText(indicatorFilePath, _indicatorIndex.ToString());
 
+            //Reset processes
+            testSimProcess?.Dispose();
+            trainingProcess?.Dispose();
+
             switch(_indicatorIndex)
             {
                 case 0:
@@ -385,12 +397,20 @@ namespace PhysicsSimulations
                     StartTraining();
                     break;
             }
+
+            InvokeRepeating(nameof(CheckForProcessTerminaiton), 1f,1f);
         }
 
         private void StartSimulation()
         {
             string executablePath = Path.Combine(Data.LanderBuildPath, Data.LanderBuildName);
-            Process.Start(executablePath);
+            testSimProcess = new Process();
+            testSimProcess.StartInfo.FileName = executablePath;
+            testSimProcess.EnableRaisingEvents = true;
+            testSimProcess.Start();
+
+            //Toggle indicator
+            ToggleProcessRunningIndicator(0);
         }
 
         private void StartTraining()
@@ -405,15 +425,19 @@ namespace PhysicsSimulations
             string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
             string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName}";
 
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            trainingProcess = new Process();
+            trainingProcess.StartInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 Arguments = $"/K {activateCommand} && {trainCommand}", // Use /K to keep the Command Prompt window open
                 UseShellExecute = true,
                 CreateNoWindow = false
             };
+            trainingProcess.EnableRaisingEvents = true;
+            trainingProcess.Start();
 
-            Process.Start(startInfo);
+            //Toggle indicator
+            ToggleProcessRunningIndicator(1);
         }
 
         public void OnQuitButtonClicked()
@@ -421,5 +445,31 @@ namespace PhysicsSimulations
             Application.Quit();
         }
         #endregion
+
+        #region UI METHODS
+        private void ToggleProcessRunningIndicator(int _index = -1)
+        {
+            Debug.Log($"ToggleProcessRunningIndicator {_index}");
+            testSimProcessIndicator.SetActive(_index == 0);
+            trainingProcessIndicator.SetActive(_index == 1);
+        }
+        #endregion
+
+        private void CheckForProcessTerminaiton()
+        {
+            Debug.Log($"CheckForProcessTerminaiton");
+            if (testSimProcess != null && testSimProcess.HasExited)
+            {
+                testSimProcess = null;
+                ToggleProcessRunningIndicator();
+                CancelInvoke(nameof(CheckForProcessTerminaiton));
+            }
+            if (trainingProcess != null && trainingProcess.HasExited)
+            {
+                trainingProcess = null;
+                ToggleProcessRunningIndicator();
+                CancelInvoke(nameof(CheckForProcessTerminaiton));
+            }
+        }
     }
 }
