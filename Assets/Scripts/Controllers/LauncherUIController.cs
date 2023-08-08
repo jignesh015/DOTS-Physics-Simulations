@@ -7,6 +7,8 @@ using TMPro;
 using SimpleFileBrowser;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace PhysicsSimulations
 {
@@ -125,7 +127,7 @@ namespace PhysicsSimulations
             Debug.Log($"File path : {newFilePath}");
 
             //Also save to current config file
-            string currentConfigPath = $"{Path.Combine(Data.CurrentConfigRootPathLauncher, Data.CurrentSimConfigFileName)}.json";
+            string currentConfigPath = $"{Path.Combine(Data.CurrentConfigRootPathLauncher, Data.CurrentSimConfigFileName)}";
 
             // Write the JSON data to the file.
             File.WriteAllText(newFilePath, jsonData);
@@ -142,8 +144,6 @@ namespace PhysicsSimulations
                 {
                     // Read the JSON file content
                     string jsonContent = File.ReadAllText(pathToFile);
-
-                    Debug.Log($"{jsonContent}");
 
                     //Convert to config
                     SimConfiguration _simConfig = new SimConfiguration();
@@ -244,7 +244,7 @@ namespace PhysicsSimulations
             string newfilePath = Path.Combine(Data.TrainingConfigRootPathLauncher, $"{CurrentTrainingConfig.configName}.json");
 
             //Also save to current config file
-            string currentConfigPath = $"{Path.Combine(Data.CurrentConfigRootPathLauncher, Data.CurrentTrainingConfigFileName)}.json";
+            string currentConfigPath = $"{Path.Combine(Data.CurrentConfigRootPathLauncher, Data.CurrentTrainingConfigFileName)}";
 
             // Write the JSON data to the file.
             File.WriteAllText(newfilePath, jsonData);
@@ -325,14 +325,89 @@ namespace PhysicsSimulations
         #endregion
 
         #region GENERIC PUBLIC METHODS
-        public void OnStartTrainingButtonClicked()
+        public async void OnTestSimButtonClicked()
         {
+            if (!Directory.Exists(Data.LanderBuildPath))
+            {
+                Debug.LogError($"Lander not found at {Data.LanderBuildPath} ");
+                return;
+            }
+            //Save the sim config before proceeding
+            UpdateSimConfigFromUI();
 
+            await Task.Delay(100);
+
+            LoadLanderBuild(0);
         }
 
-        public void OnTestSimButtonClicked()
+        public async void OnStartTrainingButtonClicked()
         {
+            if (string.IsNullOrEmpty(trainingConfigNameInput.text))
+            {
+                trainingConfigNameError.SetActive(true);
+                return;
+            }
 
+            if (!Directory.Exists(Data.LanderBuildPath))
+            {
+                Debug.LogError($"Lander not found at {Data.LanderBuildPath} ");
+                return;
+            }
+            //Save the sim and training config before proceeding
+            UpdateSimConfigFromUI();
+            UpdateTrainingConfigFromUI();
+
+            await Task.Delay(100);
+
+            LoadLanderBuild(1);
+        }
+
+        /// <summary>
+        /// Loads the lander build with specified indicator
+        /// 0 = Simulation only
+        /// 1 = Training + Simulation
+        /// </summary>
+        /// <param name="_indicatorIndex"></param>
+        private void LoadLanderBuild(int _indicatorIndex)
+        {
+            string indicatorFilePath = Path.Combine(Data.CurrentConfigRootPathLauncher, Data.SimIndicatorFileName);
+            File.WriteAllText(indicatorFilePath, _indicatorIndex.ToString());
+
+            switch(_indicatorIndex)
+            {
+                case 0:
+                    StartSimulation();
+                    break;
+                case 1:
+                    StartTraining();
+                    break;
+            }
+        }
+
+        private void StartSimulation()
+        {
+            string executablePath = Path.Combine(Data.LanderBuildPath, Data.LanderBuildName);
+            Process.Start(executablePath);
+        }
+
+        private void StartTraining()
+        {
+            string venvPath = Data.VirtualEnvironmentPath();
+            string executablePath = Data.LanderBuildPath;
+
+            // Construct the full command
+            string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
+            string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName}";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/K {activateCommand} && {trainCommand}", // Use /K to keep the Command Prompt window open
+                UseShellExecute = true,
+                CreateNoWindow = false
+            };
+
+            Process.Start(startInfo);
         }
 
         public void OnQuitButtonClicked()

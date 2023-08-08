@@ -36,8 +36,13 @@ namespace PhysicsSimulations
         void Start()
         {
             scc = SimConfigurationController.Instance;
+            scc.OnSimConfigLoaded += SetConfigUI;
+        }
 
-            SetConfigUI();
+        private void OnDisable()
+        {
+            if (scc == null) return;
+            scc.OnSimConfigLoaded -= SetConfigUI;
         }
 
         // Update is called once per frame

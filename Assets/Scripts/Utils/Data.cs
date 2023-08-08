@@ -11,20 +11,37 @@ namespace PhysicsSimulations
         //HEIGHTMAPS ROOT PATH
         public static string CarHeightmapRoot = "Heightmaps";
 
+        //LANDER BUILD PATH
+        public static string LanderBuildPath = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "lander")}";
+        public static string LanderBuildName = "Lander.exe";
+
         //CONFIGURATION JSON ROOT PATH FOR LAUNCHER
         public static string ConfigRootPathLauncher = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "custom_config")}";
         public static string SimConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "sim_config")}";
         public static string TrainingConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "train_config")}";
         public static string CurrentConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "current_config")}";
 
+        //CONFIGURATION JSON ROOT PATH FOR LANDER
+        public static string ConfigRootPathLander = $"{Path.Combine(Directory.GetParent(Directory.GetParent(Application.dataPath).FullName).FullName, "custom_config")}";
+        public static string SimConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "sim_config")}";
+        public static string TrainingConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "train_config")}";
+        public static string CurrentConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "current_config")}";
+
         //FILE NAME FOR CURRENT SIM CONFIG
-        public static string CurrentSimConfigFileName = "CurrentSimConfig";
+        public static string CurrentSimConfigFileName = "CurrentSimConfig.json";
 
         //FILE NAME FOR CURRENT TRAINING CONFIG
-        public static string CurrentTrainingConfigFileName = "CurrentTrainingConfig";
+        public static string CurrentTrainingConfigFileName = "CurrentTrainingConfig.json";
+
+        //SIMULATION INDICATOR FILE PATH
+        public static string SimIndicatorFileName = "SimIndicator";
 
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;
+
+        //SCENE NAMES
+        public static string TestSimulationSceneName = "TrainingScene";
+        public static string TrainingSceneName = "TrainingScene";
 
         public static string Timestamp()
         {
@@ -36,6 +53,11 @@ namespace PhysicsSimulations
 
             // Convert the timestamp to a string using the format string.
             return now.ToString(format);
+        }
+
+        public static string VirtualEnvironmentPath()
+        {
+            return Path.Combine(Directory.GetParent(Application.dataPath).FullName, "venv");
         }
     }
 }

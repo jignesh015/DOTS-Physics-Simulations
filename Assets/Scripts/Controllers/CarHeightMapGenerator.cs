@@ -9,9 +9,9 @@ namespace PhysicsSimulations
 {
     public class CarHeightMapGenerator : MonoBehaviour
     {
-        public Texture2D heightmapTexture;
-        public float heightmapScale;
-
+        [SerializeField] private List<Texture2D> allHeightmapTextures;
+        [SerializeField] private Texture2D selectedHeightmapTexture;
+        [SerializeField] private float heightmapScale;
         [SerializeField] private bool loadHeightmap;
 
         public List<float> carHeightMapList = new List<float>();
@@ -20,32 +20,32 @@ namespace PhysicsSimulations
         public int VoxelCount {  get; private set; }
         public bool HeightmapReady {  get; private set; }
 
-        private int textureHeight;
+        public int TextureHeight { get; private set; }
 
         // Start is called before the first frame update
         void Start()
         {
-            if(loadHeightmap)
-                LoadHeightmap(heightmapTexture.name);
-            else
-                HeightmapReady = true;
+            //if(loadHeightmap)
+            //    LoadHeightmap(selectedHeightmapTexture.name);
+            //else
+            //    HeightmapReady = true;
         }
 
         public void GenerateHeightmap()
         {
             HeightmapReady = false;
 
-            VoxelCount = heightmapTexture.width * heightmapTexture.height;
+            VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
             float[] carHeightMapListArr = new float[VoxelCount];
-            int _textureHeight = heightmapTexture.height;
+            int _textureHeight = selectedHeightmapTexture.height;
 
-            Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
+            Debug.Log($"Width: {selectedHeightmapTexture.width} | Height: {selectedHeightmapTexture.height}");
 
-            for(int i = 0; i < heightmapTexture.width; i++)
+            for(int i = 0; i < selectedHeightmapTexture.width; i++)
             {
-                for(int j = 0; j < heightmapTexture.height; j++)
+                for(int j = 0; j < selectedHeightmapTexture.height; j++)
                 {
-                    carHeightMapListArr[j + i * _textureHeight] = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
+                    carHeightMapListArr[j + i * _textureHeight] = selectedHeightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
                 }
             }
             carHeightMapList = carHeightMapListArr.ToList();
@@ -54,17 +54,17 @@ namespace PhysicsSimulations
 
         public void GenerateHeightmapJSON()
         {
-            VoxelCount = heightmapTexture.width * heightmapTexture.height;
+            VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
             float[] carHeightMapListArr = new float[VoxelCount];
-            int _textureHeight = heightmapTexture.height;
+            int _textureHeight = selectedHeightmapTexture.height;
 
-            Debug.Log($"Width: {heightmapTexture.width} | Height: {heightmapTexture.height}");
+            Debug.Log($"Width: {selectedHeightmapTexture.width} | Height: {selectedHeightmapTexture.height}");
 
-            for (int i = 0; i < heightmapTexture.width; i++)
+            for (int i = 0; i < selectedHeightmapTexture.width; i++)
             {
-                for (int j = 0; j < heightmapTexture.height; j++)
+                for (int j = 0; j < selectedHeightmapTexture.height; j++)
                 {
-                    carHeightMapListArr[j + i * _textureHeight] = heightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
+                    carHeightMapListArr[j + i * _textureHeight] = selectedHeightmapTexture.GetPixel(i, j).grayscale * heightmapScale;
                 }
             }
             List<float> _carHeightMapList = carHeightMapListArr.ToList();
@@ -73,7 +73,7 @@ namespace PhysicsSimulations
             string jsonData = JsonUtility.ToJson(new SerializableList<float>(_carHeightMapList));
 
             // Get a path to save the json file
-            string fileName = $"{heightmapTexture.name}.json";
+            string fileName = $"{selectedHeightmapTexture.name}.json";
             string filePath = Path.Combine(Data.CarHeightmapRoot, fileName);
 
             // Write the JSON data to the file.
@@ -87,7 +87,7 @@ namespace PhysicsSimulations
             if(carHeightMapList == null ||  carHeightMapList.Count == 0) 
                 return 0f;
 
-            float _height = carHeightMapList[row + column * heightmapTexture.height];
+            float _height = carHeightMapList[row + column * selectedHeightmapTexture.height];
             return _height;
         }
 
@@ -96,16 +96,17 @@ namespace PhysicsSimulations
             if (updatedHeightmapList == null || updatedHeightmapList.Count == 0)
                 return;
 
-            updatedHeightmapList[row + column * textureHeight] = value;
+            updatedHeightmapList[row + column * TextureHeight] = value;
         }
 
-        public void LoadHeightmap(string fileName)
+        public void LoadHeightmap(Texture2D _heightmap)
         {
             HeightmapReady = false;
-            textureHeight = heightmapTexture.height;
+            selectedHeightmapTexture = _heightmap;
+            TextureHeight = selectedHeightmapTexture.height;
 
             // Combine the folder path and the file name to get the full file path.
-            string filePath = Path.Combine(Data.CarHeightmapRoot, $"{fileName}");
+            string filePath = Path.Combine(Data.CarHeightmapRoot, $"{selectedHeightmapTexture.name}");
             var textFile = Resources.Load<TextAsset>(filePath);
 
             // Check if the file exists.
@@ -126,6 +127,11 @@ namespace PhysicsSimulations
                 Debug.Log($"Heightmap not found at {filePath}");
                 GenerateHeightmap();
             }
+        }
+
+        public void LoadHeightmap(int _heightmapIndex)
+        {
+            LoadHeightmap(allHeightmapTextures[_heightmapIndex]);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using System.IO;
 
 namespace PhysicsSimulations
 {
@@ -21,12 +22,6 @@ namespace PhysicsSimulations
 
         [Header("SCRIPT REFERENCES")]
         public CarHeightMapGenerator carHeightMapGenerator;
-
-        [Header("AIR PARTICLE SPAWN SETTINGS")]
-        public bool SpawnAirParticlesAutomatically;
-        public bool SpawnAirParticlesCommand { get; set; }
-        public bool SpawnAirParticles { get; private set; }
-        public int AirParticlesBurstCount { get; set; }
 
         [Header("VOXEL GRID SETTINGS")]
         public bool ShowCollisionHeatmap;
@@ -47,7 +42,13 @@ namespace PhysicsSimulations
         public float AverageKineticEnergy { get; private set; }
         public float AverageDragForce { get; private set; }
 
+        //AIR PARTICLE SPAWN SETTINGS
+        public bool SpawnAirParticlesCommand { get; set; }
+        public bool SpawnAirParticles { get; private set; }
+        public int AirParticlesBurstCount { get; set; }
+
         //EVENT DELEGATES
+        public Action OnSimConfigLoaded;
         public Action OnVoxelsReady;
         public Action OnAirSpawnStarted;
         public Action OnAirSpawnStopped;
@@ -66,20 +67,46 @@ namespace PhysicsSimulations
             {
                 _instance = this;
             }
-
-            ResetToDefault();
         }
 
         // Start is called before the first frame update
         void Start()
         {
+            LoadSimConfig();
+
+            //Assign listeners
             OnVoxelsReady += OnVoxelsReadyListener;
         }
 
-        // Update is called once per frame
-        void Update()
+        private async void LoadSimConfig()
         {
-           
+            //Path to current sim config file
+            string pathToSimConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentSimConfigFileName);
+            Debug.Log($"<color=red>{pathToSimConfigFile}</color>");
+            if (!Directory.Exists(Data.ConfigRootPathLander)
+               || !Directory.Exists(Data.CurrentConfigRootPathLander)
+               || !File.Exists(pathToSimConfigFile))
+            {
+                Debug.Log("<color=red>Config files not found. Starting simulation using default settings</color>");
+                ResetToDefault();
+            }
+            else
+            {
+                // Read the JSON file content
+                string jsonContent = File.ReadAllText(pathToSimConfigFile);
+
+                //Convert to config
+                SimConfiguration _simConfig = new SimConfiguration();
+                _simConfig.LoadFromJson(jsonContent);
+                SetCurrentConfig(_simConfig);
+            }
+
+            await Task.Delay(100);
+
+            OnSimConfigLoaded?.Invoke();
+
+            //Load heightmap as per current sim config
+            carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);
         }
 
         private void FixedUpdate()
@@ -168,7 +195,7 @@ namespace PhysicsSimulations
 
         public void OnVoxelsReadyListener()
         {
-            if(VoxelsReady && SpawnAirParticlesAutomatically)
+            if(VoxelsReady && CurrentSimConfig.spawnAirParticlesAutomatically)
             {
                 Debug.Log($"<color=magenta>Voxels Ready</color>");
                 SpawnAirParticlesWithDelay(2000);

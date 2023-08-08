@@ -15,7 +15,6 @@ namespace PhysicsSimulations
         [Header("TRAINING PATHS")]
         [SerializeField] private string resultOutputName = "[result folder name]";
         [SerializeField] private string buildPath = "[path to build]";
-        [SerializeField] private string venvPath = "[path to venv]";
 
         [Header("TRAINING SETTINGS")]
         [Range(0.001f,1f)]
@@ -72,9 +71,7 @@ namespace PhysicsSimulations
             scc = SimConfigurationController.Instance;
             scc.OnAirSpawnStarted += EnableAdjustHeightAgent;
 
-            heightMapTextureLength = scc.carHeightMapGenerator.heightmapTexture.height;
-
-            venvPath = VirtualEnvironmentPath();
+            heightMapTextureLength = scc.carHeightMapGenerator.TextureHeight;
         }
 
         private void OnEnable()
@@ -120,6 +117,8 @@ namespace PhysicsSimulations
 
         public void StartTraining()
         {
+            string venvPath = Data.VirtualEnvironmentPath();
+
             // Construct the full command
             string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
             string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml --run-id={resultOutputName}";
