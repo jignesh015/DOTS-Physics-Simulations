@@ -80,6 +80,7 @@ namespace PhysicsSimulations
                     hasSpawned = false;
                 }
             }
+            spawnerEntities.Dispose();
         }
 
         private static void GetRandomSubset(NativeArray<float3> originalList, ref NativeArray<float3> randomSpawnPositions, int subsetCount, double elapsedTime)

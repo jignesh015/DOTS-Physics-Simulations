@@ -38,6 +38,7 @@ namespace PhysicsSimulations
                 //Remove the Emitter component once the VFX is spawned
                 state.EntityManager.RemoveComponent<VfxEmitter>(entity);
             }
+            entities.Dispose();
         }
     }
 }

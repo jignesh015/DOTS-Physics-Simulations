@@ -37,6 +37,7 @@ namespace PhysicsSimulations
                     state.EntityManager.DestroyEntity(entity);
                 }
             }
+            entities.Dispose();
         }
     }
 }

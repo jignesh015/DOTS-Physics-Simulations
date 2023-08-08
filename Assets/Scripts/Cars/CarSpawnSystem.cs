@@ -31,10 +31,10 @@ namespace PhysicsSimulations
                 {
                     em.DestroyEntity(spawnedCarEntity);
                 }
+                spawnedCarEntities.Dispose();
 
                 //Spawn new car
                 var carSpawnerEntities = state.GetEntityQuery(new ComponentType[] { typeof(CarSpawn) }).ToEntityArray(Allocator.TempJob);
-
                 foreach(Entity spawnEntity in carSpawnerEntities)
                 {
                     CarSpawn carSpawn = em.GetComponentData<CarSpawn>(spawnEntity);
@@ -44,6 +44,7 @@ namespace PhysicsSimulations
                         em.Instantiate(carSpawn.CarPrefab);
                     }
                 }
+                carSpawnerEntities.Dispose();
             }
         }
     }

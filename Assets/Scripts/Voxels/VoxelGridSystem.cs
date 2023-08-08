@@ -86,6 +86,8 @@ namespace PhysicsSimulations
                 }
             }
             #endregion
+
+            voxelGridEntities.Dispose();
         }
 
         public void SpawnSingleRow(EntityManager em, Entity voxelGridEntity, VoxelGrid voxelGrid, LocalTransform voxelGridTransform) 
