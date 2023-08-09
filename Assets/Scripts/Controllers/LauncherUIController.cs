@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -60,6 +59,7 @@ namespace PhysicsSimulations
         [Header("PROCESS INDICATOR UI")]
         [SerializeField] private GameObject testSimProcessIndicator;
         [SerializeField] private GameObject trainingProcessIndicator;
+        [SerializeField] private GameObject resultProcessIndicator;
 
         public SimConfiguration CurrentSimConfig { get; private set; }
         public TrainingConfiguration CurrentTrainingConfig { get; private set; }
@@ -69,6 +69,7 @@ namespace PhysicsSimulations
 
         private Process testSimProcess;
         private Process trainingProcess;
+        private Process resultProcess;
 
         // Start is called before the first frame update
         void Start()
@@ -353,7 +354,8 @@ namespace PhysicsSimulations
 
         public async void OnStartTrainingButtonClicked()
         {
-            if (string.IsNullOrEmpty(trainingConfigNameInput.text))
+            if (string.IsNullOrEmpty(trainingConfigNameInput.text) ||
+                Directory.Exists(Path.Combine(Data.ResultsPathLauncher, trainingConfigNameInput.text)))
             {
                 trainingConfigNameError.SetActive(true);
                 return;
@@ -373,6 +375,11 @@ namespace PhysicsSimulations
             LoadLanderBuild(1);
         }
 
+        public void OnCheckResultButtonClicked()
+        {
+
+        }
+
         /// <summary>
         /// Loads the lander build with specified indicator
         /// 0 = Simulation only
@@ -387,6 +394,7 @@ namespace PhysicsSimulations
             //Reset processes
             testSimProcess?.Dispose();
             trainingProcess?.Dispose();
+            resultProcess?.Dispose();
 
             switch(_indicatorIndex)
             {
@@ -395,6 +403,9 @@ namespace PhysicsSimulations
                     break;
                 case 1:
                     StartTraining();
+                    break;
+                case 2:
+                    CheckResult();
                     break;
             }
 
@@ -423,7 +434,8 @@ namespace PhysicsSimulations
 
             // Construct the full command
             string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
-            string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName}";
+            string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName} " +
+                $" --width={Screen.currentResolution.width} --height={Screen.currentResolution.height}  --max-lifetime-restarts=0";
 
             trainingProcess = new Process();
             trainingProcess.StartInfo = new ProcessStartInfo
@@ -438,6 +450,11 @@ namespace PhysicsSimulations
 
             //Toggle indicator
             ToggleProcessRunningIndicator(1);
+        }
+
+        private void CheckResult()
+        {
+
         }
 
         public void OnQuitButtonClicked()

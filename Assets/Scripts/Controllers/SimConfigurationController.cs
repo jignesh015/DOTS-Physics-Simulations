@@ -32,7 +32,6 @@ namespace PhysicsSimulations
         public float WindMagnitude;
         public int ChangeCarIndex = -1;
         public ViewAngle CurrentViewAngle;
-        public int VoxelCollisionCount;
         public List<float> KineticEnergyList;
         public List<float> DragForceList;
         
@@ -41,6 +40,7 @@ namespace PhysicsSimulations
         //METRICS
         public float AverageKineticEnergy { get; private set; }
         public float AverageDragForce { get; private set; }
+        public int VoxelCollisionCount { get; set; }
 
         //AIR PARTICLE SPAWN SETTINGS
         public bool SpawnAirParticlesCommand { get; set; }
@@ -48,12 +48,11 @@ namespace PhysicsSimulations
         public int AirParticlesBurstCount { get; set; }
 
         //EVENT DELEGATES
-        public Action OnSimConfigLoaded;
-        public Action OnTrainConfigLoaded;
+        public Action<SimConfiguration> OnSimConfigLoaded;
+        public Action<TrainingConfiguration> OnTrainConfigLoaded;
         public Action OnVoxelsReady;
         public Action OnAirSpawnStarted;
         public Action OnAirSpawnStopped;
-
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -74,6 +73,7 @@ namespace PhysicsSimulations
         void Start()
         {
             LoadSimConfig();
+            ChangeView(ViewAngle.FreeLook);
 
             //Assign listeners
             OnVoxelsReady += OnVoxelsReadyListener;
@@ -103,7 +103,7 @@ namespace PhysicsSimulations
 
             await Task.Delay(100);
 
-            OnSimConfigLoaded?.Invoke();
+            OnSimConfigLoaded?.Invoke(CurrentSimConfig.Clone());
 
             //Load heightmap as per current sim config
             carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);

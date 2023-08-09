@@ -20,12 +20,14 @@ namespace PhysicsSimulations
         public static string SimConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "sim_config")}";
         public static string TrainingConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "train_config")}";
         public static string CurrentConfigRootPathLauncher = $"{Path.Combine(ConfigRootPathLauncher, "current_config")}";
+        public static string ResultsPathLauncher = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "results")}";
 
         //CONFIGURATION JSON ROOT PATH FOR LANDER
         public static string ConfigRootPathLander = $"{Path.Combine(Directory.GetParent(Directory.GetParent(Application.dataPath).FullName).FullName, "custom_config")}";
         public static string SimConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "sim_config")}";
         public static string TrainingConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "train_config")}";
         public static string CurrentConfigRootPathLander = $"{Path.Combine(ConfigRootPathLander, "current_config")}";
+        public static string ResultsPathLander = $"{Path.Combine(Directory.GetParent(Directory.GetParent(Application.dataPath).FullName).FullName, "results")}";
 
         //FILE NAME FOR CURRENT SIM CONFIG
         public static string CurrentSimConfigFileName = "CurrentSimConfig.json";

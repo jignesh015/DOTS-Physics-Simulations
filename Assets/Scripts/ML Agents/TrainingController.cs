@@ -31,7 +31,12 @@ namespace PhysicsSimulations
 
         private int heightMapTextureLength;
 
-        public TrainingConfiguration CurrentTrainConfig;
+        public TrainingConfiguration CurrentTrainConfig { get; set; }
+
+        //AGENT PARAMETERS
+        public int StepCountText { get; set; }
+        public int EpisodeCount { get; set; }
+        public float CumulativeReward { get; set; }
 
         private static TrainingController _instance;
         public static TrainingController Instance { get { return _instance; } }
@@ -98,7 +103,7 @@ namespace PhysicsSimulations
 
             await Task.Delay(100);
 
-            scc.OnTrainConfigLoaded?.Invoke();
+            scc.OnTrainConfigLoaded?.Invoke(CurrentTrainConfig.Clone());
         }
 
         public void EnableAdjustHeightAgent()
@@ -151,6 +156,24 @@ namespace PhysicsSimulations
             };
 
             Process.Start(startInfo);
+        }
+
+        public void OnApplicationQuit()
+        {
+            string _resultDir = Path.Combine(Data.ResultsPathLander, CurrentTrainConfig.configName);
+            Debug.Log($"OnApplicationQuit: {_resultDir}");
+
+            //Save current heightmap to json
+            if (Directory.Exists(_resultDir))
+            {
+                // Convert the list to JSON format using JsonUtility.
+                string jsonData = JsonUtility.ToJson(new SerializableList<float>(scc.carHeightMapGenerator.updatedHeightmapList));
+
+                // Write the JSON data to the file.
+                File.WriteAllText(Path.Combine(_resultDir,$"{CurrentTrainConfig.configName}_heightmap.json"), jsonData);
+
+                Debug.Log($"Heightmap saved at: {_resultDir}");
+            }
         }
     }
 }

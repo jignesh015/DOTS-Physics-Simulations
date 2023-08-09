@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -28,6 +26,8 @@ namespace PhysicsSimulations
 
         private int airStoppedCount;
 
+        private Academy academy;
+
         private void Start()
         {
             scc = SimConfigurationController.Instance;
@@ -42,9 +42,9 @@ namespace PhysicsSimulations
 
         public override void Initialize()
         {
-            //ActionSpec continuousActionSpec = new(continuousActionSpecCount, new int[] { });
-            //GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = continuousActionSpec;
             Debug.Log($"<color=magenta>Initialize {GetComponent<BehaviorParameters>().BrainParameters.ActionSpec.NumContinuousActions}</color>");
+
+            academy = Academy.Instance;
         }
 
         public override void OnEpisodeBegin()
@@ -85,6 +85,9 @@ namespace PhysicsSimulations
             //Debug.Log($"<color=maroon>AirSpawnStopped</color>");
 
             bool shouldEndEpisode = false;
+            tc.StepCountText = academy.StepCount;
+            tc.EpisodeCount = CompletedEpisodes;
+            tc.CumulativeReward = GetCumulativeReward();
 
             #region KINETIC ENERGY REWARD
             //Give rewards as per kinectic energy difference

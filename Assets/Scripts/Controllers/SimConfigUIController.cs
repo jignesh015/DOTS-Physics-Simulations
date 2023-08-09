@@ -19,30 +19,51 @@ namespace PhysicsSimulations
         [SerializeField] private TextMeshProUGUI airSpeedText;
         [SerializeField] private TextMeshProUGUI avgKineticEnergyText;
         [SerializeField] private TextMeshProUGUI avgDragForceText;
+        [SerializeField] private TextMeshProUGUI collisionCountText;
         [SerializeField] private TextMeshProUGUI airBurstCountText;
+
+        [Header("TRAINING PARAM INDICATORS")]
+        [SerializeField] private GameObject trainingParamPanel;
+        [SerializeField] private TextMeshProUGUI stepCountText;
+        [SerializeField] private TextMeshProUGUI episodeCountText;
+        [SerializeField] private TextMeshProUGUI cumulativeRewardText;
 
         [Header("UI")]
         [SerializeField] private Image spawnAirButtonIcon;
         [SerializeField] private Sprite spawnAirPlaySprite;
         [SerializeField] private Sprite spawnAirStopSprite;
 
+        [Header("BUTTONS")]
+        [SerializeField] private Button spawnAirButton;
+        [SerializeField] private Button resetDefaultButton;
+
         private SimConfiguration config;
         private SimConfigurationSanity configSanity;
 
         private SimConfigurationController scc;
+        private TrainingController tc;
+
         private bool configUISet;
+
+        private bool showKE = true;
+        private bool showDF = true;
+        private bool showVCC = true;
 
         // Start is called before the first frame update
         void Start()
         {
             scc = SimConfigurationController.Instance;
             scc.OnSimConfigLoaded += SetConfigUI;
+            scc.OnTrainConfigLoaded += GetTrainingConfig;
+
+            trainingParamPanel.SetActive(false);
         }
 
         private void OnDisable()
         {
             if (scc == null) return;
             scc.OnSimConfigLoaded -= SetConfigUI;
+            scc.OnTrainConfigLoaded -= GetTrainingConfig;
         }
 
         // Update is called once per frame
@@ -59,6 +80,12 @@ namespace PhysicsSimulations
                 //Display Average Drag force
                 ToggleDragForceIndicator(scc.AverageDragForce);
 
+                //Display Collision Count
+                ToggleCollisionCountIndicator(scc.VoxelCollisionCount);
+
+                //Disaply Training Indicators
+                ToggleTrainingParameterIndicators();
+
                 //Display burst count
                 airBurstCountText.gameObject.SetActive(scc.SpawnAirParticles);
                 if (airBurstCountText.gameObject.activeSelf)
@@ -71,9 +98,9 @@ namespace PhysicsSimulations
             }
         }
 
-        public void SetConfigUI()
+        public void SetConfigUI(SimConfiguration _config)
         {
-            config = scc.GetDefaultConfig();
+            config = _config;
             configSanity = scc.configSanityCheck;
 
             airSpeedInput.value = config.airSpeed;
@@ -135,8 +162,7 @@ namespace PhysicsSimulations
 
             await Task.Delay(100);
 
-            SetConfigUI();
-            //initialValueCheck = true;
+            SetConfigUI(scc.GetDefaultConfig());
         }
 
         public void OnSpawnAirParticlesButtonClicked()
@@ -147,16 +173,59 @@ namespace PhysicsSimulations
                 scc.StopAirParticles();
         }
 
-        public void ToggleKineticEnergyIndicator(float _value)
+        public void OnQuitButtonCLicked()
         {
-            avgKineticEnergyText.gameObject.SetActive(_value != 0f);
+            Application.Quit();
+        }
+
+        private void ToggleKineticEnergyIndicator(float _value)
+        {
+            if(_value == 0) return;
+            avgKineticEnergyText.gameObject.SetActive(showKE);
             avgKineticEnergyText.text = $"Avg KE: {_value:F2}J";
         }
 
-        public void ToggleDragForceIndicator(float _value)
+        private void ToggleDragForceIndicator(float _value)
         {
-            avgDragForceText.gameObject.SetActive(_value != 0f);
+            if (_value == 0) return;
+            avgDragForceText.gameObject.SetActive(showDF);
             avgDragForceText.text = $"Drag: {_value:F2}N";
+        }
+
+        private void ToggleCollisionCountIndicator(int _value)
+        {
+            if (_value == 0) return;
+            collisionCountText.gameObject.SetActive(showVCC);
+            collisionCountText.text = $"Collsn. Count: {_value:0}";
+        }
+
+        private void ToggleTrainingParameterIndicators()
+        {
+            if(tc == null) return;
+
+            stepCountText.text = $"Step/Total: {tc.StepCountText}";
+            episodeCountText.text = $"Episode: {tc.EpisodeCount:0}";
+            cumulativeRewardText.text = $"Reward: {tc.CumulativeReward:F2}";
+        }
+
+        private void GetTrainingConfig(TrainingConfiguration _trainConfig)
+        {
+            tc = FindObjectOfType<TrainingController>(true);
+            showKE = _trainConfig.enableKineticEnergyMetric;
+            showDF = _trainConfig.enableDragForceMetric;
+            showVCC = _trainConfig.enableCollisionCountMetric;
+            trainingParamPanel.SetActive(true);
+
+            DisableAllUI();
+        }
+
+        private void DisableAllUI()
+        {
+            airSpeedInput.interactable = false;
+            airParticleCountInput.interactable = false;
+            airParticleBurstCountInput.interactable = false;
+            spawnAirButton.interactable = false;
+            resetDefaultButton.interactable = false;
         }
     }
 }

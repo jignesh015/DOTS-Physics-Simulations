@@ -4996,7 +4996,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Please enter a Training Config Name
+  m_text: Please enter a unique training config name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f340b1fc510c9f149b65095e3be69e9f, type: 2}
   m_sharedMaterial: {fileID: -4161587639618137020, guid: f340b1fc510c9f149b65095e3be69e9f,
@@ -5040,7 +5040,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
