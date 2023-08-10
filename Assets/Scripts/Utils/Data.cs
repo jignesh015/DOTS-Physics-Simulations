@@ -38,6 +38,9 @@ namespace PhysicsSimulations
         //SIMULATION INDICATOR FILE PATH
         public static string SimIndicatorFileName = "SimIndicator";
 
+        //RESULT FILE PATH
+        public static string ResultFolderIndicatorFileName = "ResultFolderIndicator";
+
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;
 
@@ -47,6 +50,7 @@ namespace PhysicsSimulations
 
         //PLAYER PREFS
         public static string SimIndicatorPref = "SimIndicatorPref";
+        public static string ResultPathPref = "ResultPathPref";
 
         public static string Timestamp()
         {
@@ -63,6 +67,11 @@ namespace PhysicsSimulations
         public static string VirtualEnvironmentPath()
         {
             return Path.Combine(Directory.GetParent(Application.dataPath).FullName, "venv");
+        }
+
+        public static string GetResultHeightmapPath(string _rootResultPath, string _resultFolderName)
+        {
+            return Path.Combine(_rootResultPath, $"{_resultFolderName}_heightmap.json");
         }
     }
 }

@@ -29,19 +29,23 @@ namespace PhysicsSimulations
 
             //Read from sim indicator file
             string indicatorText = File.ReadAllText(pathToSimIndicator);
-            if(indicatorText.Equals("0")) 
-            {
-                PlayerPrefs.SetInt(Data.SimIndicatorPref, 0);
+            int.TryParse(indicatorText, out int indicatorIndex);
+            PlayerPrefs.SetInt(Data.SimIndicatorPref, indicatorIndex);
 
-                //Load Test Simulation
-                LoadSimulation();
-            }
-            else
+            switch (indicatorIndex)
             {
-                PlayerPrefs.SetInt(Data.SimIndicatorPref, 1);
-
-                //Load Training
-                LoadTraining();
+                case 0:
+                    //Load Test Simulation
+                    LoadSimulation();
+                    break;
+                case 1:
+                    //Load Training
+                    LoadTraining();
+                    break;
+                case 2:
+                    //Load Simulation with result heightmap
+                    LoadSimulationForResult();
+                    break;
             }
         }
 
@@ -55,6 +59,18 @@ namespace PhysicsSimulations
         {
             // Load the scene by name
             SceneManager.LoadScene(Data.TrainingSceneName);
+        }
+
+        public void LoadSimulationForResult()
+        {
+            //Path to result indicator file
+            string pathToResultIndicator = Path.Combine(Data.CurrentConfigRootPathLander, Data.ResultFolderIndicatorFileName);
+            if (File.Exists(pathToResultIndicator))
+            {
+                string resultPath = File.ReadAllText(pathToResultIndicator);
+                PlayerPrefs.SetString(Data.ResultPathPref, resultPath);
+            }
+            LoadSimulation();
         }
     }
 }

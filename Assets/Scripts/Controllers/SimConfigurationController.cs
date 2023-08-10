@@ -81,8 +81,12 @@ namespace PhysicsSimulations
 
         private async void LoadSimConfig()
         {
+            int simIndicator = PlayerPrefs.GetInt(Data.SimIndicatorPref);
+            bool _isCheckingResult = simIndicator == 2 && PlayerPrefs.HasKey(Data.ResultPathPref);
+
             //Path to current sim config file
-            string pathToSimConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentSimConfigFileName);
+            string pathToSimConfigFile = _isCheckingResult ? Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), Data.CurrentSimConfigFileName)
+                : Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentSimConfigFileName);
             if (!Directory.Exists(Data.ConfigRootPathLander)
                || !Directory.Exists(Data.CurrentConfigRootPathLander)
                || !File.Exists(pathToSimConfigFile))
@@ -105,13 +109,27 @@ namespace PhysicsSimulations
 
             OnSimConfigLoaded?.Invoke(CurrentSimConfig.Clone());
 
-            //Load heightmap as per current sim config
-            carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);
+            //Load heightmap as per current sim config/result 
+            if(_isCheckingResult)
+            {
+                CurrentSimConfig.spawnAirParticlesAutomatically = false;
+
+                //Load the result heightmap
+                string _resultPath = PlayerPrefs.GetString(Data.ResultPathPref);
+                string resultHeightmapPath = Data.GetResultHeightmapPath(_resultPath, Path.GetFileName(_resultPath));
+                carHeightMapGenerator.LoadHeightmap(resultHeightmapPath, CurrentSimConfig.carId);
+            }
+            else
+            {
+                carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);
+            }
 
             //Enable training if applicable
-            if(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 1 
-                && FindObjectOfType<TrainingController>(true) != null)
+            if(simIndicator == 1 && FindObjectOfType<TrainingController>(true) != null)
+            {
+                CurrentSimConfig.spawnAirParticlesAutomatically = true;
                 FindObjectOfType<TrainingController>(true).gameObject.SetActive(true);
+            }
         }
 
         private void FixedUpdate()

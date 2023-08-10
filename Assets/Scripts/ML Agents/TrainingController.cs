@@ -82,7 +82,7 @@ namespace PhysicsSimulations
 
         private async void LoadTrainConfig()
         {
-            //Path to current sim config file
+            //Path to current training config file
             string pathToTrainConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentTrainingConfigFileName);
             if (!Directory.Exists(Data.ConfigRootPathLander)
                || !Directory.Exists(Data.CurrentConfigRootPathLander)
@@ -170,9 +170,27 @@ namespace PhysicsSimulations
                 string jsonData = JsonUtility.ToJson(new SerializableList<float>(scc.carHeightMapGenerator.updatedHeightmapList));
 
                 // Write the JSON data to the file.
-                File.WriteAllText(Path.Combine(_resultDir,$"{CurrentTrainConfig.configName}_heightmap.json"), jsonData);
+                File.WriteAllText(Data.GetResultHeightmapPath(_resultDir, CurrentTrainConfig.configName), jsonData);
 
                 Debug.Log($"Heightmap saved at: {_resultDir}");
+            }
+
+            //Copy current sim config to result directory
+            string pathToSimConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentSimConfigFileName);
+            if (Directory.Exists(Data.ConfigRootPathLander)
+               && Directory.Exists(Data.CurrentConfigRootPathLander)
+               && File.Exists(pathToSimConfigFile))
+            {
+                File.Copy(pathToSimConfigFile, Path.Combine(_resultDir, Path.GetFileName(pathToSimConfigFile)));
+            }
+
+            //Copy current training config file to result directory
+            string pathToTrainConfigFile = Path.Combine(Data.CurrentConfigRootPathLander, Data.CurrentTrainingConfigFileName);
+            if (Directory.Exists(Data.ConfigRootPathLander)
+               && Directory.Exists(Data.CurrentConfigRootPathLander)
+               && File.Exists(pathToTrainConfigFile))
+            {
+                File.Copy(pathToTrainConfigFile, Path.Combine(_resultDir, Path.GetFileName(pathToTrainConfigFile)));
             }
         }
     }

@@ -134,5 +134,30 @@ namespace PhysicsSimulations
         {
             LoadHeightmap(allHeightmapTextures[_heightmapIndex]);
         }
+
+        public void LoadHeightmap(string _heightmapJsonPath, int _heightmapIndex)
+        {
+            HeightmapReady = false;
+            selectedHeightmapTexture = allHeightmapTextures[_heightmapIndex];
+            TextureHeight = selectedHeightmapTexture.height;
+            VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
+
+            if (File.Exists(_heightmapJsonPath))
+            {
+                string _json = File.ReadAllText(_heightmapJsonPath);
+
+                // Deserialize the JSON data back to a list using JsonUtility.
+                SerializableList<float> dataContainer = JsonUtility.FromJson<SerializableList<float>>(_json);
+                if (dataContainer != null)
+                {
+                    carHeightMapList = dataContainer.items;
+                    HeightmapReady = true;
+                }
+                else
+                    LoadHeightmap(_heightmapIndex);
+            }
+            else
+                LoadHeightmap(_heightmapIndex);
+        }
     }
 }

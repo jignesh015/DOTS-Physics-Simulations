@@ -59,7 +59,7 @@ namespace PhysicsSimulations
         [Header("PROCESS INDICATOR UI")]
         [SerializeField] private GameObject testSimProcessIndicator;
         [SerializeField] private GameObject trainingProcessIndicator;
-        [SerializeField] private GameObject resultProcessIndicator;
+        [SerializeField] private GameObject checkResultProcessIndicator;
 
         public SimConfiguration CurrentSimConfig { get; private set; }
         public TrainingConfiguration CurrentTrainingConfig { get; private set; }
@@ -69,7 +69,7 @@ namespace PhysicsSimulations
 
         private Process testSimProcess;
         private Process trainingProcess;
-        private Process resultProcess;
+        private Process checkResultProcess;
 
         // Start is called before the first frame update
         void Start()
@@ -377,7 +377,23 @@ namespace PhysicsSimulations
 
         public void OnCheckResultButtonClicked()
         {
+            FileBrowser.ShowLoadDialog((chosenFolderPath) =>
+            {
+                string pathToFolder = chosenFolderPath[0];
+                string resultHeightmapPath = Data.GetResultHeightmapPath(pathToFolder, Path.GetFileName(pathToFolder));
+                if (Directory.Exists(pathToFolder) 
+                    && File.Exists(resultHeightmapPath))
+                {
+                    //Save result heightmap path to an indicator file for lander
+                    string resultFilePath = Path.Combine(Data.CurrentConfigRootPathLauncher, Data.ResultFolderIndicatorFileName);
+                    File.WriteAllText(resultFilePath, pathToFolder);
 
+                    LoadLanderBuild(2);
+                }
+            }, () =>
+            {
+                Debug.Log("Load folders cancelled");
+            }, FileBrowser.PickMode.Folders, false, Data.ResultsPathLauncher);
         }
 
         /// <summary>
@@ -394,7 +410,7 @@ namespace PhysicsSimulations
             //Reset processes
             testSimProcess?.Dispose();
             trainingProcess?.Dispose();
-            resultProcess?.Dispose();
+            checkResultProcess?.Dispose();
 
             switch(_indicatorIndex)
             {
@@ -454,7 +470,14 @@ namespace PhysicsSimulations
 
         private void CheckResult()
         {
+            string executablePath = Path.Combine(Data.LanderBuildPath, Data.LanderBuildName);
+            checkResultProcess = new Process();
+            checkResultProcess.StartInfo.FileName = executablePath;
+            checkResultProcess.EnableRaisingEvents = true;
+            checkResultProcess.Start();
 
+            //Toggle indicator
+            ToggleProcessRunningIndicator(2);
         }
 
         public void OnQuitButtonClicked()
@@ -469,6 +492,7 @@ namespace PhysicsSimulations
             Debug.Log($"ToggleProcessRunningIndicator {_index}");
             testSimProcessIndicator.SetActive(_index == 0);
             trainingProcessIndicator.SetActive(_index == 1);
+            checkResultProcessIndicator.SetActive(_index == 2);
         }
         #endregion
 
@@ -484,6 +508,12 @@ namespace PhysicsSimulations
             if (trainingProcess != null && trainingProcess.HasExited)
             {
                 trainingProcess = null;
+                ToggleProcessRunningIndicator();
+                CancelInvoke(nameof(CheckForProcessTerminaiton));
+            }
+            if(checkResultProcess != null && checkResultProcess.HasExited)
+            {
+                checkResultProcess = null;
                 ToggleProcessRunningIndicator();
                 CancelInvoke(nameof(CheckForProcessTerminaiton));
             }
