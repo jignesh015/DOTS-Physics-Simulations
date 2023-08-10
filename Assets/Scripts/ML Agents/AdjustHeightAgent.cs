@@ -85,6 +85,8 @@ namespace PhysicsSimulations
             //Debug.Log($"<color=maroon>AirSpawnStopped</color>");
 
             bool shouldEndEpisode = false;
+            bool isFixedEpisodeLength = tc.CurrentTrainConfig.fixedEpisodeLength;
+
             tc.StepCountText = academy.StepCount;
             tc.EpisodeCount = CompletedEpisodes;
             tc.CumulativeReward = GetCumulativeReward();
@@ -95,7 +97,7 @@ namespace PhysicsSimulations
             if (previousAvgKineticEnergy != 0 && tc.CurrentTrainConfig.enableKineticEnergyMetric)
             {
                 string _debugColor = "yellow";
-                if (baseLineAvgKineticEnergy != 0 && Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.CurrentTrainConfig.maxKineticEnergyVariance)
+                if (!isFixedEpisodeLength && baseLineAvgKineticEnergy != 0 && Mathf.Abs(baseLineAvgKineticEnergy - scc.AverageKineticEnergy) > tc.CurrentTrainConfig.maxKineticEnergyVariance)
                 {
                     AddReward(baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? tc.CurrentTrainConfig.kineticEnergyPositiveScore : tc.CurrentTrainConfig.kineticEnergyNegativeScore);
                     _debugColor = baseLineAvgKineticEnergy < scc.AverageKineticEnergy ? "green" : "red";
@@ -126,7 +128,7 @@ namespace PhysicsSimulations
             if (previousDragForce != 0 && tc.CurrentTrainConfig.enableDragForceMetric)
             {
                 string _debugColor = "yellow";
-                if (baseLineDragForce != 0 && Mathf.Abs(baseLineDragForce - scc.AverageDragForce) > tc.CurrentTrainConfig.maxDragForceVariance)
+                if (!isFixedEpisodeLength && baseLineDragForce != 0 && Mathf.Abs(baseLineDragForce - scc.AverageDragForce) > tc.CurrentTrainConfig.maxDragForceVariance)
                 {
                     AddReward(baseLineDragForce < scc.AverageDragForce ? tc.CurrentTrainConfig.dragForceNegativeScore : tc.CurrentTrainConfig.dragForcePositiveScore);
                     _debugColor = baseLineDragForce < scc.AverageDragForce ? "red" : "green";
@@ -156,7 +158,7 @@ namespace PhysicsSimulations
             if (previousCollisionCount != 0 && tc.CurrentTrainConfig.enableCollisionCountMetric)
             {
                 string _debugColor = "yellow";
-                if (baseLineCollisionCount != 0 && Mathf.Abs(baseLineCollisionCount - scc.VoxelCollisionCount) > tc.CurrentTrainConfig.maxCollisionCountVariance)
+                if (!isFixedEpisodeLength && baseLineCollisionCount != 0 && Mathf.Abs(baseLineCollisionCount - scc.VoxelCollisionCount) > tc.CurrentTrainConfig.maxCollisionCountVariance)
                 {
                     AddReward(baseLineCollisionCount < scc.VoxelCollisionCount ? tc.CurrentTrainConfig.collisionCountNegativeScore : tc.CurrentTrainConfig.collisionCountPositiveScore);
                     _debugColor = baseLineCollisionCount < scc.VoxelCollisionCount ? "red" : "green";
@@ -180,14 +182,14 @@ namespace PhysicsSimulations
             if (baseLineCollisionCount == 0 && scc.VoxelCollisionCount != 0) baseLineCollisionCount = scc.VoxelCollisionCount;
             #endregion
 
+            airStoppedCount++;
             //Check whether to end the episode
-            if (!tc.CurrentTrainConfig.fixedEpisodeLength && shouldEndEpisode) 
+            if (!isFixedEpisodeLength && shouldEndEpisode) 
                 EndEpisode();
-            else if(tc.CurrentTrainConfig.fixedEpisodeLength && airStoppedCount % tc.CurrentTrainConfig.episodePeriod == 0)
+            else if(isFixedEpisodeLength && airStoppedCount % tc.CurrentTrainConfig.episodePeriod == 0)
                 EndEpisode();
 
             //Check wheter to take decision or an action
-            airStoppedCount++;
             if (airStoppedCount % tc.CurrentTrainConfig.decisionPeriod == 0) RequestDecision();
             else RequestAction();
         }
