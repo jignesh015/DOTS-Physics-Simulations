@@ -84,6 +84,9 @@ namespace PhysicsSimulations
         [Header("RESULT")]
         public string configName;
 
+        [Header("HYPER PARAMETERS")]
+        public int timeScale = 20;
+
         public TrainingConfiguration Clone()
         {
             return new TrainingConfiguration
@@ -105,7 +108,8 @@ namespace PhysicsSimulations
                 dragForceNegativeScore = dragForceNegativeScore,
                 collisionCountPositiveScore = collisionCountPositiveScore,
                 collisionCountNegativeScore = collisionCountNegativeScore,
-                configName = configName
+                configName = configName,
+                timeScale = timeScale
             };
         }
 

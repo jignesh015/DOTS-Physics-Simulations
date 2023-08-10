@@ -56,6 +56,9 @@ namespace PhysicsSimulations
         [SerializeField] private TMP_InputField trainingConfigNameInput;
         [SerializeField] private GameObject trainingConfigNameError;
 
+        [Header("TRAINING HYPER PARAMETERS UI")]
+        [SerializeField] private TMP_InputField trainingTimeScaleInput;
+
         [Header("PROCESS INDICATOR UI")]
         [SerializeField] private GameObject testSimProcessIndicator;
         [SerializeField] private GameObject trainingProcessIndicator;
@@ -238,6 +241,7 @@ namespace PhysicsSimulations
             collisionCountNegativeScoreInput.text = _trainingConfig.collisionCountNegativeScore.ToString("F1");
 
             trainingConfigNameInput.text = _trainingConfig.configName;
+            trainingTimeScaleInput.text = _trainingConfig.timeScale.ToString();
             trainConfigUISet = true;
         }
 
@@ -321,7 +325,8 @@ namespace PhysicsSimulations
                 collisionCountPositiveScore = float.Parse(collisionCountPositiveScoreInput.text),
                 collisionCountNegativeScore = float.Parse(collisionCountNegativeScoreInput.text),
 
-                configName = trainingConfigNameInput.text
+                configName = trainingConfigNameInput.text,
+                timeScale = int.Parse(trainingTimeScaleInput.text)
             };
 
             //Save to json file
@@ -451,7 +456,7 @@ namespace PhysicsSimulations
             // Construct the full command
             string activateCommand = $"\"{venvPath}\\Scripts\\activate\"";
             string trainCommand = $"mlagents-learn config\\AdjustHeight.yaml  --env={executablePath} --run-id={CurrentTrainingConfig.configName} " +
-                $" --width={Screen.currentResolution.width} --height={Screen.currentResolution.height}  --max-lifetime-restarts=0";
+                $" --width={Screen.currentResolution.width} --height={Screen.currentResolution.height}  --max-lifetime-restarts=0 --time-scale={CurrentTrainingConfig.timeScale}";
 
             trainingProcess = new Process();
             trainingProcess.StartInfo = new ProcessStartInfo
