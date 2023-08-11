@@ -28,16 +28,21 @@ namespace PhysicsSimulations
 
         private Academy academy;
 
+        private float ogHeightmapSum;
+        private float updatedHeightmapSum;
+
         private void Start()
         {
             scc = SimConfigurationController.Instance;
             tc = TrainingController.Instance;
             scc.OnAirSpawnStopped += AirSpawnStopped;
+            scc.OnVoxelsReady += OnVoxelsReady;
         }
 
         protected override void OnDisable()
         {
             scc.OnAirSpawnStopped -= AirSpawnStopped;
+            scc.OnVoxelsReady -= OnVoxelsReady;
         }
 
         public override void Initialize()
@@ -78,6 +83,13 @@ namespace PhysicsSimulations
             TrainingController.Instance.SetNewVoxelHeight = true;
             TrainingController.Instance.VoxelHeightFactor = _heightFactor;
             TrainingController.Instance.VoxelHeightFactorList = actions.ContinuousActions.ToList();
+        }
+
+        private void OnVoxelsReady()
+        {
+            //Calculate sum of the original heightmap
+            if(ogHeightmapSum == 0)
+                ogHeightmapSum = scc.carHeightMapGenerator.carHeightMapList.Sum();
         }
 
         private void AirSpawnStopped()
@@ -180,6 +192,24 @@ namespace PhysicsSimulations
             }
             previousCollisionCount = scc.VoxelCollisionCount;
             if (baseLineCollisionCount == 0 && scc.VoxelCollisionCount != 0) baseLineCollisionCount = scc.VoxelCollisionCount;
+            #endregion
+
+            #region HEIGHTMAP SUM REWARDS
+            //Give rewards as per the sum of heightmap values
+            //Positive if sum decreases, negative if sum increases
+            string _heightmapDebugColor;
+            updatedHeightmapSum = scc.carHeightMapGenerator.updatedHeightmapList.Sum();
+            if(updatedHeightmapSum < ogHeightmapSum)
+            {
+                _heightmapDebugColor = "green";
+                AddReward(2f);
+            }
+            else
+            {
+                _heightmapDebugColor = "red";
+                AddReward(-1);
+            }
+            Debug.Log($"<color={_heightmapDebugColor}> Updated Heightmap Sum: {updatedHeightmapSum} | Og Sum: {ogHeightmapSum}</color>");
             #endregion
 
             airStoppedCount++;

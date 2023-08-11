@@ -1166,6 +1166,7 @@ MonoBehaviour:
     collisionCountPositiveScore: 2
     collisionCountNegativeScore: -1
     configName: 
+    timeScale: 20
   adjustHeightAgent: {fileID: 1165965474}
   resultOutputName: TestEd1
   compareWithOgHeight: 0
