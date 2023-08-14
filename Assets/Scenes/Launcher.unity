@@ -9312,6 +9312,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1753365380024249864, guid: 9570df26e811648449c9b25e91498cd8,
+        type: 3}
+      propertyPath: m_Options.m_Options.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753365380024249864, guid: 9570df26e811648449c9b25e91498cd8,
+        type: 3}
+      propertyPath: m_Options.m_Options.Array.data[3].m_Text
+      value: Hemisphere
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753365380024249864, guid: 9570df26e811648449c9b25e91498cd8,
+        type: 3}
+      propertyPath: m_Options.m_Options.Array.data[4].m_Text
+      value: Cuboid
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753365380024249864, guid: 9570df26e811648449c9b25e91498cd8,
+        type: 3}
+      propertyPath: m_Options.m_Options.Array.data[5].m_Text
+      value: Cone
+      objectReference: {fileID: 0}
     - target: {fileID: 3407837187476641383, guid: 9570df26e811648449c9b25e91498cd8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -9421,6 +9441,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SettingPanel (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399274842638460424, guid: 9570df26e811648449c9b25e91498cd8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 6607361275624865510, guid: 9570df26e811648449c9b25e91498cd8,
         type: 3}

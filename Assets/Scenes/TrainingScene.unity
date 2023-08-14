@@ -1003,6 +1003,9 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 5544e8b62bc65fc44a264ce2082cb1f6, type: 3}
   - {fileID: 2800000, guid: ccb13859f5999e541b85d77979a9d87a, type: 3}
   - {fileID: 2800000, guid: b59b1a2c287942d4b843abe34119f788, type: 3}
+  - {fileID: 2800000, guid: 2647b2b6d1918b746adb018439527e9d, type: 3}
+  - {fileID: 2800000, guid: 1ea9a6387c9232442a666edcbbec8442, type: 3}
+  - {fileID: 2800000, guid: aaa0596fd9fe542438b61ab83d20f207, type: 3}
   selectedHeightmapTexture: {fileID: 0}
   heightmapScale: 1
   loadHeightmap: 1

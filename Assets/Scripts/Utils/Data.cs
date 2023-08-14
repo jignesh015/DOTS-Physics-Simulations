@@ -10,6 +10,7 @@ namespace PhysicsSimulations
     {
         //HEIGHTMAPS ROOT PATH
         public static string CarHeightmapRoot = "Heightmaps";
+        public static string CarHeightmapRootResources = $"{Path.Combine(Application.dataPath, "Resources/Heightmaps")}";
 
         //LANDER BUILD PATH
         public static string LanderBuildPath = $"{Path.Combine(Directory.GetParent(Application.dataPath).FullName, "lander")}";

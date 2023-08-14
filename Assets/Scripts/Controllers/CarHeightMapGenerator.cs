@@ -74,7 +74,7 @@ namespace PhysicsSimulations
 
             // Get a path to save the json file
             string fileName = $"{selectedHeightmapTexture.name}.json";
-            string filePath = Path.Combine(Data.CarHeightmapRoot, fileName);
+            string filePath = Path.Combine(Data.CarHeightmapRootResources, fileName);
 
             // Write the JSON data to the file.
             File.WriteAllText(filePath, jsonData);
