@@ -197,19 +197,22 @@ namespace PhysicsSimulations
             #region HEIGHTMAP SUM REWARDS
             //Give rewards as per the sum of heightmap values
             //Positive if sum decreases, negative if sum increases
-            string _heightmapDebugColor;
-            updatedHeightmapSum = scc.carHeightMapGenerator.updatedHeightmapList.Sum();
-            if(updatedHeightmapSum < ogHeightmapSum)
+            if(tc.CurrentTrainConfig.enableHeightmapSumMetric)
             {
-                _heightmapDebugColor = "green";
-                AddReward(2f);
+                string _heightmapDebugColor;
+                updatedHeightmapSum = scc.carHeightMapGenerator.updatedHeightmapList.Sum();
+                if (updatedHeightmapSum < ogHeightmapSum)
+                {
+                    _heightmapDebugColor = "green";
+                    AddReward(tc.CurrentTrainConfig.heightmapSumPositiveScore);
+                }
+                else
+                {
+                    _heightmapDebugColor = "red";
+                    AddReward(tc.CurrentTrainConfig.heightmapSumNegativeScore);
+                }
+                Debug.Log($"<color={_heightmapDebugColor}> Updated Heightmap Sum: {updatedHeightmapSum} | Og Sum: {ogHeightmapSum}</color>");
             }
-            else
-            {
-                _heightmapDebugColor = "red";
-                AddReward(-1);
-            }
-            Debug.Log($"<color={_heightmapDebugColor}> Updated Heightmap Sum: {updatedHeightmapSum} | Og Sum: {ogHeightmapSum}</color>");
             #endregion
 
             airStoppedCount++;

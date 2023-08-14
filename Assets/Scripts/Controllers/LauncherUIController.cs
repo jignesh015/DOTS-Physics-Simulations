@@ -39,6 +39,7 @@ namespace PhysicsSimulations
         [SerializeField] private Toggle kineticEnergyMetricToggle;
         [SerializeField] private Toggle dragForceMetricToggle;
         [SerializeField] private Toggle collisionCountMetricToggle;
+        [SerializeField] private Toggle heightmapSumMetricToggle;
 
         [SerializeField] private TMP_InputField maxKineticEnergyVarianceInput;
         [SerializeField] private TMP_InputField maxDragForceVarianceInput;
@@ -51,6 +52,8 @@ namespace PhysicsSimulations
         [SerializeField] private TMP_InputField dragForceNegativeScoreInput;
         [SerializeField] private TMP_InputField collisionCountPositiveScoreInput;
         [SerializeField] private TMP_InputField collisionCountNegativeScoreInput;
+        [SerializeField] private TMP_InputField heightmapSumPositiveScoreInput;
+        [SerializeField] private TMP_InputField heightmapSumNegativeScoreInput;
 
         [Header("TRAINING CONFIG RESULT UI")]
         [SerializeField] private TMP_InputField trainingConfigNameInput;
@@ -228,6 +231,7 @@ namespace PhysicsSimulations
             kineticEnergyMetricToggle.isOn = _trainingConfig.enableKineticEnergyMetric;
             dragForceMetricToggle.isOn = _trainingConfig.enableDragForceMetric;
             collisionCountMetricToggle.isOn = _trainingConfig.enableCollisionCountMetric;
+            heightmapSumMetricToggle.isOn = _trainingConfig.enableHeightmapSumMetric;
 
             maxKineticEnergyVarianceInput.text = _trainingConfig.maxKineticEnergyVariance.ToString("0");
             maxDragForceVarianceInput.text = _trainingConfig.maxDragForceVariance.ToString("0");
@@ -239,6 +243,8 @@ namespace PhysicsSimulations
             dragForceNegativeScoreInput.text = _trainingConfig.dragForceNegativeScore.ToString("F1");
             collisionCountPositiveScoreInput.text = _trainingConfig.collisionCountPositiveScore.ToString("F1");
             collisionCountNegativeScoreInput.text = _trainingConfig.collisionCountNegativeScore.ToString("F1");
+            heightmapSumPositiveScoreInput.text = _trainingConfig.heightmapSumPositiveScore.ToString("F1");
+            heightmapSumNegativeScoreInput.text = _trainingConfig.heightmapSumNegativeScore.ToString("F1");
 
             trainingConfigNameInput.text = _trainingConfig.configName;
             trainingTimeScaleInput.text = _trainingConfig.timeScale.ToString();
@@ -313,6 +319,7 @@ namespace PhysicsSimulations
                 enableKineticEnergyMetric = kineticEnergyMetricToggle.isOn,
                 enableDragForceMetric = dragForceMetricToggle.isOn,
                 enableCollisionCountMetric = collisionCountMetricToggle.isOn,
+                enableHeightmapSumMetric = heightmapSumMetricToggle.isOn,
 
                 maxKineticEnergyVariance = float.Parse(maxKineticEnergyVarianceInput.text),
                 maxDragForceVariance = int.Parse(maxDragForceVarianceInput.text),
@@ -324,6 +331,8 @@ namespace PhysicsSimulations
                 dragForceNegativeScore = float.Parse(dragForceNegativeScoreInput.text),
                 collisionCountPositiveScore = float.Parse(collisionCountPositiveScoreInput.text),
                 collisionCountNegativeScore = float.Parse(collisionCountNegativeScoreInput.text),
+                heightmapSumPositiveScore = float.Parse(heightmapSumPositiveScoreInput.text),
+                heightmapSumNegativeScore = float.Parse(heightmapSumNegativeScoreInput.text),
 
                 configName = trainingConfigNameInput.text,
                 timeScale = int.Parse(trainingTimeScaleInput.text)

@@ -65,6 +65,7 @@ namespace PhysicsSimulations
         public bool enableKineticEnergyMetric = true;
         public bool enableDragForceMetric = true;
         public bool enableCollisionCountMetric = true;
+        public bool enableHeightmapSumMetric = true;
 
         public float maxKineticEnergyVariance = 30;
         public int maxDragForceVariance = 200;
@@ -80,6 +81,10 @@ namespace PhysicsSimulations
         //COLLISION COUNT REWARD
         public float collisionCountPositiveScore = 2;
         public float collisionCountNegativeScore = -1;
+        //HEIGHTMAP SUM REWARD
+        public float heightmapSumPositiveScore = 2;
+        public float heightmapSumNegativeScore = -1;
+
 
         [Header("RESULT")]
         public string configName;
@@ -99,6 +104,7 @@ namespace PhysicsSimulations
                 enableKineticEnergyMetric = enableKineticEnergyMetric,
                 enableDragForceMetric = enableDragForceMetric,
                 enableCollisionCountMetric = enableCollisionCountMetric,
+                enableHeightmapSumMetric = enableHeightmapSumMetric,
                 maxKineticEnergyVariance = maxKineticEnergyVariance,
                 maxDragForceVariance = maxDragForceVariance,
                 maxCollisionCountVariance = maxCollisionCountVariance,
@@ -108,6 +114,8 @@ namespace PhysicsSimulations
                 dragForceNegativeScore = dragForceNegativeScore,
                 collisionCountPositiveScore = collisionCountPositiveScore,
                 collisionCountNegativeScore = collisionCountNegativeScore,
+                heightmapSumPositiveScore = heightmapSumPositiveScore,
+                heightmapSumNegativeScore = heightmapSumNegativeScore,
                 configName = configName,
                 timeScale = timeScale
             };
