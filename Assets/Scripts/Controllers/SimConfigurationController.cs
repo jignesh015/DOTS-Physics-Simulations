@@ -211,6 +211,11 @@ namespace PhysicsSimulations
             ChangeCarIndex = _carIndex;
         }
 
+        public void ToggleCollisionHeatmap(bool _value)
+        {
+            ShowCollisionHeatmap = _value;
+        }
+
         public void ResetToDefault()
         {
             CurrentSimConfig = defaultConfig;

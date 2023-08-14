@@ -155,6 +155,12 @@ namespace PhysicsSimulations
             scc.ChangeCar(_value);
         }
 
+        public void OnCollisionHeatmapToggleChange(bool _value)
+        {
+            if (scc == null || !configUISet) return;
+            scc.ToggleCollisionHeatmap(_value);
+        }
+
         public async void OnResetConfigButtonClicked()
         {
             configUISet = false;
