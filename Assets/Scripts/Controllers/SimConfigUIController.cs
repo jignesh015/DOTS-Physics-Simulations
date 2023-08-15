@@ -28,6 +28,10 @@ namespace PhysicsSimulations
         [SerializeField] private TextMeshProUGUI episodeCountText;
         [SerializeField] private TextMeshProUGUI cumulativeRewardText;
 
+        [Header("TRAINING PARAM INDICATORS")]
+        [SerializeField] private GameObject checkResultPanel;
+        [SerializeField] private Button exportCollisionHeatmapButton;
+
         [Header("UI")]
         [SerializeField] private Image spawnAirButtonIcon;
         [SerializeField] private Sprite spawnAirPlaySprite;
@@ -57,6 +61,7 @@ namespace PhysicsSimulations
             scc.OnTrainConfigLoaded += GetTrainingConfig;
 
             trainingParamPanel.SetActive(false);
+            checkResultPanel.SetActive(false);
         }
 
         private void OnDisable()
@@ -113,6 +118,8 @@ namespace PhysicsSimulations
 
             airParticleCountInput.minValue = configSanity.airParticleRatioMin;
             airParticleCountInput.maxValue = configSanity.airParticleRatioMax;
+
+            checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
 
             configUISet = true;
         }
@@ -222,16 +229,30 @@ namespace PhysicsSimulations
             showVCC = _trainConfig.enableCollisionCountMetric;
             trainingParamPanel.SetActive(true);
 
-            DisableAllUI();
+            ToggleUIInteraction(false);
         }
 
-        private void DisableAllUI()
+        private void ToggleUIInteraction(bool _state)
         {
-            airSpeedInput.interactable = false;
-            airParticleCountInput.interactable = false;
-            airParticleBurstCountInput.interactable = false;
-            spawnAirButton.interactable = false;
-            resetDefaultButton.interactable = false;
+            airSpeedInput.interactable = _state;
+            airParticleCountInput.interactable = _state;
+            airParticleBurstCountInput.interactable = _state;
+            spawnAirButton.interactable = _state;
+            resetDefaultButton.interactable = _state;
+            exportCollisionHeatmapButton.interactable = _state;
+        }
+
+        public void OnExportHeatmapButtonClicked()
+        {
+            ScreenshotController sc = FindObjectOfType<ScreenshotController>();
+            if (sc == null) return;
+            ToggleUIInteraction(false);
+            sc.ExportCollisionHeatmap(ExportHeatmapCallback);
+        }
+
+        private void ExportHeatmapCallback()
+        {
+            ToggleUIInteraction(true);
         }
     }
 }
