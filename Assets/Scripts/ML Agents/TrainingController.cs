@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,9 +38,11 @@ namespace PhysicsSimulations
         public int StepCountText { get; set; }
         public int EpisodeCount { get; set; }
         public float CumulativeReward { get; set; }
+        public DateTime TrainingStartTime { get; set; }
 
         private static TrainingController _instance;
         public static TrainingController Instance { get { return _instance; } }
+
 
         private void Awake()
         {
@@ -65,6 +68,8 @@ namespace PhysicsSimulations
             scc.OnAirSpawnStarted += EnableAdjustHeightAgent;
 
             heightMapTextureLength = scc.carHeightMapGenerator.TextureHeight;
+
+            TrainingStartTime = DateTime.Now;
         }
 
         private void OnEnable()
@@ -191,6 +196,26 @@ namespace PhysicsSimulations
                && File.Exists(pathToTrainConfigFile))
             {
                 File.Copy(pathToTrainConfigFile, Path.Combine(_resultDir, Path.GetFileName(pathToTrainConfigFile)));
+            }
+
+            //Save Training output to result directory
+            if (Directory.Exists(_resultDir))
+            {
+                TrainingOutput trainingOutput = new()
+                {
+                    baselineKineticEnergy = scc.InitialKineticEnergy,
+                    baselineDragForce = scc.InitialDragForce,
+                    baselineVoxelCollisionCount = scc.InitialVoxelCollisionCount,
+                    trainingTime = Data.FormattedTimer(TrainingStartTime)
+                };
+
+                //Convert to json
+                string jsonData = JsonUtility.ToJson(trainingOutput);
+
+                // Write the JSON data to the file.
+                File.WriteAllText(Path.Combine(_resultDir, $"{CurrentTrainConfig.configName}_{Data.TrainingOutputFileName}.json"), jsonData);
+
+                Debug.Log($"Training Output saved at: {_resultDir}");
             }
         }
     }

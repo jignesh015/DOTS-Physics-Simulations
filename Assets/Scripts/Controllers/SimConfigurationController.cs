@@ -42,6 +42,11 @@ namespace PhysicsSimulations
         public float AverageDragForce { get; private set; }
         public int VoxelCollisionCount { get; set; }
 
+        //BASELINE METRICS
+        public float InitialKineticEnergy { get; private set; }
+        public float InitialDragForce { get; private set; }
+        public int InitialVoxelCollisionCount { get; set; }
+
         //AIR PARTICLE SPAWN SETTINGS
         public bool SpawnAirParticlesCommand { get; set; }
         public bool SpawnAirParticles { get; private set; }
@@ -53,6 +58,8 @@ namespace PhysicsSimulations
         public Action OnVoxelsReady;
         public Action OnAirSpawnStarted;
         public Action OnAirSpawnStopped;
+
+        private int spawnedAirCycleCount;
 
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
@@ -107,8 +114,6 @@ namespace PhysicsSimulations
 
             await Task.Delay(100);
 
-            OnSimConfigLoaded?.Invoke(CurrentSimConfig.Clone());
-
             //Load heightmap as per current sim config/result 
             if(_isCheckingResult)
             {
@@ -118,17 +123,52 @@ namespace PhysicsSimulations
                 string _resultPath = PlayerPrefs.GetString(Data.ResultPathPref);
                 string resultHeightmapPath = Data.GetResultHeightmapPath(_resultPath, Path.GetFileName(_resultPath));
                 carHeightMapGenerator.LoadHeightmap(resultHeightmapPath, CurrentSimConfig.carId);
+
+                //Load training output
+                LoadTrainingOutput(_resultPath);
             }
             else
             {
                 carHeightMapGenerator.LoadHeightmap(CurrentSimConfig.carId);
             }
 
+            OnSimConfigLoaded?.Invoke(CurrentSimConfig.Clone());
+
             //Enable training if applicable
-            if(simIndicator == 1 && FindObjectOfType<TrainingController>(true) != null)
+            if (simIndicator == 1 && FindObjectOfType<TrainingController>(true) != null)
             {
                 CurrentSimConfig.spawnAirParticlesAutomatically = true;
-                FindObjectOfType<TrainingController>(true).gameObject.SetActive(true);
+                OnAirSpawnStopped += EnableTraining;
+            }
+        }
+
+        private void LoadTrainingOutput(string _resultPath)
+        {
+            string _trainingOutputFilePath = Path.Combine(_resultPath, $"{Path.GetFileName(_resultPath)}_{Data.TrainingOutputFileName}.json");
+            if (File.Exists(_trainingOutputFilePath))
+            {
+                // Read the JSON file content
+                string jsonContent = File.ReadAllText(_trainingOutputFilePath);
+
+                //Convert to Training output
+                TrainingOutput trainingOutput = new();
+                trainingOutput.LoadFromJson(jsonContent);
+
+                InitialKineticEnergy = trainingOutput.baselineKineticEnergy;
+                InitialDragForce = trainingOutput.baselineDragForce;
+                InitialVoxelCollisionCount = trainingOutput.baselineVoxelCollisionCount;
+            }
+        }
+
+        private void EnableTraining()
+        {
+            TrainingController tc = FindObjectOfType<TrainingController>(true);
+            if(tc.gameObject.activeSelf)
+                OnAirSpawnStopped -= EnableTraining;
+            else
+            {
+                SpawnAirParticlesWithDelay(0);
+                tc.gameObject.SetActive(true);
             }
         }
 
@@ -240,6 +280,8 @@ namespace PhysicsSimulations
 
         private IEnumerator SpawnAirParticlesWithDelayAsync(int _delayInMS)
         {
+            
+
             yield return new WaitForSeconds((float)_delayInMS / 1000);
             SpawnAirParticles = true;
             SpawnAirParticlesCommand = false;
@@ -252,10 +294,15 @@ namespace PhysicsSimulations
         }
 
         public void StopAirParticles() 
-        { 
+        {
+            spawnedAirCycleCount++;
             SpawnAirParticles = false;
             CalculateAverageKineticEnergy();
             CalculateAverageDragForce();
+
+            //Store initial Collision Count
+            if (spawnedAirCycleCount > 1 && InitialVoxelCollisionCount == 0)
+                InitialVoxelCollisionCount = VoxelCollisionCount;
 
             OnAirSpawnStopped?.Invoke();
         }
@@ -296,6 +343,10 @@ namespace PhysicsSimulations
                 AverageKineticEnergy = KineticEnergyList.Average();
                 //Debug.Log($"<color=olive>Average KE = {AverageKineticEnergy}</color>");
                 KineticEnergyList.Clear();
+
+                //Store initial Avg KE
+                if (spawnedAirCycleCount > 1 && InitialKineticEnergy == 0)
+                    InitialKineticEnergy = AverageKineticEnergy;
             }
             else
             {
@@ -326,6 +377,10 @@ namespace PhysicsSimulations
             {
                 AverageDragForce = DragForceList.Average();
                 DragForceList.Clear();
+
+                //Store initial Avg Drag Force
+                if (spawnedAirCycleCount > 1 && InitialDragForce == 0)
+                    InitialDragForce = AverageDragForce;
             }
             else
             { 

@@ -22,9 +22,15 @@ namespace PhysicsSimulations
         [SerializeField] private TextMeshProUGUI collisionCountText;
         [SerializeField] private TextMeshProUGUI airBurstCountText;
 
+        [Header("RESULT INDICATORS")]
+        [SerializeField] private GameObject resultOutputPanel;
+        [SerializeField] private TextMeshProUGUI originalAvgKineticEnergyText;
+        [SerializeField] private TextMeshProUGUI originalAvgDragForceText;
+        [SerializeField] private TextMeshProUGUI originalCollisionCountText;
+
         [Header("TRAINING PARAM INDICATORS")]
         [SerializeField] private GameObject trainingParamPanel;
-        [SerializeField] private TextMeshProUGUI stepCountText;
+        [SerializeField] private TextMeshProUGUI trainingTime;
         [SerializeField] private TextMeshProUGUI episodeCountText;
         [SerializeField] private TextMeshProUGUI cumulativeRewardText;
 
@@ -80,13 +86,13 @@ namespace PhysicsSimulations
                 airSpeedText.text = $"Speed: {config.airSpeed:0} mph";
 
                 //Display avg kinetic energy
-                ToggleKineticEnergyIndicator(scc.AverageKineticEnergy);
+                ToggleKineticEnergyIndicator(scc.AverageKineticEnergy, scc.InitialKineticEnergy);
 
                 //Display Average Drag force
-                ToggleDragForceIndicator(scc.AverageDragForce);
+                ToggleDragForceIndicator(scc.AverageDragForce, scc.InitialDragForce);
 
                 //Display Collision Count
-                ToggleCollisionCountIndicator(scc.VoxelCollisionCount);
+                ToggleCollisionCountIndicator(scc.VoxelCollisionCount, scc.InitialVoxelCollisionCount);
 
                 //Disaply Training Indicators
                 ToggleTrainingParameterIndicators();
@@ -119,7 +125,13 @@ namespace PhysicsSimulations
             airParticleCountInput.minValue = configSanity.airParticleRatioMin;
             airParticleCountInput.maxValue = configSanity.airParticleRatioMax;
 
+            resultOutputPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
             checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
+
+            //Set result output
+            originalAvgKineticEnergyText.text = $"Avg KE: {scc.InitialKineticEnergy:F2}J";
+            originalAvgDragForceText.text = $"Drag: {scc.InitialDragForce:F2}N";
+            originalCollisionCountText.text = $"Collsn. Count: {scc.InitialVoxelCollisionCount:0}";
 
             configUISet = true;
         }
@@ -191,32 +203,47 @@ namespace PhysicsSimulations
             Application.Quit();
         }
 
-        private void ToggleKineticEnergyIndicator(float _value)
+        private void ToggleKineticEnergyIndicator(float _value, float _initialValue)
         {
             if(_value == 0) return;
+
+            string _prefix = _value < _initialValue ? "-" : _value == _initialValue ? "" : "+";
+            string _diffValue = $"{_prefix}{Mathf.Abs(_value - _initialValue):0}";
+            string _color = _value < _initialValue ? Data.RedColor : Data.GreenColor;
+
             avgKineticEnergyText.gameObject.SetActive(showKE);
-            avgKineticEnergyText.text = $"Avg KE: {_value:F2}J";
+            avgKineticEnergyText.text = $"Avg KE: {_value:F2}J\n(<color={_color}>{_diffValue}</color>)";
         }
 
-        private void ToggleDragForceIndicator(float _value)
+        private void ToggleDragForceIndicator(float _value, float _initialValue)
         {
             if (_value == 0) return;
+
+            string _prefix = _value < _initialValue ? "-" : _value == _initialValue ? "" : "+";
+            string _diffValue = $"{_prefix}{Mathf.Abs(_value - _initialValue):0}";
+            string _color = _value < _initialValue ? Data.RedColor : Data.GreenColor;
+
             avgDragForceText.gameObject.SetActive(showDF);
-            avgDragForceText.text = $"Drag: {_value:F2}N";
+            avgDragForceText.text = $"Drag: {_value:F2}N\n(<color={_color}>{_diffValue}</color>)";
         }
 
-        private void ToggleCollisionCountIndicator(int _value)
+        private void ToggleCollisionCountIndicator(int _value, int _initialValue)
         {
             if (_value == 0) return;
+
+            string _prefix = _value < _initialValue ? "-" : _value == _initialValue ? "" : "+";
+            string _diffValue = $"{_prefix}{Mathf.Abs(_value - _initialValue):0}";
+            string _color = _value < _initialValue ? Data.RedColor : Data.GreenColor;
+
             collisionCountText.gameObject.SetActive(showVCC);
-            collisionCountText.text = $"Collsn. Count: {_value:0}";
+            collisionCountText.text = $"Collsn. Count: {_value:0}\n(<color={_color}>{_diffValue}</color>)";
         }
 
         private void ToggleTrainingParameterIndicators()
         {
             if(tc == null) return;
 
-            stepCountText.text = $"Step/Total: {tc.StepCountText}";
+            trainingTime.text = $"Time: {Data.FormattedTimer(tc.TrainingStartTime)}";
             episodeCountText.text = $"Episode: {tc.EpisodeCount:0}";
             cumulativeRewardText.text = $"Reward: {tc.CumulativeReward:F2}";
         }
@@ -228,6 +255,10 @@ namespace PhysicsSimulations
             showDF = _trainConfig.enableDragForceMetric;
             showVCC = _trainConfig.enableCollisionCountMetric;
             trainingParamPanel.SetActive(true);
+
+            originalAvgKineticEnergyText.gameObject.SetActive(showKE);
+            originalAvgDragForceText.gameObject.SetActive(showDF);
+            originalCollisionCountText.gameObject.SetActive(showVCC);
 
             ToggleUIInteraction(false);
         }

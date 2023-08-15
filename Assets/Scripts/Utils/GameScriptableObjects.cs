@@ -128,4 +128,19 @@ namespace PhysicsSimulations
             JsonUtility.FromJsonOverwrite(json, this);
         }
     }
+
+    [Serializable]
+    public class TrainingOutput
+    {
+        public float baselineKineticEnergy;
+        public float baselineDragForce;
+        public int baselineVoxelCollisionCount;
+        public string trainingTime;
+
+        // Deserialize JSON and update properties
+        public void LoadFromJson(string json)
+        {
+            JsonUtility.FromJsonOverwrite(json, this);
+        }
+    }
 }

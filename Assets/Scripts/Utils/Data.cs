@@ -42,6 +42,9 @@ namespace PhysicsSimulations
         //RESULT FILE PATH
         public static string ResultFolderIndicatorFileName = "ResultFolderIndicator";
 
+        //TRAINING OUTPUT FILE NAME
+        public static string TrainingOutputFileName = "TrainingOutput";
+
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;
 
@@ -53,6 +56,10 @@ namespace PhysicsSimulations
         public static string SimIndicatorPref = "SimIndicatorPref";
         public static string ResultPathPref = "ResultPathPref";
 
+        //TEXT COLOR HEX CODE
+        public static string RedColor = "#e60d1a";
+        public static string GreenColor = "#789258";
+
         public static string Timestamp()
         {
             // Get the current timestamp.
@@ -63,6 +70,14 @@ namespace PhysicsSimulations
 
             // Convert the timestamp to a string using the format string.
             return now.ToString(format);
+        }
+
+        public static string FormattedTimer(DateTime startTime)
+        {
+            TimeSpan timeDifference = DateTime.Now - startTime;
+
+            return string.Format("{0:D2}:{1:D2}:{2:D2}", timeDifference.Hours, 
+                timeDifference.Minutes, timeDifference.Seconds);
         }
 
         public static string VirtualEnvironmentPath()
