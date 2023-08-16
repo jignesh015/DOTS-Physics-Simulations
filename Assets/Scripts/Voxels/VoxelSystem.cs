@@ -145,6 +145,9 @@ namespace PhysicsSimulations
                 {
                     //Get height factor for current voxel cell
                     float _currentHeightFactor = TrainingController.Instance.GetHeightFactor(voxel.Row, voxel.Column);
+                    if(TrainingController.Instance.CurrentTrainConfig.onlyDecreaseHeight && _currentHeightFactor > 0)
+                        _currentHeightFactor = -1*_currentHeightFactor;
+
                     float _maxVoxelHeightVariance = TrainingController.Instance.CurrentTrainConfig.maxVoxelHeightVariance;
 
                     #region Adjust Height factor according to adjacent row's factor ->
@@ -163,7 +166,7 @@ namespace PhysicsSimulations
                     float _newHeight = voxel.Height + (_currentHeightFactor * _maxVoxelHeightVariance);
 
                     //Clamp the new height to be within the acceptable variance of the og height
-                    _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight + _maxVoxelHeightVariance);
+                    _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight);
 
                     //Check if height increased, decreased or remained same
                     float _heightToCheck = TrainingController.Instance.compareWithOgHeight ? voxel.OgHeight : voxel.Height;

@@ -11,7 +11,7 @@ namespace PhysicsSimulations
         public float airSpeed = 50;
         public Vector3 windSpawnZoneDimension;
         public float airParticleRatio = 0.5f;
-        public int airParticleBurstCount = 20;
+        public int airParticleBurstCount = 10;
         public bool spawnAirParticlesAutomatically = true;
         public int carId;
 
@@ -59,6 +59,7 @@ namespace PhysicsSimulations
         public int decisionPeriod = 2;
         public int episodePeriod = 5;
         public bool onlyModifyCollidedVoxels = true;
+        public bool onlyDecreaseHeight = false;
         public bool fixedEpisodeLength = false;
 
         [Header("METRICS SETTINGS")]
@@ -100,6 +101,7 @@ namespace PhysicsSimulations
                 decisionPeriod = decisionPeriod,
                 episodePeriod = episodePeriod,
                 onlyModifyCollidedVoxels = onlyModifyCollidedVoxels,
+                onlyDecreaseHeight = onlyDecreaseHeight,
                 fixedEpisodeLength = fixedEpisodeLength,
                 enableKineticEnergyMetric = enableKineticEnergyMetric,
                 enableDragForceMetric = enableDragForceMetric,

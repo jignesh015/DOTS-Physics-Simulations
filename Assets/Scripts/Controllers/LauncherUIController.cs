@@ -33,6 +33,7 @@ namespace PhysicsSimulations
         [SerializeField] private TMP_InputField decisionPeriodInput;
         [SerializeField] private TMP_InputField episodePeriodInput;
         [SerializeField] private Toggle onlyModifyCollidedVoxelsToggle;
+        [SerializeField] private Toggle onlyDecreaseHeightToggle;
         [SerializeField] private Toggle fixedEpisodeLengthToggle;
 
         [Header("TRAINING CONFIG METRICS UI")]
@@ -226,6 +227,7 @@ namespace PhysicsSimulations
             decisionPeriodInput.text = _trainingConfig.decisionPeriod.ToString("0");
             episodePeriodInput.text = _trainingConfig.episodePeriod.ToString("0");
             onlyModifyCollidedVoxelsToggle.isOn = _trainingConfig.onlyModifyCollidedVoxels;
+            onlyDecreaseHeightToggle.isOn = _trainingConfig.onlyDecreaseHeight;
             fixedEpisodeLengthToggle.isOn = _trainingConfig.fixedEpisodeLength;
 
             kineticEnergyMetricToggle.isOn = _trainingConfig.enableKineticEnergyMetric;
@@ -314,6 +316,7 @@ namespace PhysicsSimulations
                 decisionPeriod = int.Parse(decisionPeriodInput.text),
                 episodePeriod = int.Parse(episodePeriodInput.text),
                 onlyModifyCollidedVoxels = onlyModifyCollidedVoxelsToggle.isOn,
+                onlyDecreaseHeight = onlyDecreaseHeightToggle.isOn,
                 fixedEpisodeLength = fixedEpisodeLengthToggle.isOn,
 
                 enableKineticEnergyMetric = kineticEnergyMetricToggle.isOn,
