@@ -144,7 +144,7 @@ namespace PhysicsSimulations
 
         private void LoadTrainingOutput(string _resultPath)
         {
-            string _trainingOutputFilePath = Path.Combine(_resultPath, $"{Path.GetFileName(_resultPath)}_{Data.TrainingOutputFileName}.json");
+            string _trainingOutputFilePath = Path.Combine(_resultPath, $"{Path.GetFileName(_resultPath)}_{Data.TrainingOutputFileName}");
             if (File.Exists(_trainingOutputFilePath))
             {
                 // Read the JSON file content

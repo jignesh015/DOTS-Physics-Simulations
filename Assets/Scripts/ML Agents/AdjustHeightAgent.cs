@@ -70,6 +70,9 @@ namespace PhysicsSimulations
                 if (tc.CurrentTrainConfig.enableDragForceMetric) sensor.AddObservation(scc.AverageDragForce);
                 if (tc.CurrentTrainConfig.enableCollisionCountMetric) sensor.AddObservation(scc.VoxelCollisionCount);
                 sensor.AddObservation(scc.carHeightMapGenerator.updatedHeightmapList.ToArray());
+
+                //Save observations to CSV file
+                tc.SaveObservationsToCSV(CompletedEpisodes);
             }
         }
 

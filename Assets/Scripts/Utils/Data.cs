@@ -43,7 +43,10 @@ namespace PhysicsSimulations
         public static string ResultFolderIndicatorFileName = "ResultFolderIndicator";
 
         //TRAINING OUTPUT FILE NAME
-        public static string TrainingOutputFileName = "TrainingOutput";
+        public static string TrainingOutputFileName = "TrainingOutput.json";
+
+        //METRICS OBSERVATION CSV FILE NAME
+        public static string MetricObservationFileName = "MetricObservations.csv";
 
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;

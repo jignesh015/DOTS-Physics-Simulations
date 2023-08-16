@@ -20,7 +20,7 @@ namespace PhysicsSimulations
             scc = SimConfigurationController.Instance;
         }
 
-        public void TakeCameraScreenshot(ViewAngle _angle, string _savePath)
+        public void TakeCameraScreenshot(ViewAngle _angle, string _savePath, string _configName = "Default")
         {
             targetCamera = cameraAngles[(int)_angle];
             RenderTexture renderTexture = new(Screen.width, Screen.height, 24);
@@ -38,9 +38,14 @@ namespace PhysicsSimulations
             Destroy(renderTexture);
 
             byte[] bytes = screenshot.EncodeToPNG();
-            screenshotFileName = $"{Path.GetFileName(_savePath)}_{_angle}.png";
+            screenshotFileName = $"{_configName}_{_angle}.png";
+
+            //Check if directory exists to save the file
+            if(!Directory.Exists(_savePath))
+                Directory.CreateDirectory(_savePath );
+
             File.WriteAllBytes(Path.Combine(_savePath, screenshotFileName), bytes);
-            Debug.Log("Camera screenshot captured: " + screenshotFileName);
+            //Debug.Log("Camera screenshot captured: " + screenshotFileName);
         }
 
         public void TakeCameraScreenshot(int _angle)
@@ -63,7 +68,8 @@ namespace PhysicsSimulations
             //Take screenshot from all angle
             foreach (ViewAngle angle in Enum.GetValues(typeof(ViewAngle)))
             {
-                TakeCameraScreenshot(angle, PlayerPrefs.GetString(Data.ResultPathPref));
+                TakeCameraScreenshot(angle, Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), 
+                    "CollisionHeatmaps"), Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref)));
                 yield return null;
                 yield return null;
             }

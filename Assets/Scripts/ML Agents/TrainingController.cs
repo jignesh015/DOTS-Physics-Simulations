@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -163,6 +162,26 @@ namespace PhysicsSimulations
             Process.Start(startInfo);
         }
 
+        public void SaveObservationsToCSV(int _completedEpisodes)
+        {
+            string _resultDir = Path.Combine(Data.ResultsPathLander, CurrentTrainConfig.configName);
+            if (!Directory.Exists(_resultDir)) return;
+
+            string _csvFilePath = Path.Combine(_resultDir, $"{CurrentTrainConfig.configName}_{Data.MetricObservationFileName}");
+
+            if(!File.Exists(_csvFilePath))
+            {
+                using StreamWriter writer = new(_csvFilePath);
+                string header = "Episode,Kinetic Energy,Drag Force,Voxel Collision Count";
+                writer.WriteLine(header);
+            }
+
+            // Append the new values to the CSV file
+            using StreamWriter writerAppend = new(_csvFilePath, true);
+            string line = $"{_completedEpisodes},{scc.AverageKineticEnergy},{scc.AverageDragForce},{scc.VoxelCollisionCount}";
+            writerAppend.WriteLine(line);
+        }
+
         public void OnApplicationQuit()
         {
             string _resultDir = Path.Combine(Data.ResultsPathLander, CurrentTrainConfig.configName);
@@ -213,7 +232,7 @@ namespace PhysicsSimulations
                 string jsonData = JsonUtility.ToJson(trainingOutput);
 
                 // Write the JSON data to the file.
-                File.WriteAllText(Path.Combine(_resultDir, $"{CurrentTrainConfig.configName}_{Data.TrainingOutputFileName}.json"), jsonData);
+                File.WriteAllText(Path.Combine(_resultDir, $"{CurrentTrainConfig.configName}_{Data.TrainingOutputFileName}"), jsonData);
 
                 Debug.Log($"Training Output saved at: {_resultDir}");
             }
