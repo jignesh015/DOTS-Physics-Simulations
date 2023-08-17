@@ -149,6 +149,7 @@ namespace PhysicsSimulations
                         _currentHeightFactor = -1*_currentHeightFactor;
 
                     float _maxVoxelHeightVariance = TrainingController.Instance.CurrentTrainConfig.maxVoxelHeightVariance;
+                    float _stepVariance = _maxVoxelHeightVariance / math.clamp(TrainingController.Instance.CurrentTrainConfig.stepVarianceFactor,1f,100f);
 
                     #region Adjust Height factor according to adjacent row's factor ->
                     //float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;
@@ -163,7 +164,7 @@ namespace PhysicsSimulations
                     #endregion
 
                     //Calculate new height as per previous height and adjusted height factor
-                    float _newHeight = voxel.Height + (_currentHeightFactor * _maxVoxelHeightVariance);
+                    float _newHeight = voxel.Height + (_currentHeightFactor * _stepVariance);
 
                     //Clamp the new height to be within the acceptable variance of the og height
                     _newHeight = math.clamp(_newHeight, voxel.OgHeight - _maxVoxelHeightVariance, voxel.OgHeight);
@@ -178,7 +179,7 @@ namespace PhysicsSimulations
                         voxel.MatRefIndex = 0;              //Height Remained Same
 
                     //Make sure the height is within limit
-                    voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.MaxHeight);
+                    voxel.Height = math.clamp(_newHeight, voxel.MinHeight, voxel.OgHeight);
                     voxel.HasCollided = false;
                     voxel.HadPreviouslyCollided = true;
                     voxel.IsVoxelReady = false;

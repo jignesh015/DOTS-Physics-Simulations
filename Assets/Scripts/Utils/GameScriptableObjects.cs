@@ -56,6 +56,7 @@ namespace PhysicsSimulations
     {
         [Header("TRAINING SETTINGS")]
         public float maxVoxelHeightVariance = 0.075f;
+        public float stepVarianceFactor = 5f;
         public int decisionPeriod = 2;
         public int episodePeriod = 5;
         public bool onlyModifyCollidedVoxels = true;
@@ -98,6 +99,7 @@ namespace PhysicsSimulations
             return new TrainingConfiguration
             {
                 maxVoxelHeightVariance = maxVoxelHeightVariance,
+                stepVarianceFactor = stepVarianceFactor,
                 decisionPeriod = decisionPeriod,
                 episodePeriod = episodePeriod,
                 onlyModifyCollidedVoxels = onlyModifyCollidedVoxels,

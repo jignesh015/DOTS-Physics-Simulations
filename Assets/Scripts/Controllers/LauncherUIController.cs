@@ -30,6 +30,7 @@ namespace PhysicsSimulations
 
         [Header("TRAINING CONFIG SETTINGS UI")]
         [SerializeField] private TMP_InputField maxVoxelHeightVarianceInput;
+        [SerializeField] private TMP_InputField stepVarianceFactorInput;
         [SerializeField] private TMP_InputField decisionPeriodInput;
         [SerializeField] private TMP_InputField episodePeriodInput;
         [SerializeField] private Toggle onlyModifyCollidedVoxelsToggle;
@@ -224,6 +225,7 @@ namespace PhysicsSimulations
         private void SetTrainingConfigUI(TrainingConfiguration _trainingConfig)
         {
             maxVoxelHeightVarianceInput.text = _trainingConfig.maxVoxelHeightVariance.ToString("F3");
+            stepVarianceFactorInput.text = _trainingConfig.stepVarianceFactor.ToString("F1");
             decisionPeriodInput.text = _trainingConfig.decisionPeriod.ToString("0");
             episodePeriodInput.text = _trainingConfig.episodePeriod.ToString("0");
             onlyModifyCollidedVoxelsToggle.isOn = _trainingConfig.onlyModifyCollidedVoxels;
@@ -313,6 +315,7 @@ namespace PhysicsSimulations
             CurrentTrainingConfig = new TrainingConfiguration
             {
                 maxVoxelHeightVariance = (float)Math.Round(float.Parse(maxVoxelHeightVarianceInput.text), 3),
+                stepVarianceFactor = (float)Math.Round(float.Parse(stepVarianceFactorInput.text), 1),
                 decisionPeriod = int.Parse(decisionPeriodInput.text),
                 episodePeriod = int.Parse(episodePeriodInput.text),
                 onlyModifyCollidedVoxels = onlyModifyCollidedVoxelsToggle.isOn,
