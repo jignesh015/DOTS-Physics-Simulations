@@ -149,7 +149,7 @@ namespace PhysicsSimulations
                         _currentHeightFactor = -1*_currentHeightFactor;
 
                     float _maxVoxelHeightVariance = TrainingController.Instance.CurrentTrainConfig.maxVoxelHeightVariance;
-                    float _stepVariance = _maxVoxelHeightVariance / math.clamp(TrainingController.Instance.CurrentTrainConfig.stepVarianceFactor,1f,100f);
+                    float _stepVariance = _maxVoxelHeightVariance / math.clamp(TrainingController.Instance.CurrentTrainConfig.stepVarianceFactor,1f,10000f);
 
                     #region Adjust Height factor according to adjacent row's factor ->
                     //float _adjacentRowMaxHeightVariance = TrainingController.Instance.adjacentRowMaxHeightVariance;

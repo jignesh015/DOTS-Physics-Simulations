@@ -12236,11 +12236,11 @@ MonoBehaviour:
   configNameText: {fileID: 1163936385}
   defaultTrainingConfig:
     maxVoxelHeightVariance: 0.1
-    stepVarianceFactor: 5
+    stepVarianceFactor: 100
     decisionPeriod: 2
     episodePeriod: 5
     onlyModifyCollidedVoxels: 1
-    onlyDecreaseHeight: 0
+    onlyDecreaseHeight: 1
     fixedEpisodeLength: 0
     enableKineticEnergyMetric: 1
     enableDragForceMetric: 1
