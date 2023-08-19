@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace PhysicsSimulations
 {
@@ -45,6 +46,7 @@ namespace PhysicsSimulations
 
         [Header("BUTTONS")]
         [SerializeField] private Button spawnAirButton;
+        [SerializeField] private Button screenshotButton;
         [SerializeField] private Button resetDefaultButton;
 
         private SimConfiguration config;
@@ -125,8 +127,9 @@ namespace PhysicsSimulations
             airParticleCountInput.minValue = configSanity.airParticleRatioMin;
             airParticleCountInput.maxValue = configSanity.airParticleRatioMax;
 
+            screenshotButton.gameObject.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) != 1);
             resultOutputPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
-            checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
+            //checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
 
             //Set result output
             originalAvgKineticEnergyText.text = $"Avg KE: {scc.InitialKineticEnergy:F2}J";
@@ -269,6 +272,7 @@ namespace PhysicsSimulations
             airParticleCountInput.interactable = _state;
             airParticleBurstCountInput.interactable = _state;
             spawnAirButton.interactable = _state;
+            screenshotButton.interactable = _state;
             resetDefaultButton.interactable = _state;
             exportCollisionHeatmapButton.interactable = _state;
         }
@@ -278,7 +282,32 @@ namespace PhysicsSimulations
             ScreenshotController sc = FindObjectOfType<ScreenshotController>();
             if (sc == null) return;
             ToggleUIInteraction(false);
-            sc.ExportCollisionHeatmap(ExportHeatmapCallback);
+            //Export heatmap in the result folder
+            sc.ExportCollisionHeatmap(ExportHeatmapCallback,
+              Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), Data.CollisionHeatmapsFolderName),
+              Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref)));
+        }
+
+        public void OnScreenshotButtonClicked()
+        {
+            ScreenshotController sc = FindObjectOfType<ScreenshotController>();
+            if (sc == null) return;
+            ToggleUIInteraction(false);
+
+            if(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2)
+            {
+                //Export heatmap in the result folder
+                sc.ExportCollisionHeatmap(ExportHeatmapCallback,
+                  Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), Data.CollisionHeatmapsFolderName),
+                  Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref)));
+            }
+            else
+            {
+                //Export heatmap in the root folder
+                sc.ExportCollisionHeatmap(ExportHeatmapCallback,
+                  Path.Combine(Data.CollisionHeatmapsRootPath, scc.carHeightMapGenerator.TextureName),
+                  scc.carHeightMapGenerator.TextureName);
+            }
         }
 
         private void ExportHeatmapCallback()

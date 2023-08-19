@@ -21,6 +21,7 @@ namespace PhysicsSimulations
         public bool HeightmapReady {  get; private set; }
 
         public int TextureHeight { get; private set; }
+        public string TextureName { get; private set; }
 
         // Start is called before the first frame update
         void Start()
@@ -104,6 +105,7 @@ namespace PhysicsSimulations
             HeightmapReady = false;
             selectedHeightmapTexture = _heightmap;
             TextureHeight = selectedHeightmapTexture.height;
+            TextureName = GetCarName(selectedHeightmapTexture.name);
             VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
 
             // Combine the folder path and the file name to get the full file path.
@@ -140,6 +142,7 @@ namespace PhysicsSimulations
             HeightmapReady = false;
             selectedHeightmapTexture = allHeightmapTextures[_heightmapIndex];
             TextureHeight = selectedHeightmapTexture.height;
+            TextureName = GetCarName(selectedHeightmapTexture.name);
             VoxelCount = selectedHeightmapTexture.width * selectedHeightmapTexture.height;
 
             if (File.Exists(_heightmapJsonPath))
@@ -158,6 +161,16 @@ namespace PhysicsSimulations
             }
             else
                 LoadHeightmap(_heightmapIndex);
+        }
+
+        private static string GetCarName(string input)
+        {
+            string[] words = input.Split('_', ' ');
+            if (words.Length > 0)
+            {
+                return words[0];
+            }
+            return input;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace PhysicsSimulations
             scc = SimConfigurationController.Instance;
         }
 
-        public void TakeCameraScreenshot(ViewAngle _angle, string _savePath, string _configName = "Default")
+        public void TakeCameraScreenshot(ViewAngle _angle, string _savePath, string _fileName = "Default")
         {
             targetCamera = cameraAngles[(int)_angle];
             RenderTexture renderTexture = new(Screen.width, Screen.height, 24);
@@ -38,7 +38,7 @@ namespace PhysicsSimulations
             Destroy(renderTexture);
 
             byte[] bytes = screenshot.EncodeToPNG();
-            screenshotFileName = $"{_configName}_{_angle}.png";
+            screenshotFileName = $"{_fileName}_{_angle}.png";
 
             //Check if directory exists to save the file
             if(!Directory.Exists(_savePath))
@@ -53,12 +53,12 @@ namespace PhysicsSimulations
             TakeCameraScreenshot((ViewAngle)_angle, Application.dataPath);
         }
 
-        public void ExportCollisionHeatmap(Action _callback)
+        public void ExportCollisionHeatmap(Action _callback, string _savePath, string _fileName)
         {
-            StartCoroutine(ExportCollisionHeatmapAsync(_callback));
+            StartCoroutine(ExportCollisionHeatmapAsync(_callback, _savePath, _fileName));
         }
 
-        private IEnumerator ExportCollisionHeatmapAsync(Action _callback)
+        private IEnumerator ExportCollisionHeatmapAsync(Action _callback, string _savePath, string _fileName)
         {
             if (!scc.SpawnAirParticlesCommand && scc.SpawnAirParticles)
                 scc.StopAirParticles();
@@ -68,8 +68,7 @@ namespace PhysicsSimulations
             //Take screenshot from all angle
             foreach (ViewAngle angle in Enum.GetValues(typeof(ViewAngle)))
             {
-                TakeCameraScreenshot(angle, Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), 
-                    "CollisionHeatmaps"), Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref)));
+                TakeCameraScreenshot(angle, _savePath, _fileName);
                 yield return null;
                 yield return null;
             }
