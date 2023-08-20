@@ -6407,7 +6407,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Export Collision Heatmap
+  m_text: Export Results
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f340b1fc510c9f149b65095e3be69e9f, type: 2}
   m_sharedMaterial: {fileID: -4161587639618137020, guid: f340b1fc510c9f149b65095e3be69e9f,
@@ -6828,7 +6828,7 @@ MonoBehaviour:
   episodeCountText: {fileID: 1430636111525665270}
   cumulativeRewardText: {fileID: 6942245795285114727}
   checkResultPanel: {fileID: 3185212402879981391}
-  exportCollisionHeatmapButton: {fileID: 1952620740145243176}
+  exportResultButton: {fileID: 1952620740145243176}
   spawnAirButtonIcon: {fileID: 7864867694775914170}
   spawnAirPlaySprite: {fileID: 21300000, guid: ea14fc2086a5bba49821bad2d5e83685, type: 3}
   spawnAirStopSprite: {fileID: 21300000, guid: f05091433d715a64bbafff594b302309, type: 3}
@@ -7427,7 +7427,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 869861020758672022}
         m_TargetAssemblyTypeName: PhysicsSimulations.SimConfigUIController, Assembly-CSharp
-        m_MethodName: OnExportHeatmapButtonClicked
+        m_MethodName: OnExportResultButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

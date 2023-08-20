@@ -37,7 +37,7 @@ namespace PhysicsSimulations
 
         [Header("TRAINING PARAM INDICATORS")]
         [SerializeField] private GameObject checkResultPanel;
-        [SerializeField] private Button exportCollisionHeatmapButton;
+        [SerializeField] private Button exportResultButton;
 
         [Header("UI")]
         [SerializeField] private Image spawnAirButtonIcon;
@@ -50,6 +50,7 @@ namespace PhysicsSimulations
         [SerializeField] private Button resetDefaultButton;
 
         private SimConfiguration config;
+        private TrainingConfiguration trainConfig;
         private SimConfigurationSanity configSanity;
 
         private SimConfigurationController scc;
@@ -129,7 +130,7 @@ namespace PhysicsSimulations
 
             screenshotButton.gameObject.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) != 1);
             resultOutputPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
-            //checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
+            checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
 
             //Set result output
             originalAvgKineticEnergyText.text = $"Avg KE: {scc.InitialKineticEnergy:F2}J";
@@ -253,6 +254,7 @@ namespace PhysicsSimulations
 
         private void GetTrainingConfig(TrainingConfiguration _trainConfig)
         {
+            trainConfig = _trainConfig;
             tc = FindObjectOfType<TrainingController>(true);
             showKE = _trainConfig.enableKineticEnergyMetric;
             showDF = _trainConfig.enableDragForceMetric;
@@ -274,18 +276,17 @@ namespace PhysicsSimulations
             spawnAirButton.interactable = _state;
             screenshotButton.interactable = _state;
             resetDefaultButton.interactable = _state;
-            exportCollisionHeatmapButton.interactable = _state;
+            exportResultButton.interactable = _state;
         }
 
-        public void OnExportHeatmapButtonClicked()
+        public void OnExportResultButtonClicked()
         {
-            ScreenshotController sc = FindObjectOfType<ScreenshotController>();
-            if (sc == null) return;
+            ResultUIController rc = FindObjectOfType<ResultUIController>();
+            if (rc == null) return;
             ToggleUIInteraction(false);
-            //Export heatmap in the result folder
-            sc.ExportCollisionHeatmap(ExportHeatmapCallback,
-              Path.Combine(PlayerPrefs.GetString(Data.ResultPathPref), Data.CollisionHeatmapsFolderName),
-              Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref)));
+
+            //Export result in the result folder
+            rc.ExportResult(ExportHeatmapCallback);
         }
 
         public void OnScreenshotButtonClicked()
