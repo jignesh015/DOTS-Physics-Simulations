@@ -19,10 +19,13 @@ namespace PhysicsSimulations
         [Header("METRICS COMPARISON")]
         [SerializeField] private TextMeshProUGUI avgKEBefore;
         [SerializeField] private TextMeshProUGUI avgKEAfter;
+        [SerializeField] private TextMeshProUGUI percentageKE;
         [SerializeField] private TextMeshProUGUI avgDFBefore;
         [SerializeField] private TextMeshProUGUI avgDFAfter;
+        [SerializeField] private TextMeshProUGUI percentageDF;
         [SerializeField] private TextMeshProUGUI avgVCCBefore;
         [SerializeField] private TextMeshProUGUI avgVCCAfter;
+        [SerializeField] private TextMeshProUGUI percentageVCC;
 
         [Header("CONFIG DETAILS")]
         [SerializeField] private TextMeshProUGUI configNameText;
@@ -95,9 +98,12 @@ namespace PhysicsSimulations
             SimConfigUIController simUI = FindObjectOfType<SimConfigUIController>();
             if (simUI != null)
             {
-                avgKEAfter.text = GetMetricValue(0);
-                avgDFAfter.text = GetMetricValue(1);
-                avgVCCAfter.text = GetMetricValue(2);
+                avgKEAfter.text = GetMetricValue(0)[0];
+                percentageKE.text = GetMetricValue(0)[1];
+                avgDFAfter.text = GetMetricValue(1)[0];
+                percentageDF.text = GetMetricValue(1)[1];
+                avgVCCAfter.text = GetMetricValue(2)[0];
+                percentageVCC.text = GetMetricValue(2)[1];
             }
             
             //Path to current training config file
@@ -176,7 +182,7 @@ namespace PhysicsSimulations
             return texture;
         }
 
-        private string GetMetricValue(int metricIndex)
+        private List<string> GetMetricValue(int metricIndex)
         {
             float _value = 0;
             string _valueStr="";
@@ -201,10 +207,21 @@ namespace PhysicsSimulations
                     break;
             }
 
+            float _percentage = ((_value - _initialValue) / (0.5f * (_value + _initialValue))) * 100f ; 
+
             string _prefix = _value < _initialValue ? "-" : _value == _initialValue ? "" : "+";
+            string _percentagePrefix = _percentage < 0 ? "-" : "+";
             string _diffValue = $"{_prefix}{Mathf.Abs(_value - _initialValue):0}";
+            string _percentageStr = $"{_percentagePrefix}{Mathf.Abs(_percentage):F2}%"; 
+
             string _color = _value < _initialValue ? Data.RedColor : Data.GreenColor;
-            return $"{_valueStr} (<color={_color}>{_diffValue}</color>)";
+            string _percentagecolor = _percentage < 0 ? Data.RedColor : Data.GreenColor;
+
+            return new List<string>()
+            {
+                $"{_valueStr} (<color={_color}>{_diffValue}</color>)",
+                $"<color={_percentagecolor}>{_percentageStr}</color>",
+            };
         }
     }
 }
