@@ -61,6 +61,10 @@ namespace PhysicsSimulations
 
         private int spawnedAirCycleCount;
 
+        //VCC Average Settings
+        private int baseCycleCount = 10;
+        [HideInInspector]public float vccAverageFactor;
+
         private static SimConfigurationController _instance;
         public static SimConfigurationController Instance { get { return _instance; } }
 
@@ -118,6 +122,10 @@ namespace PhysicsSimulations
             if(_isCheckingResult)
             {
                 CurrentSimConfig.spawnAirParticlesAutomatically = false;
+
+                //Set burst count to 200 and re-calculate VCC Avg Factor
+                CurrentSimConfig.airParticleBurstCount = 200;
+                vccAverageFactor = (float)CurrentSimConfig.airParticleBurstCount / baseCycleCount;
 
                 //Load the result heightmap
                 string _resultPath = PlayerPrefs.GetString(Data.ResultPathPref);
@@ -189,6 +197,9 @@ namespace PhysicsSimulations
         public void SetCurrentConfig(SimConfiguration config)
         {
             CurrentSimConfig = PerformSanityCheck(config);
+
+            //Calculate VCC Avg Factor
+            vccAverageFactor = (float)CurrentSimConfig.airParticleBurstCount / baseCycleCount;
         }
 
         public SimConfiguration PerformSanityCheck(SimConfiguration config)

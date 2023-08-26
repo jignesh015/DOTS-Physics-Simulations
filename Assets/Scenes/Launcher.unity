@@ -12227,7 +12227,7 @@ MonoBehaviour:
     airParticleRatioMin: 0.1
     airParticleRatioMax: 1
     airParticleBurstCountMin: 0
-    airParticleBurstCountMax: 80
+    airParticleBurstCountMax: 200
   airSpeedInput: {fileID: 1657824858}
   airParticleRatioInput: {fileID: 127831649}
   airParticleBurstCountInput: {fileID: 1149339804}

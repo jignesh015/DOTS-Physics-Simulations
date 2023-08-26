@@ -4249,7 +4249,7 @@ MonoBehaviour:
     airParticleRatioMin: 0.1
     airParticleRatioMax: 1
     airParticleBurstCountMin: 0
-    airParticleBurstCountMax: 80
+    airParticleBurstCountMax: 200
   mainCamera: {fileID: 330585543}
   freeLookCamera: {fileID: 1551428645}
   sideViewVC: {fileID: 88391333}
@@ -4261,6 +4261,7 @@ MonoBehaviour:
   CurrentViewAngle: 0
   KineticEnergyList: []
   DragForceList: []
+  vccAverageFactor: 0
 --- !u!4 &913572971
 Transform:
   m_ObjectHideFlags: 0
@@ -5337,7 +5338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -400.0001, y: -100}
+  m_AnchoredPosition: {x: -400.00006, y: -100}
   m_SizeDelta: {x: -800, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1490589151
@@ -5952,7 +5953,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -400.0001, y: 0}
+  m_AnchoredPosition: {x: -400.00006, y: 0}
   m_SizeDelta: {x: -799.9999, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1743140802

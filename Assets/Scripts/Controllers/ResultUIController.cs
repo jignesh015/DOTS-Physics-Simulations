@@ -201,7 +201,7 @@ namespace PhysicsSimulations
                     _initialValue = scc.InitialDragForce;
                     break;
                 case 2:
-                    _value = scc.VoxelCollisionCount;
+                    _value = scc.VoxelCollisionCount / scc.vccAverageFactor;
                     _valueStr = $"{_value:0}";
                     _initialValue = scc.InitialVoxelCollisionCount;
                     break;

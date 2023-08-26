@@ -95,7 +95,7 @@ namespace PhysicsSimulations
                 ToggleDragForceIndicator(scc.AverageDragForce, scc.InitialDragForce);
 
                 //Display Collision Count
-                ToggleCollisionCountIndicator(scc.VoxelCollisionCount, scc.InitialVoxelCollisionCount);
+                ToggleCollisionCountIndicator(scc.VoxelCollisionCount, scc.InitialVoxelCollisionCount, scc.vccAverageFactor);
 
                 //Disaply Training Indicators
                 ToggleTrainingParameterIndicators();
@@ -231,16 +231,18 @@ namespace PhysicsSimulations
             avgDragForceText.text = $"Drag: {_value:F2}N\n(<color={_color}>{_diffValue}</color>)";
         }
 
-        private void ToggleCollisionCountIndicator(int _value, int _initialValue)
+        private void ToggleCollisionCountIndicator(int _value, int _initialValue, float _avgFactor)
         {
             if (_value == 0) return;
 
-            string _prefix = _value < _initialValue ? "-" : _value == _initialValue ? "" : "+";
-            string _diffValue = $"{_prefix}{Mathf.Abs(_value - _initialValue):0}";
-            string _color = _value < _initialValue ? Data.RedColor : Data.GreenColor;
+            float _avgValue = _value / _avgFactor;
+
+            string _prefix = _avgValue < _initialValue ? "-" : _avgValue == _initialValue ? "" : "+";
+            string _diffValue = $"{_prefix}{Mathf.Abs(_avgValue - _initialValue):0}";
+            string _color = _avgValue < _initialValue ? Data.RedColor : Data.GreenColor;
 
             collisionCountText.gameObject.SetActive(showVCC);
-            collisionCountText.text = $"Collsn. Count: {_value:0}\n(<color={_color}>{_diffValue}</color>)";
+            collisionCountText.text = $"Collsn. Count: {_avgValue:0}\n(<color={_color}>{_diffValue}</color>)";
         }
 
         private void ToggleTrainingParameterIndicators()
