@@ -35,8 +35,13 @@ namespace PhysicsSimulations
         [SerializeField] private TextMeshProUGUI episodeCountText;
         [SerializeField] private TextMeshProUGUI cumulativeRewardText;
 
-        [Header("TRAINING PARAM INDICATORS")]
+        [Header("TEST SIMULATION UI")]
+        [SerializeField] private GameObject testSimPanel;
+        [SerializeField] private Button exportMetricButton;
+
+        [Header("CHECK RESULT UI")]
         [SerializeField] private GameObject checkResultPanel;
+        [SerializeField] private TextMeshProUGUI resultNameText;
         [SerializeField] private Button exportResultButton;
 
         [Header("UI")]
@@ -130,12 +135,17 @@ namespace PhysicsSimulations
 
             screenshotButton.gameObject.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) != 1);
             resultOutputPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
+            testSimPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 0);
             checkResultPanel.SetActive(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2);
 
             //Set result output
             originalAvgKineticEnergyText.text = $"Avg KE: {scc.InitialKineticEnergy:F2}J";
             originalAvgDragForceText.text = $"Drag: {scc.InitialDragForce:F2}N";
             originalCollisionCountText.text = $"Collsn. Count: {scc.InitialVoxelCollisionCount:0}";
+
+            //Set result name
+            if(PlayerPrefs.GetInt(Data.SimIndicatorPref) == 2)
+                resultNameText.text = $"{Path.GetFileName(PlayerPrefs.GetString(Data.ResultPathPref))}";
 
             configUISet = true;
         }
@@ -278,7 +288,35 @@ namespace PhysicsSimulations
             spawnAirButton.interactable = _state;
             screenshotButton.interactable = _state;
             resetDefaultButton.interactable = _state;
+            exportMetricButton.interactable = _state;
             exportResultButton.interactable = _state;
+        }
+
+        public void OnExportMetricButtonClicked()
+        {
+            if(!Directory.Exists(Data.OriginalSimRootPath))
+                Directory.CreateDirectory(Data.OriginalSimRootPath);
+
+            string _outputPath = Path.Combine(Data.OriginalSimRootPath, scc.carHeightMapGenerator.TextureName);
+            if (!Directory.Exists(_outputPath))
+                Directory.CreateDirectory(_outputPath);
+
+            TrainingOutput trainingOutput = new()
+            {
+                baselineKineticEnergy = scc.AverageKineticEnergy,
+                baselineDragForce = scc.AverageDragForce,
+                baselineVoxelCollisionCount = Mathf.RoundToInt(scc.VoxelCollisionCount / scc.vccAverageFactor),
+                trainingTime = ""
+            };
+
+            //Convert to json
+            string jsonData = JsonUtility.ToJson(trainingOutput);
+
+            // Write the JSON data to the file.
+            File.WriteAllText(Path.Combine(_outputPath, Data.OriginalSimOutputFileName), jsonData);
+
+            Debug.Log($"Original Sim Output saved at: {Path.Combine(_outputPath, Data.OriginalSimOutputFileName)}");
+
         }
 
         public void OnExportResultButtonClicked()
@@ -308,7 +346,7 @@ namespace PhysicsSimulations
             {
                 //Export heatmap in the root folder
                 sc.ExportCollisionHeatmap(ExportHeatmapCallback,
-                  Path.Combine(Data.CollisionHeatmapsRootPath, scc.carHeightMapGenerator.TextureName),
+                  Path.Combine(Data.OriginalSimRootPath, scc.carHeightMapGenerator.TextureName),
                   scc.carHeightMapGenerator.TextureName);
             }
         }

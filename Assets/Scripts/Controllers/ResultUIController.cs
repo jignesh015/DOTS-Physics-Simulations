@@ -49,10 +49,10 @@ namespace PhysicsSimulations
         private IEnumerator ExportResultAsync(Action _callback)
         {
             //Load images for Collision Heatmap (Before)
-            if (Directory.Exists(Data.CollisionHeatmapsRootPath) &&
-                Directory.Exists(Path.Combine(Data.CollisionHeatmapsRootPath, scc.carHeightMapGenerator.TextureName)))
+            if (Directory.Exists(Data.OriginalSimRootPath) &&
+                Directory.Exists(Path.Combine(Data.OriginalSimRootPath, scc.carHeightMapGenerator.TextureName)))
             {
-                string _folderPath = Path.Combine(Data.CollisionHeatmapsRootPath, scc.carHeightMapGenerator.TextureName);
+                string _folderPath = Path.Combine(Data.OriginalSimRootPath, scc.carHeightMapGenerator.TextureName);
                 int i = 0;
                 foreach (ViewAngle angle in Enum.GetValues(typeof(ViewAngle)))
                 {
@@ -63,7 +63,7 @@ namespace PhysicsSimulations
             }
             else
             {
-                Debug.Log($"<color={Data.RedColor}>Collision Heatmap (Before) not found at {Path.Combine(Data.CollisionHeatmapsRootPath, scc.carHeightMapGenerator.TextureName)}</color>");
+                Debug.Log($"<color={Data.RedColor}>Collision Heatmap (Before) not found at {Path.Combine(Data.OriginalSimRootPath, scc.carHeightMapGenerator.TextureName)}</color>");
             }
 
             //Load images for Collision Heatmap (After)

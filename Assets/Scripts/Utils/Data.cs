@@ -45,14 +45,17 @@ namespace PhysicsSimulations
         //TRAINING OUTPUT FILE NAME
         public static string TrainingOutputFileName = "TrainingOutput.json";
 
+        //ORIGINAL SIM OUTPUT FILE NAME
+        public static string OriginalSimOutputFileName = "OriginalSimOutput.json";
+
         //METRICS OBSERVATION CSV FILE NAME
         public static string MetricObservationFileName = "MetricObservations.csv";
 
         //COLLISION HEATMAP FOLDER NAME
         public static string CollisionHeatmapsFolderName = "collision_heatmaps";
 
-        //COLLISION HEATMAP ROOT PATH FOR LANDER
-        public static string CollisionHeatmapsRootPath = $"{Path.Combine(Directory.GetParent(Directory.GetParent(Application.dataPath).FullName).FullName, CollisionHeatmapsFolderName)}";
+        //ORIGINAL SIMULATION RESULT ROOT PATH FOR LANDER
+        public static string OriginalSimRootPath = $"{Path.Combine(Directory.GetParent(Directory.GetParent(Application.dataPath).FullName).FullName, "original_sim_output")}";
 
         //PHYSICS CONSTANTS AND VARIABLES
         public static float AirDensity = 1.2f;

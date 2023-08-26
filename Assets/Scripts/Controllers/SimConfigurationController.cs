@@ -133,7 +133,10 @@ namespace PhysicsSimulations
                 carHeightMapGenerator.LoadHeightmap(resultHeightmapPath, CurrentSimConfig.carId);
 
                 //Load training output
-                LoadTrainingOutput(_resultPath);
+                //LoadTrainingOutput(_resultPath);
+
+                //Load Og sim outout
+                LoadOriginalSimOutput();
             }
             else
             {
@@ -157,6 +160,27 @@ namespace PhysicsSimulations
             {
                 // Read the JSON file content
                 string jsonContent = File.ReadAllText(_trainingOutputFilePath);
+
+                //Convert to Training output
+                TrainingOutput trainingOutput = new();
+                trainingOutput.LoadFromJson(jsonContent);
+
+                InitialKineticEnergy = trainingOutput.baselineKineticEnergy;
+                InitialDragForce = trainingOutput.baselineDragForce;
+                InitialVoxelCollisionCount = trainingOutput.baselineVoxelCollisionCount;
+            }
+        }
+
+        private void LoadOriginalSimOutput()
+        {
+            string _outputPath = Path.Combine(Data.OriginalSimRootPath, carHeightMapGenerator.TextureName);
+            if (!Directory.Exists(_outputPath)) return;
+
+            string _ogSimOutputFilePath = Path.Combine(_outputPath, Data.OriginalSimOutputFileName);
+            if (File.Exists(_ogSimOutputFilePath))
+            {
+                // Read the JSON file content
+                string jsonContent = File.ReadAllText(_ogSimOutputFilePath);
 
                 //Convert to Training output
                 TrainingOutput trainingOutput = new();
